@@ -1,0 +1,20 @@
+# LaTeX Auxiliary Files
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.xdv
+*.dvi
+*.blg
+*.bbl
+*.run.xml
+*.bcf
+
+# programs
+*.py
+scratch/
