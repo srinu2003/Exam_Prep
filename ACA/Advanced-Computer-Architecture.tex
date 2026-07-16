@@ -1,0 +1,883 @@
+\documentclass[12pt,a4paper,openany]{book}
+
+% =========================================================================
+% Core Package Imports
+% =========================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{indentfirst}
+
+% TikZ & PGFPlots Configuration
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc, positioning, shapes.geometric, arrows.meta, automata, matrix}
+
+% =========================================================================
+% Formatting and Styling Configurations
+% =========================================================================
+\onehalfspacing
+
+% Defining Theorem Styles using amsthm
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+\newtheorem{example}{Example}[chapter]
+
+% Hyphenation settings
+\hyphenpenalty=1000
+\tolerance=2000
+
+% =========================================================================
+% Document Metadata
+% =========================================================================
+\title{
+    \large\textbf{M.Tech CSE I Year II Semester}\\[1cm]
+    \Huge\textbf{Advanced Computer Architecture}\\
+    \large\textit{An Exhaustive, Foundations-First Textbook on Parallelism, Scalability, and Hardware Design}\\[1.5cm]
+    \large\textbf{Department of Computer Science and Engineering}\\
+    \large{Marri Laxman Reddy Institute of Technology and Management}\\
+    \small{(UGC Autonomous)}
+}
+\author{\textbf{Course Code: PC - IV}}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+% =========================================================================
+% PREFACE
+% =========================================================================
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+Computer architecture is the foundational bridge between the software we write and the physical hardware that executes it. In the early days of computing, this bridge was relatively simple: a single control unit fetched instructions one after another and executed them sequentially on a single processing element. However, as the physical limits of materials science and quantum mechanics have caught up with semiconductor scaling, the sequential computing model has reached its practical limits.
+
+Today, performance scaling is driven almost entirely by parallelism, pipeline designs, and scalable architectures. This textbook is designed to introduce these advanced architectural paradigms. We start from absolute first principles, explaining abstract hardware logic using everyday analogies before introducing mathematical formulations and hardware block diagrams.
+
+Every chapter is structured to build your intuition before introducing formal equations. Whether you are a first-year graduate student or an engineer looking to understand the physical reality of modern high-performance systems, this book will serve as a comprehensive, mathematically rigorous guide.
+% =========================================================================
+% CHAPTER 1: THEORY OF PARALLELISM & PARALLEL COMPUTER MODELS
+% =========================================================================
+\chapter[Theory of Parallelism and Parallel Models]{Theory of Parallelism and Parallel Computer Models}
+
+To design computers that operate at high performance, we must first understand the fundamental physical and theoretical constraints that dictate how data moves through a system. This chapter establishes the evolutionary pathways of computing architectures, standardizes how we classify them, and analyzes the theoretical frameworks used to measure parallel processing limits.
+
+\section{Introduction for Beginners: What is Computer Architecture?}
+Before diving into the complex mathematics of parallel systems, let us establish what computer architecture actually represents.
+
+A helpful analogy is to compare computer architecture to the design of a metropolitan transportation network:
+\begin{itemize}
+    \item \textbf{Instruction Set Architecture (ISA):} This is the driver's manual. It specifies the rules of the road—what operations the vehicle can perform (addition, branch, load) and how the controls are labeled (registers).
+    \item \textbf{Computer Organization (Microarchitecture):} This is what is under the hood of the vehicle. It represents the physical implementation of the ISA—how many cylinders the engine has (execution units), how wide the fuel injection pipes are (data buses), and how the fuel filter is structured (caches).
+\end{itemize}
+
+While a software engineer write programs using high-level languages, the microarchitecture is responsible for converting those instructions into physical electrical signals that charge capacitors, flip logic gates, and transfer data across copper and silicon wires.
+
+\subsection{The Physical Boundaries of Computation}
+For decades, microprocessors grew faster through two main principles:
+\begin{enumerate}
+    \item \textbf{Moore's Law:} An empirical observation by Gordon Moore in 1965 stating that the number of transistors on a microchip doubles roughly every two years.
+    \item \textbf{Dennard Scaling:} A scaling formulation stating that as transistors shrink, their power density remains constant. This meant engineers could make transistors smaller, pack more of them together, and increase their clock speeds without increasing overall power dissipation.
+\end{enumerate}
+
+By the mid-2000s, Dennard scaling reached its limit. As transistor gate oxide layers shrank to just a few atoms in thickness, quantum tunneling occurred, causing substantial electrical leakage. This leakage generated heat even when the transistor was idle. This physical limitation, known as the \textbf{Power Wall}, made it impossible to continue increasing clock frequencies without melting the physical silicon chip.
+
+This boundary forced system designers to stop trying to build faster single-core processors and instead place multiple, moderately clocked processing elements on a single piece of silicon. This shift marked the beginning of modern parallel computer design.
+
+\section{The Memory Hierarchy Pyramid}
+In any computer system, there is a fundamental trade-off between speed, capacity, and cost:
+\begin{itemize}
+    \item Memory that is extremely fast (such as registers) must be physically close to the execution units. Because of this proximity, it requires substantial physical space on the silicon die, which limits its capacity and makes it expensive.
+    \item Memory that is highly capacious (such as magnetic hard drives or solid-state disks) is physically distant and complex to access, which makes it cheap but slow.
+\end{itemize}
+
+To balance these trade-offs, computer systems use a tiered \textbf{Memory Hierarchy}, which is traditionally represented as a pyramid.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{0.9\textwidth}{!}{%
+        \begin{tikzpicture}
+            % Draw Hierarchy Pyramid (width 9, height 6, apex at 4.5,6)
+            \draw[thick] (0,0) -- (4.5,6) -- (9,0) -- cycle;
+
+            % Horizontal Lines (calculated using x = 4.5/6*y on left, 9 - 4.5/6*y on right)
+            \draw[thick] ({4.5/6*1}, 1) -- ({9 - 4.5/6*1}, 1);
+            \draw[thick] ({4.5/6*2}, 2) -- ({9 - 4.5/6*2}, 2);
+            \draw[thick] ({4.5/6*3}, 3) -- ({9 - 4.5/6*3}, 3);
+            \draw[thick] ({4.5/6*4}, 4) -- ({9 - 4.5/6*4}, 4);
+            \draw[thick] ({4.5/6*5}, 5) -- ({9 - 4.5/6*5}, 5);
+
+            % Labels inside the Pyramid (perfectly centered vertically in each 1-unit strip)
+            \node[font=\tiny\bfseries] at (4.5,5.2) {Registers};
+            \node[font=\small\bfseries] at (4.5,4.5) {L1 Cache};
+            \node[font=\small\bfseries] at (4.5,3.5) {L2/L3 Cache};
+            \node[font=\small\bfseries] at (4.5,2.5) {Main Memory (DRAM)};
+            \node[font=\small\bfseries] at (4.5,1.5) {Solid State Drive (SSD)};
+            \node[font=\small\bfseries] at (4.5,0.5) {Magnetic Disk / Cloud Storage};
+
+            % Side arrows
+            \draw[->, {Stealth}-, thick, blue] (-0.6,0) -- node[left, align=center, black, font=\small] {Speed \& Cost\\(Increases Upward)} (-0.6,6);
+            \draw[->, -{Stealth}, thick, red] (9.6,0) -- node[right, align=center, black, font=\small] {Capacity\\(Increases Downward)} (9.6,6);
+        \end{tikzpicture}%
+    }
+    \caption{The typical Memory Hierarchy Pyramid showing speed, capacity, and cost trade-offs.}
+    \label{fig:memory_pyramid}
+\end{figure}
+
+The pyramid structure in Figure \ref{fig:memory_pyramid} functions through the principle of \textbf{Locality of Reference}:
+\begin{itemize}
+    \item \textbf{Temporal Locality:} If a program accesses a memory location once, it is highly likely to access the exact same location again in the near future.
+    \item \textbf{Spatial Locality:} If a program accesses a memory location, it is highly likely to access neighboring memory locations shortly thereafter (e.g., streaming through an array).
+\end{itemize}
+
+\section{Flynn's Taxonomy}
+In 1966, Michael J. Flynn proposed a categorization system for computer architectures based on the flow of instruction streams and data streams through the hardware. Under Flynn's taxonomy, all architectures are classified into four distinct categories.
+
+\subsection{Single Instruction, Single Data (SISD)}
+This represents the traditional sequential computer model based on the classic Von Neumann architecture. A single control unit fetches one instruction at a time from memory. This instruction is decoded and executed by a single processing element on a single data stream.
+
+\subsection{Single Instruction, Multiple Data (SIMD)}
+In this architecture, a single, central control unit fetches and decodes a single instruction stream. However, instead of executing it on a single piece of data, the control unit broadcasts this instruction to multiple processing elements. Each processing element executes the operation on its own unique data element. This is the structural foundation of modern graphics processing units (GPUs) and vector processors.
+
+\subsection{Multiple Instruction, Single Data (MISD)}
+This structure involves multiple independent control units, each fetching different instructions, but executing them on the exact same data stream. This architecture is rarely used in general-purpose computing. Its primary application is in high-reliability, fault-tolerant control systems (such as spacecraft flight controllers or safety-critical railway systems), where multiple distinct algorithms process the same sensor data to cross-verify the results.
+
+\subsection{Multiple Instruction, Multiple Data (MIMD)}
+This represents the most flexible and widely used class of parallel computers. In a MIMD system, multiple independent processors run different programs (different instruction streams) on different datasets (different data streams). Modern multi-core processors, server clusters, and distributed systems are examples of MIMD architectures.
+
+\section{Shared-Memory Multiprocessors (UMA/NUMA)}
+Within MIMD systems, how physical memory is organized determines how processors communicate with one another.
+
+\subsection{Uniform Memory Access (UMA)}
+In a UMA system, all processors share a single, centralized physical memory via a system bus or crossbar interconnect. Every processor experiences the exact same access time (latency) to read or write to any memory location. Because of this uniform behavior, UMA architectures are also called Symmetric Multiprocessors (SMPs).
+\subsection{Non-Uniform Memory Access (NUMA)}
+As the number of processors scales, a centralized system bus becomes a performance bottleneck. To resolve this, NUMA architectures partition the physical memory and distribute it directly to individual processors.
+
+Each processor can access its own local partition of memory with low latency. However, if a processor needs to access a memory address residing in another processor's partition (remote memory), it must route the request across an interconnect network, which incurs higher latency.
+
+\begin{figure}[htbp]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tikzpicture}[every node/.style={font=\small}]
+            % UMA Block Diagram
+            \begin{scope}[xshift=0cm]
+                \node[draw, rectangle, fill=blue!10, minimum width=1.5cm, minimum height=0.8cm, align=center] (p1) at (0,3.2) {Processor\\1};
+                \node[draw, rectangle, fill=blue!10, minimum width=1.5cm, minimum height=0.8cm, align=center] (p2) at (2.2,3.2) {Processor\\2};
+                \node[draw, rectangle, fill=blue!10, minimum width=1.5cm, minimum height=0.8cm, align=center] (p3) at (4.4,3.2) {Processor\\3};
+
+                \node[draw, rectangle, fill=orange!20, minimum width=6cm, minimum height=0.6cm] (bus) at (2.2,1.8) {Shared Interconnect (System Bus)};
+
+                \node[draw, rectangle, fill=green!10, minimum width=3.5cm, minimum height=0.8cm, align=center] (mem) at (2.2,0.5) {Shared Physical Memory\\(DRAM)};
+
+                \draw[<->, thick] (p1) -- (p1 |- bus.north);
+                \draw[<->, thick] (p2) -- (p2 |- bus.north);
+                \draw[<->, thick] (p3) -- (p3 |- bus.north);
+                \draw[<->, thick] (bus.south) -- (mem.north);
+
+                \node[font=\bfseries, text width=4cm, align=center] at (2.2,-0.8) {Uniform Memory Access (UMA)};
+            \end{scope}
+
+            % NUMA Block Diagram
+            \begin{scope}[xshift=8cm]
+                \node[draw, rectangle, fill=blue!10, minimum width=1.4cm, minimum height=0.8cm, align=center] (np1) at (0,3.2) {Processor\\1};
+                \node[draw, rectangle, fill=green!10, minimum width=1.4cm, minimum height=0.6cm, align=center] (m1) at (0,1.8) {Local\\Mem 1};
+                \draw[<->, thick] (np1) -- (m1);
+
+                \node[draw, rectangle, fill=blue!10, minimum width=1.4cm, minimum height=0.8cm, align=center] (np2) at (3.5,3.2) {Processor\\2};
+                \node[draw, rectangle, fill=green!10, minimum width=1.4cm, minimum height=0.6cm, align=center] (m2) at (3.5,1.8) {Local\\Mem 2};
+                \draw[<->, thick] (np2) -- (m2);
+
+                \node[draw, rectangle, fill=orange!20, minimum width=4.9cm, minimum height=0.6cm] (inter) at (1.75,0.5) {High-Speed Interconnect};
+
+                \draw[<->, thick] (m1.south) -- (m1.south |- inter.north);
+                \draw[<->, thick] (m2.south) -- (m2.south |- inter.north);
+
+                \node[font=\bfseries, text width=4cm, align=center] at (1.75,-0.8) {Non-Uniform Memory Access (NUMA)};
+            \end{scope}
+        \end{tikzpicture}%
+    }
+    \caption{Physical architectural layouts contrasting UMA and NUMA systems.}
+    \label{fig:uma_vs_numa}
+\end{figure}
+
+\section{Theoretical Models: PRAM and VLSI}
+To analyze parallel algorithms independently of physical hardware constraints, researchers use the \textbf{Parallel Random Access Machine (PRAM)} model.
+
+A PRAM model assumes:
+\begin{enumerate}
+    \item $P$ identical processors connected to a single, infinitely large, shared random-access memory.
+    \item All processors operate in lockstep, executing instructions in synchronized clock cycles.
+    \item Memory accesses are instantaneous and take exactly one clock cycle.
+\end{enumerate}
+
+Based on how the model handles concurrent reads and writes to the same memory location, it is divided into several sub-models:
+\begin{itemize}
+    \item \textbf{EREW (Exclusive Read, Exclusive Write):} No two processors can read or write to the same memory location at the same time. This is the most restrictive model.
+    \item \textbf{CREW (Concurrent Read, Exclusive Write):} Multiple processors can read from the same memory location simultaneously, but only one processor can write to a location at any given instant.
+    \item \textbf{CRCW (Concurrent Read, Concurrent Write):} Multiple processors can both read and write to the same location simultaneously. Write conflicts are resolved by specific strategies:
+          \begin{itemize}
+              \item \textit{Common:} All writing processors must write the exact same value; otherwise, an error occurs.
+              \item \textit{Arbitrary:} One random processor's write succeeds, while others are discarded.
+              \item \textit{Priority:} The processor with the lowest identification number (ID) has its write succeed.
+          \end{itemize}
+\end{itemize}
+
+While PRAM assumes ideal hardware, the \textbf{VLSI (Very Large Scale Integration) Complexity Model} accounts for physical constraints on silicon. It evaluates algorithms based on:
+\begin{itemize}
+    \item \textbf{Area ($A$):} The physical amount of silicon space required to implement the circuit.
+    \item \textbf{Time ($T$):} The number of clock cycles required to complete the computation.
+\end{itemize}
+Under the VLSI model, physical routing, wire length, and signal propagation delays are analyzed using metrics like the $AT^2$ trade-off.
+
+% =========================================================================
+% CHAPTER 2: PROGRAM DEPENDENCIES, FLOW MECHANISMS, AND INTERCONNECTS
+% =========================================================================
+\chapter[Dependencies, Flow, and Interconnects]{Program Dependencies, Flow Mechanisms, and Interconnects}
+
+Before parallelizing a program across multiple processing elements, we must analyze whether those elements can execute operations concurrently without corrupting the program's logic. This chapter details data dependency analysis, non-traditional execution flow paradigms, and physical interconnect network designs.
+
+\section{Bernstein's Conditions}
+To safely execute two instructions in parallel, we must guarantee that their execution order does not alter the final state of memory. This guarantee is governed by \textbf{Bernstein's Conditions}.
+
+Let $I_1$ and $I_2$ be two instructions. We define:
+\begin{itemize}
+    \item $R_i$: The set of memory locations or registers read by instruction $I_i$ (the Read Set).
+    \item $W_i$: The set of memory locations or registers written to by instruction $I_i$ (the Write Set).
+\end{itemize}
+
+\begin{definition}[Bernstein's Conditions]
+    Two instructions $I_1$ and $I_2$ can execute concurrently and yield deterministic results if and only if they satisfy the following three conditions:
+    \begin{equation}
+        R_1 \cap W_2 = \emptyset
+    \end{equation}
+    \begin{equation}
+        W_1 \cap R_2 = \emptyset
+    \end{equation}
+    \begin{equation}
+        W_1 \cap W_2 = \emptyset
+    \end{equation}
+\end{definition}
+
+If any of these intersections are not empty, a dependency exists, and the instructions must be executed sequentially.
+
+\section{Data Dependencies and Program Graphs}
+Data dependencies represent hardware or software constraints that dictate instruction ordering:
+\begin{enumerate}
+    \item \textbf{Read-After-Write (RAW) / Flow Dependency:} Instruction $I_2$ requires a value calculated by instruction $I_1$. If $I_2$ runs before $I_1$ completes, it will read stale data. This is a true dependency.
+    \item \textbf{Write-After-Read (WAR) / Anti-Dependency:} Instruction $I_2$ writes to a register that instruction $I_1$ needs to read. If $I_2$ runs early, it will overwrite the value before $I_1$ can access it. This is a false dependency solvable by renaming registers.
+    \item \textbf{Write-After-Write (WAW) / Output Dependency:} Both $I_1$ and $I_2$ write to the exact same storage location. If $I_2$ completes before $I_1$, the final value stored in the register will be the result of $I_1$ instead of $I_2$. This is also a false dependency solvable by register renaming.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[node distance=2.5cm, auto, >=Stealth, thick]
+        % Nodes represent Instructions
+        \node[draw, circle, fill=blue!10] (i1) {$I_1$};
+        \node[draw, circle, fill=blue!10, below left=of i1] (i2) {$I_2$};
+        \node[draw, circle, fill=blue!10, below right=of i1] (i3) {$I_3$};
+        \node[draw, circle, fill=blue!10, below=of i2] (i4) {$I_4$};
+
+        % Dependencies
+        \draw[->, blue] (i1) -- node[left, black, font=\small] {RAW (Flow)} (i2);
+        \draw[->, orange] (i1) -- node[right, black, font=\small] {WAW (Output)} (i3);
+        \draw[->, red] (i2) -- node[left, black, font=\small] {WAR (Anti)} (i4);
+        \draw[->, purple, dashed] (i3) -- node[right, black, font=\small] {Control} (i4);
+    \end{tikzpicture}
+    \caption{A Data Flow Program Graph (DFG) illustrating different classes of instruction dependencies.}
+    \label{fig:dfg_dependencies}
+\end{figure}
+
+\section{Dataflow Execution Mechanisms}
+Traditional computers are governed by a \textbf{control-flow} mechanism: instructions are executed sequentially in the order they appear in the program, unless explicit control instructions (like jumps or branches) redirect execution.
+
+An alternative paradigm is the \textbf{data-flow} mechanism, which has no program counter. An instruction is fetched and executed if and only if all of its input operands become available. This model exposes the absolute maximum amount of instruction-level parallelism, though it requires complex tag-matching hardware to track operand availability.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+        % Input Token Queue
+        \node[draw, rectangle, fill=blue!10, minimum width=2cm, minimum height=0.6cm] (queue) at (0,3) {Token Queue};
+
+        % Matching Unit
+        \node[draw, rectangle, fill=orange!20, minimum width=2.5cm, minimum height=1cm, align=center] (matcher) at (4,3) {Token Matching\\Unit};
+
+        % Node Store (Instruction Templates)
+        \node[draw, rectangle, fill=green!10, minimum width=2.5cm, minimum height=1cm, align=center] (store) at (4,1) {Instruction\\Store};
+
+        % Execution Unit (Text is upright using shape border rotate)
+        \node[draw, trapezium, trapezium left angle=75, trapezium right angle=75, fill=red!15, minimum width=2.5cm, minimum height=1.2cm, align=center, shape border rotate=-90] (alu) at (8,2) {Processing\\Element\\(ALU)};
+
+        % Connections
+        \draw[-{Stealth}, thick] (queue) -- (matcher);
+        \draw[-{Stealth}, thick] (store) -- (matcher);
+        \draw[-{Stealth}, thick, shorten >=3pt] (matcher.east) -- (alu.west);
+        % \draw[-{Stealth}, thick, shorten >=3pt] (matcher.east) -- ++(1,0) |- (alu.west);
+        \draw[-{Stealth}, thick] (alu.east) -- ++(1,0) |- (4, -1) -- node[above, midway, font=\footnotesize] {Result Tokens} (0, -1) -- (queue.south);
+    \end{tikzpicture}
+    \caption{Block diagram of a Dataflow Execution Engine.}
+    \label{fig:dataflow_block}
+\end{figure}
+
+In a dataflow architecture:
+\begin{itemize}
+    \item \textbf{Token Queue:} Stores data packets (tokens) containing operand values and destination instruction tags.
+    \item \textbf{Matching Unit:} Matches incoming tokens with other operands required by the same instruction. Once all operands for an instruction arrive, they are packaged together.
+    \item \textbf{Instruction Store / Node Store:} Holds the opcodes and templates for the program's instructions.
+          \dots
+\end{itemize}
+
+\subsection{Activity Templates}
+To implement this in hardware, instruction templates are stored as \textbf{Activity Templates}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+        \matrix [matrix of nodes,
+            nodes={draw, minimum width=3.5cm, minimum height=0.6cm, fill=blue!5},
+            row sep=0.1cm,
+            column sep=1cm] (tmpl)
+        {
+            \textbf{Opcode} (e.g., ADD)                           \\
+            \textbf{Operand Slot 1} (Value / Empty Tag)           \\
+            \textbf{Operand Slot 2} (Value / Empty Tag)           \\
+            \textbf{Destination Address 1} (Instruction ID, Slot) \\
+            \textbf{Destination Address 2} (Instruction ID, Slot) \\
+        };
+        \node[left=0.5cm of tmpl-1-1, font=\bfseries] {Activity Template Structure};
+    \end{tikzpicture}
+    \caption{The structure of an Activity Template in a dynamic dataflow computer.}
+    \label{fig:activity_template}
+\end{figure}
+
+The template in Figure \ref{fig:activity_template} remains idle in the instruction store until tokens arrive to fill its operand slots. Once both slots contain valid data, the hardware extracts the template, packages it as an executable packet, and routes it to the ALU.
+
+\section{System Interconnect Topologies}
+To coordinate processing nodes in MIMD systems, they must be physically connected by a communication network. We evaluate network topologies using three main metrics:
+\begin{itemize}
+    \item \textbf{Node Degree ($d$):} The number of physical links connected to a single node. High node degree increases cost and wiring complexity but provides more direct communication paths.
+    \item \textbf{Diameter ($D$):} The maximum shortest path distance between any two nodes in the network, measured in terms of physical hops. A smaller diameter means faster worst-case communication.
+    \item \textbf{Bisection Bandwidth ($B$):} The minimum bandwidth available between two halves of the network when it is split into two equal-sized parts. High bisection bandwidth indicates that the network can handle heavy global traffic without bottlenecks.
+\end{itemize}
+
+Let us analyze three common topologies:
+\begin{enumerate}
+    \item \textbf{2D Mesh (Figure \ref{fig:topo_mesh}):} Nodes are arranged in a 2D grid. It is highly suited for 2D silicon implementations (e.g., modern multi-core processors).
+    \item \textbf{Hypercube (Figure \ref{fig:topo_cube}):} An $n$-dimensional hypercube connects $2^n$ nodes. Each node has degree $n$, and the maximum path diameter is also $n$. This logarithmic behavior provides low latency and high bisection bandwidth at the cost of complex high-dimensional physical wiring.
+    \item \textbf{Fat-Tree (Figure \ref{fig:topo_tree}):} Unlike a traditional tree, where the links near the top are a major bottleneck, a Fat-Tree increases link bandwidth (or ``thickness'') as you move up the hierarchy toward the root.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.6]
+            \foreach \x in {0,1,2}
+            \foreach \y in {0,1,2}
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (n\x\y) at (\x*1.5,\y*1.5) {};
+
+            \foreach \x in {0,1,2} {
+                    \draw[thick] (n\x0) -- (n\x1) -- (n\x2);
+                    \draw[thick] (n0\x) -- (n1\x) -- (n2\x);
+                }
+        \end{tikzpicture}
+        \caption{2D Mesh.}
+        \label{fig:topo_mesh}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.6]
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (000) at (0,0) {};
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (100) at (2,0) {};
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (010) at (0,2) {};
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (110) at (2,2) {};
+
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (001) at (0.8,0.8) {};
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (101) at (2.8,0.8) {};
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (011) at (0.8,2.8) {};
+            \node[draw, circle, fill=gray!30, inner sep=3pt] (111) at (2.8,2.8) {};
+
+            \draw[thick, gray!60, dashed] (001) -- (101);
+            \draw[thick, gray!60, dashed] (001) -- (011);
+            \draw[thick, gray!60, dashed] (001) -- (000);
+
+            \draw[thick] (000) -- (100) -- (110) -- (010) -- cycle;
+            \draw[thick] (100) -- (101);
+            \draw[thick] (010) -- (011);
+            \draw[thick] (110) -- (111);
+            \draw[thick] (101) -- (111) -- (011);
+        \end{tikzpicture}
+        \caption{3D Hypercube.}
+        \label{fig:topo_cube}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \begin{tikzpicture}[scale=0.6]
+            % Draw Fat Tree Nodes (increased horizontal spacing to prevent overlaps under scale)
+            \node[draw, rectangle, fill=red!20, minimum width=2.4cm, minimum height=0.4cm] (root) at (3.0,4) {Root};
+
+            \node[draw, rectangle, fill=orange!20, minimum width=1cm, minimum height=0.4cm] (sw0) at (0.75,2) {Switch};
+            \node[draw, rectangle, fill=orange!20, minimum width=1cm, minimum height=0.4cm] (sw1) at (5.25,2) {Switch};
+
+            \node[draw, circle, fill=blue!10, inner sep=2pt] (n0) at (0,0) {$P_1$};
+            \node[draw, circle, fill=blue!10, inner sep=2pt] (n1) at (1.5,0) {$P_2$};
+            \node[draw, circle, fill=blue!10, inner sep=2pt] (n2) at (4.5,0) {$P_3$};
+            \node[draw, circle, fill=blue!10, inner sep=2pt] (n3) at (6.0,0) {$P_4$};
+
+            % Connections with varying thickness
+            \draw[line width=3pt] (root) -- (sw0);
+            \draw[line width=3pt] (root) -- (sw1);
+
+            \draw[line width=1.5pt] (sw0) -- (n0);
+            \draw[line width=1.5pt] (sw0) -- (n1);
+            \draw[line width=1.5pt] (sw1) -- (n2);
+            \draw[line width=1.5pt] (sw1) -- (n3);
+        \end{tikzpicture}
+        \caption{Fat-Tree.}
+        \label{fig:topo_tree}
+    \end{minipage}
+\end{figure}
+
+% =========================================================================
+% CHAPTER 3: SCALABILITY AND PERFORMANCE SCALING LAWS
+% =========================================================================
+\chapter{Scalability and Performance Scaling Laws}
+
+To build high-performance systems systematically, we must use quantitative metrics to measure how well our software scales as we add more processors. This chapter reviews system performance metrics and derives the fundamental laws of parallel speedup.
+
+\section{System Performance Metrics}
+We measure the execution performance of a processor using several standard variables:
+\begin{itemize}
+    \item \textbf{Clock Cycle Time ($t$):} The duration of a single processor clock cycle. The inverse is the clock rate $f = 1/t$.
+    \item \textbf{Cycles Per Instruction (CPI):} The average number of clock cycles required to execute a single instruction in a given program.
+    \item \textbf{Instruction Count ($I$):} The total number of instructions in the compiled program.
+    \item \textbf{MIPS (Millions of Instructions Per Second):} A historical metric representing execution speed, calculated as:
+          \begin{equation}
+              \text{MIPS} = \frac{I}{\text{Execution Time} \times 10^6} = \frac{f}{\text{CPI} \times 10^6}
+          \end{equation}
+\end{itemize}
+
+\section{Speedup Performance Laws}
+We define speedup ($S_N$) as the ratio of execution time on a single processor to the execution time on $N$ processors:
+\begin{equation}
+    S_N = \frac{T_1}{T_N}
+\end{equation}
+
+How does speedup scale as we add more processors? This question is answered by two key scaling laws.
+
+\subsection{Amdahl's Law (Fixed-Workload Scaling)}
+Amdahl's Law, proposed by Gene Amdahl in 1967, models performance scaling under a rigid assumption: the workload to be solved is of fixed size.
+
+\subsubsection{Physical Analogy}
+Imagine a team of construction workers tasking themselves with building a single, specific backyard deck. Some tasks must be done sequentially (e.g., digging the post holes, waiting for concrete to cure). Other tasks can be done in parallel if you hire more workers (e.g., nailing down deck boards). No matter how many workers you hire, you cannot bypass the concrete curing time. The sequential part of the job acts as a hard limit on how fast the deck can be completed.
+
+\subsubsection{Mathematical Derivation of Amdahl's Law}
+Let $T_1$ be the total sequential execution time of a program on a single processor. Let $s$ represent the fraction of the execution time that is inherently sequential and cannot be parallelized. Consequently, the fraction of the program that can be parallelized is $(1 - s)$.
+
+When executed on $N$ identical, fully cooperative parallel processors, the sequential portion still takes time $s \cdot T_1$, while the parallelizable portion scales down by a factor of $N$. The execution time on $N$ processors, $T_N$, is:
+\begin{equation}
+    T_N = s \cdot T_1 + \frac{(1 - s) \cdot T_1}{N}
+\end{equation}
+
+Substituting this expression back into our definition of speedup ($S_N = T_1 / T_N$):
+\begin{equation}
+    S_N = \frac{T_1}{s \cdot T_1 + \frac{(1 - s) \cdot T_1}{N}}
+\end{equation}
+
+Factoring out $T_1$ from both the numerator and the denominator yields Amdahl's Law:
+\begin{theorem}[Amdahl's Law]
+    \begin{equation}
+        S_N = \frac{1}{s + \frac{1 - s}{N}}
+    \end{equation}
+\end{theorem}
+
+\begin{lemma}[Asymptotic Limit of Amdahl's Law]
+    If we add an infinite number of processors to solve our fixed-size problem, we find the absolute upper limit of speedup:
+    \begin{equation}
+        \lim_{N \to \infty} S_N = \lim_{N \to \infty} \frac{1}{s + \frac{1-s}{N}} = \frac{1}{s}
+    \end{equation}
+\end{lemma}
+
+This limit reveals a harsh reality: if only $5\%$ of a program is sequential ($s = 0.05$), the maximum speedup achievable is $1 / 0.05 = 20\times$, even if we deploy millions of processor cores.
+
+\subsection{Gustafson's Law (Scaled-Workload Scaling)}
+In 1988, John L. Gustafson pointed out a limitation of Amdahl's model: in practice, users do not keep their problem size fixed when they get access to larger supercomputers. Instead, they scale up the problem size to obtain more accurate or detailed results in the same amount of time.
+
+\subsubsection{Physical Analogy}
+Instead of trying to build the same backyard deck faster, a larger construction crew is given a fixed time frame (say, one week) and told to build the largest, most detailed structure possible. With more workers, the parallel work scales up, while the relative impact of sequential planning tasks diminishes.
+
+\subsubsection{Mathematical Derivation of Gustafson's Law}
+Let $T_N$ represent the execution time of a scaled workload running on $N$ processors. To simplify the math, we normalize this total parallel execution time to 1 unit of time:
+\begin{equation}
+    T_N = s + p = 1
+\end{equation}
+where $s$ is the sequential time fraction and $p$ is the parallel execution fraction on the $N$-processor system. Thus, $p = 1 - s$.
+
+If we were to run this same scaled workload on a single, isolated processor, the parallel portion would no longer be divided among $N$ workers. It would take $N$ times longer to complete. The total execution time on a single processor, $T_1$, is:
+\begin{equation}
+    T_1 = s + p \cdot N
+\end{equation}
+
+Substituting $p = 1 - s$:
+\begin{equation}
+    T_1 = s + (1 - s) \cdot N
+\end{equation}
+
+Since we normalized the parallel execution time $T_N = 1$, the speedup $S_N$ is:
+\begin{equation}
+    S_N = \frac{T_1}{T_N} = \frac{s + (1 - s) \cdot N}{1}
+\end{equation}
+
+This yields Gustafson's Law:
+\begin{theorem}[Gustafson's Law]
+    \begin{equation}
+        S_N = s + (1 - s) \cdot N
+    \end{equation}
+\end{theorem}
+
+This linear equation shows that speedup can scale continuously with the number of processors, provided the workload scales alongside the system size.
+
+\subsection{Visualizing Speedup Performance Curves}
+To observe how these two laws diverge, we plot their performance curves below.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                title={Speedup Laws Comparison ($s = 0.10$)},
+                xlabel={Number of Processors ($N$)},
+                ylabel={Speedup ($S_N$)},
+                xmin=1, xmax=16,
+                ymin=1, ymax=16,
+                xtick={1,2,4,6,8,10,12,14,16},
+                ytick={1,2,4,6,8,10,12,14,16},
+                legend pos=north west,
+                grid=both,
+                grid style={line width=.1pt, draw=gray!10},
+                major grid style={line width=.2pt, draw=gray!30},
+                width=0.85\textwidth,
+                height=7.5cm
+            ]
+            % Amdahl's Law Plot: s = 0.1. S_N = 1 / (0.1 + 0.9/x)
+            \addplot [
+                domain=1:16,
+                samples=100,
+                color=blue,
+                thick
+            ] {1 / (0.1 + 0.9/x)};
+            \addlegendentry{Amdahl's Law (Fixed Workload)}
+
+            % Gustafson's Law Plot: s = 0.1. S_N = 0.1 + 0.9*x
+            \addplot [
+                domain=1:16,
+                samples=100,
+                color=red,
+                dashed,
+                thick
+            ] {0.1 + 0.9*x};
+            \addlegendentry{Gustafson's Law (Scaled Workload)}
+
+            % Asymptote for Amdahl's Law (S_limit = 10)
+            \addplot [
+                domain=1:16,
+                color=blue,
+                dotted,
+                thick
+            ] {10};
+            \node[above, blue, font=\small] at (axis cs: 10, 10.2) {Amdahl Limit = 10};
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Mathematical comparison of Amdahl's and Gustafson's speedup laws for a sequential fraction of $10\%$.}
+    \label{fig:speedup_plot}
+\end{figure}
+
+% =========================================================================
+% CHAPTER 4: PIPELINING PRINCIPLES AND SUPERSCALAR DESIGN
+% =========================================================================
+\chapter{Pipelining Principles and Superscalar Design}
+
+Pipelining is a primary instruction-level parallelism technique that overlaps instruction stages in hardware. This chapter details linear and non-linear pipeline architectures, analyzes execution hazards, and demonstrates how to optimize non-linear scheduling.
+
+\section{A 5-Stage Linear Instruction Pipeline}
+Modern instructions are typically executed in multiple physical stages, separated by electrical barriers called interface latches.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[node distance=0.4cm, every node/.style={font=\small}]
+        % Pipeline Stages
+        \node[draw, rectangle, fill=blue!15, minimum width=1.1cm, minimum height=1cm, align=center] (if) {Instruction\\Fetch\\(IF)};
+        \node[draw, rectangle, fill=red!20, minimum width=0.3cm, minimum height=1.2cm] (l1) [right=of if] {$L_1$};
+
+        \node[draw, rectangle, fill=blue!15, minimum width=1.1cm, minimum height=1cm, align=center] (id) [right=of l1] {Instruction\\Decode\\(ID)};
+        \node[draw, rectangle, fill=red!20, minimum width=0.3cm, minimum height=1.2cm] (l2) [right=of id] {$L_2$};
+
+        \node[draw, rectangle, fill=blue!15, minimum width=1.1cm, minimum height=1cm, align=center] (ex) [right=of l2] {Execute\\(EX)};
+        \node[draw, rectangle, fill=red!20, minimum width=0.3cm, minimum height=1.2cm] (l3) [right=of ex] {$L_3$};
+
+        \node[draw, rectangle, fill=blue!15, minimum width=1.1cm, minimum height=1cm, align=center] (mem) [right=of l3] {Memory\\Access\\(MEM)};
+        \node[draw, rectangle, fill=red!20, minimum width=0.3cm, minimum height=1.2cm] (l4) [right=of mem] {$L_4$};
+
+        \node[draw, rectangle, fill=blue!15, minimum width=1.1cm, minimum height=1cm, align=center] (wb) [right=of l4] {Write\\Back\\(WB)};
+
+        % Connections
+        \draw[-{Stealth}, thick] (if) -- (l1);
+        \draw[-{Stealth}, thick] (l1) -- (id);
+        \draw[-{Stealth}, thick] (id) -- (l2);
+        \draw[-{Stealth}, thick] (l2) -- (ex);
+        \draw[-{Stealth}, thick] (ex) -- (l3);
+        \draw[-{Stealth}, thick] (l3) -- (mem);
+        \draw[-{Stealth}, thick] (mem) -- (l4);
+        \draw[-{Stealth}, thick] (l4) -- (wb);
+
+    \end{tikzpicture}
+    \caption{A classic 5-stage linear instruction pipeline with stabilizing interface latches ($L_1$ to $L_4$).}
+    \label{fig:linear_pipeline}
+\end{figure}
+
+The interface latches ($L_1, L_2, L_3, L_4$) act as barriers that hold the computed results of the current clock cycle, allowing the next stage to work on them during the subsequent clock cycle without corruption.
+
+\subsection{Pipeline Space-Time Diagram}
+To visualize how instructions flow through a pipeline over time, we use a \textbf{Space-Time Diagram}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.65]
+        \matrix [matrix of nodes,
+            nodes={draw, minimum width=0.85cm, minimum height=0.6cm, align=center, font=\footnotesize},
+            row sep=0.1cm,
+            column sep=0.06cm] (grid)
+        {
+            Instr 1 & IF & ID & EX & MEM & WB  & |[draw=none]| & |[draw=none]| & |[draw=none]| \\
+            Instr 2 &    & IF & ID & EX  & MEM & WB            &               &               \\
+            Instr 3 &    &    & IF & ID  & EX  & MEM           & WB            &               \\
+            Instr 4 &    &    &    & IF  & ID  & EX            & MEM           & WB            \\
+        };
+
+        % Column labels (Clock Cycles)
+        \node[above=0.2cm of grid-1-2] {C1};
+        \node[above=0.2cm of grid-1-3] {C2};
+        \node[above=0.2cm of grid-1-4] {C3};
+        \node[above=0.2cm of grid-1-5] {C4};
+        \node[above=0.2cm of grid-1-6] {C5};
+        \node[above=0.2cm of grid-1-7] {C6};
+        \node[above=0.2cm of grid-1-8] {C7};
+        \node[above=0.2cm of grid-1-9] {C8};
+
+        \node[left=0.2cm of grid-1-1, font=\bfseries] {Execution Over Time};
+    \end{tikzpicture}
+    \caption{Space-Time / Execution diagram of a 5-stage pipeline processing four instructions.}
+    \label{fig:space_time}
+\end{figure}
+
+\section{Non-Linear Pipeline Scheduling}
+In a linear pipeline, data flows forward from one stage to the next. In a \textbf{non-linear pipeline}, hardware units can be reused for different tasks at different times during an instruction's execution. This introduces feedback loops and feed-forward bypass paths, which can lead to stage collisions.
+
+\subsection{Reservation Tables}
+We use a \textbf{Reservation Table} to map stage usage over time. The rows represent physical pipeline stages, and the columns represent clock cycles.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \begin{tabular}{ccccc}
+            \toprule
+            Stage & $t_1$ & $t_2$ & $t_3$ & $t_4$ \\
+            \midrule
+            $S_1$ & X     &       &       & X     \\
+            $S_2$ &       & X     &       &       \\
+            $S_3$ &       &       & X     &       \\
+            \bottomrule
+        \end{tabular}
+        \caption{Sample non-linear pipeline Reservation Table.}
+        \label{tab:reservation}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tikzpicture}[->, >=Stealth, shorten >=1pt, auto, node distance=2.2cm, semithick]
+            \node[state] (A) {$[3]$};
+            \node[state] (B) [right=of A] {$[1,3]$};
+
+            \path (A) edge [bend left]  node {4+} (B)
+            edge [loop above] node {3}   (A)
+            (B)   edge [bend left]  node {4+} (A)
+            edge [loop above] node {3}   (B);
+        \end{tikzpicture}
+        \caption{State Transition Diagram.}
+        \label{fig:state_diagram}
+    \end{minipage}
+\end{figure}
+
+\subsection{Deriving Schedules and Collision Vectors}
+Using the reservation table in Figure \ref{tab:reservation}, let us calculate how to schedule tasks without collisions:
+\begin{enumerate}
+    \item \textbf{Forbidden Latencies:} These are the number of clock cycles between any two 'X' marks in the same row. In stage $S_1$, there are 'X' marks at $t_1$ and $t_4$. The difference is $4 - 1 = 3$. Therefore, the forbidden latency is $3$.
+    \item \textbf{Collision Vector:} We construct a binary vector $C = (c_m c_{m-1} \dots c_1)$ where $c_i = 1$ if $i$ is a forbidden latency, and $0$ otherwise. For our table, the collision vector is $C = (100)$ (since only 3 is forbidden).
+    \item \textbf{State Transition Analysis (Figure \ref{fig:state_diagram}):} We track states using the active collision vector. By analyzing the loops (cycles) in this state machine, we identify collision-free schedules.
+    \item \textbf{Greedy Cycles and MAL:} A greedy cycle is a path through the state diagram where we always choose the lowest possible latency transition. The \textbf{Minimum Average Latency (MAL)} is the average latency of the optimal cycle, representing the maximum throughput the pipeline can sustain.
+\end{enumerate}
+
+% =========================================================================
+% CHAPTER 5: SHARED-MEMORY CONSISTENCY, CACHE COHERENCE, AND MULTICOMPUTERS
+% =========================================================================
+\chapter[Shared-Memory Consistency and Coherence]{Shared-Memory Consistency and Cache Coherence}
+
+In multi-core systems, each processor has its own private, high-speed cache. This layout introduces the cache coherence problem: ensuring that all caches maintain a consistent, unified view of shared memory. This chapter covers memory consistency models, cache mapping, and coherence protocols.
+
+\section{Memory Consistency Models}
+When multiple processors read and write to shared memory, we need rules to define the exact order in which memory updates become visible to other processors. These rules are called \textbf{memory consistency models}.
+
+\subsection{Sequential Consistency (SC)}
+Defined by Leslie Lamport in 1979, Sequential Consistency is the most intuitive memory model.
+\begin{definition}[Sequential Consistency]
+    A system is sequentially consistent if the result of any execution is the same as if the operations of all processors were executed in some sequential order, and the operations of each individual processor appear in this sequence in the order specified by its program.
+\end{definition}
+
+To visualize this, imagine an execution arbiter that selects one instruction from any processor, executes it on memory, and then selects the next, like a rotating switch. No processor's memory operations can be reordered out of program order. While SC is easy to understand, it prevents many hardware optimizations (such as out-of-order execution and write buffering), resulting in lower system performance.
+
+\subsection{Weak Consistency (WC)}
+Weak consistency relaxes these rules. It splits memory operations into ordinary data accesses (loads/stores) and synchronization operations (such as acquiring or releasing a lock). It guarantees that:
+\begin{enumerate}
+    \item Synchronization operations are sequentially consistent.
+    \item No ordinary memory access is allowed to pass a synchronization operation.
+    \item Ordinary reads and writes can be aggressively reordered between synchronization points to maximize throughput.
+\end{enumerate}
+
+\section{Cache Mapping Architectures}
+When data is loaded from main memory into the cache, we use a mapping scheme to determine where it is placed. In an **N-Way Set Associative** cache, the cache is divided into sets, and each memory address maps to a specific set but can be placed in any of the $N$ ways (lines) within that set.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+        % Memory Address Block
+        \node[draw, rectangle, minimum width=5.5cm, minimum height=0.6cm, fill=gray!15] (addr) at (3,4) {};
+        \node[above=0.15cm of addr, font=\footnotesize\bfseries] {Memory Address Fields};
+
+        % Address subdivisions
+        \node[draw, rectangle, minimum width=2.5cm, minimum height=0.6cm] (tag) at (1.5,4) {Tag};
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.6cm] (set) at (3.5,4) {Index};
+        \node[draw, rectangle, minimum width=1.5cm, minimum height=0.6cm] (off) at (5,4) {Offset};
+
+        % Cache Set Representation
+        \node[draw, rectangle, fill=blue!10, minimum width=3.5cm, minimum height=0.8cm, align=center] (way0) at (1,1.5) {Way 0 (Tag, Data)};
+        \node[draw, rectangle, fill=blue!10, minimum width=3.5cm, minimum height=0.8cm, align=center] (way1) at (5,1.5) {Way 1 (Tag, Data)};
+
+        % Comparator
+        \node[draw, circle, fill=orange!20, inner sep=2pt] (comp) at (3,0) {==};
+
+        % Connections (routed via the center vertical corridor to avoid overlapping boxes)
+        \draw[-{Stealth}, thick] (set.south) -- ++(0,-1.0) -- ++(-1.5,0) -> (way0.north);
+        \draw[-{Stealth}, thick] (set.south) -- ++(0,-1.0) -- ++(1.5,0) -> (way1.north);
+
+        \draw[-{Stealth}, thick] (way0.south) |- (comp.west);
+        \draw[-{Stealth}, thick] (way1.south) |- (comp.east);
+        \draw[-{Stealth}, thick] (tag.south) -- ++(0,-1.4) -- ++(1.5,0) -- (comp.north);
+
+        \node[below=0.1cm of comp, font=\bfseries] {Hit / Miss Logic};
+    \end{tikzpicture}
+    \caption{Hardware block diagram of a 2-way Set Associative Cache mapping logic.}
+    \label{fig:cache_mapping}
+\end{figure}
+
+The index bits of the memory address are used to select a target set. The tag bits are then compared in parallel with the tags in both Way 0 and Way 1. If a match is found and the line is valid, a cache hit occurs.
+
+\section{The MESI Cache Coherence Protocol}
+The **MESI Protocol** is a common protocol used to maintain cache coherence. Every cache line is tracked in one of four states:
+\begin{itemize}
+    \item \textbf{Modified (M):} The cache line is present only in the current cache and is dirty (newer than the copy in main memory). The processor has exclusive permission to write to this line.
+    \item \textbf{Exclusive (E):} The cache line is present only in the current cache but is clean (matches main memory).
+    \item \textbf{Shared (S):} The cache line is present in the current cache and potentially other caches. It is clean and read-only.
+    \item \textbf{Invalid (I):} The cache line does not contain valid data. Reading from it triggers a cache miss.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[->, >=Stealth, shorten >=1pt, auto, node distance=3.5cm, semithick, every node/.style={font=\small}]
+        % Symmetric diamond layout to ensure adequate spacing
+        \node[state] (I) at (0,0) {I};
+        \node[state] (S) at (-3,2.5) {S};
+        \node[state] (E) at (3,2.5) {E};
+        \node[state] (M) at (0,5) {M};
+
+        % Transitions (using individual draw commands for robust label positioning)
+        \draw[->] (I) to [bend left=20] node[left, pos=0.5, align=center, font=\scriptsize] {PrRd /\\BusRd} (S);
+        \draw[->] (I) to node[left, pos=0.2, align=center, font=\scriptsize] {PrWr /\\BusRdX} (M);
+        \draw[->] (S) to [bend left=20] node[right, pos=0.25, align=center, font=\scriptsize] {BusRdX /\\-} (I);
+        \draw[->] (S) to node[above left, pos=0.65, align=center, font=\scriptsize] {PrWr /\\BusRdX} (M);
+        \draw[->] (E) to [bend right=25] node[below, pos=0.3, align=center, font=\scriptsize] {BusRd /\\-} (S);
+        \draw[->] (E) to node[above right, pos=0.5, align=center, font=\scriptsize] {PrWr /\\-} (M);
+        \draw[->] (E) to [bend right=20] node[right, pos=0.65, align=center, font=\scriptsize] {BusRdX /\\-} (I);
+        \draw[->] (M) to [bend right=45] node[above left, pos=0.5, align=center, font=\scriptsize] {BusRd /\\WriteBack} (S);
+        \draw[->] (M) to [bend left=45] node[right, pos=0.35, align=center, font=\scriptsize] {BusRdX /\\WriteBack} (I);
+    \end{tikzpicture}
+    \caption{MESI Cache Coherence Protocol state machine showing transition triggers (Processor Read/Write, Bus Read/Read-With-Intent-To-Modify) and resulting actions.}
+    \label{fig:mesi_state}
+\end{figure}
+
+The state machine in Figure \ref{fig:mesi_state} handles local processor read and write events alongside external bus transactions observed (snooped) from other processors on the system bus.
+
+% =========================================================================
+% CHAPTER 6: VECTOR AND SIMD ARCHITECTURES
+% =========================================================================
+\chapter{Vector and SIMD Architectures}
+
+Applications involving massive data parallelism (such as scientific simulations and neural network training) are highly repetitive. This chapter details hardware structures tailored for uniform vector operations.
+
+\section{Vector Processing Principles}
+Vector processors operate on entire arrays of data (vectors) using a single instruction. This reduces instruction fetch and decode overhead compared to traditional scalar loop execution.
+
+\subsection{Register-to-Register Vector Pipeline Execution Flow}
+In a Register-to-Register vector architecture, vector operands are first loaded from memory into large, multi-element vector registers. These registers then feed data directly into pipelined functional units, which write the results back to another vector register.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+        % Vector Register A (Increased height to display range internally)
+        \node[draw, rectangle, fill=blue!10, minimum width=3.2cm, minimum height=0.9cm, align=center] (VRA) at (0,3.1) {Vector Register $V_A$\\[0.05cm]\footnotesize(Elements $0 \dots 63$)};
+        % Vector Register B (Increased height to display range internally)
+        \node[draw, rectangle, fill=blue!10, minimum width=3.2cm, minimum height=0.9cm, align=center] (VRB) at (0,1.7) {Vector Register $V_B$\\[0.05cm]\footnotesize(Elements $0 \dots 63$)};
+
+        % Vector Functional Unit (Text is upright using shape border rotate)
+        \node[draw, trapezium, trapezium left angle=75, trapezium right angle=75, fill=orange!20, minimum width=2.5cm, minimum height=1.2cm, align=center, shape border rotate=-90] (VFU) at (4,2.4) {Vector\\ALU\\(Pipelined)};
+
+        % Destination Vector Register C
+        \node[draw, rectangle, fill=green!10, minimum width=3.2cm, minimum height=0.9cm, align=center] (VRC) at (9.6,2.4) {Vector Register $V_C$\\[0.05cm]\footnotesize(Elements $0 \dots 63$)};
+
+        % Connections with clean embedded result label
+        \draw[-{Stealth}, thick, shorten >=3pt] (VRA.east) -- ++(0.9,0) |- (VFU.west);
+        \draw[-{Stealth}, thick, shorten >=3pt] (VRB.east) -- ++(0.9,0) |- (VFU.west);
+        \draw[-{Stealth}, thick] (VFU.east) -- node[above, midway, font=\footnotesize] {Result stream} (VRC.west);
+    \end{tikzpicture}
+    \caption{Data flow in a Register-to-Register vector execution pipeline.}
+    \label{fig:vector_pipeline}
+\end{figure}
+
+Because the system knows it will process a long sequence of elements in order, it can stream them through the pipelined ALU without incurring instruction-fetch overhead for each individual element.
+
+\section{The Connection Machine CM-5}
+The Thinking Machines Connection Machine CM-5 is a historically significant supercomputer that combined aspects of both SIMD and MIMD designs.
+
+Architecturally, the CM-5 was composed of hundreds to thousands of processing nodes, each equipped with custom vector arithmetic units. These nodes were coordinated by a control network and connected by a high-bandwidth data network.
+
+The CM-5 organized its nodes using a \textbf{Fat-Tree} topology. Unlike a standard tree topology, where connections near the top (root) can become communication bottlenecks, a Fat-Tree increases the bandwidth (the ``thickness'' of the links) as you move up the hierarchy toward the root. This structure allows the system to sustain high global communication rates across thousands of individual processing nodes.
+
+% =========================================================================
+% POST-TEXTBOOK SUPPLEMENTARY DATA
+% =========================================================================
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+
+The evolution of computer architecture is a continuous balance between physical hardware constraints and software demands. From the early models of parallelism to modern highly parallel vector units, the primary goal has remained the same: to execute instructions as efficiently and concurrently as possible.
+
+By mastering these fundamentals—the mathematical limits of speedup, data dependencies, memory consistency models, pipelining, and cache coherence—engineers can design systems that continue to scale performance long after the physical boundaries of individual transistors have been reached.
+
+\end{document}
