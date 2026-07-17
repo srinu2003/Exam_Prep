@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.Tech CSE Exam Preparation Hub</title>
+  <meta name="description" content="Central directory for M.Tech Computer Science & Engineering syllabus, study guides, notes, and past mid-papers.">
+  <style>
+    /* Monochrome Minimal Design System */
+    body {
+      background-color: #ffffff;
+      color: #111111;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 40px 20px 80px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 40px;
+      border-bottom: 2px solid #111111;
+      padding-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.01em;
+    }
+
+    .subtitle {
+      color: #555555;
+      font-size: 1.05rem;
+      margin: 0 0 15px 0;
+    }
+
+    .meta-links {
+      font-size: 0.9rem;
+      color: #666666;
+    }
+
+    .meta-links a {
+      color: #111111;
+      text-decoration: underline;
+    }
+
+    .meta-links a:hover {
+      color: #555555;
+    }
+
+    /* Simple Controls */
+    .controls {
+      margin-bottom: 35px;
+      padding: 20px 0;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      border: 1px solid #111111;
+      background: #ffffff;
+      color: #111111;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .search-box:focus {
+      outline: 2px solid #111111;
+    }
+
+    .filter-group {
+      font-size: 0.9rem;
+      color: #666666;
+      line-height: 1.8;
+    }
+
+    .filter-btn {
+      background: none;
+      border: none;
+      color: #666666;
+      padding: 0;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .filter-btn:hover {
+      color: #111111;
+    }
+
+    .filter-btn.active {
+      color: #111111;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .separator {
+      margin: 0 5px;
+      color: #cccccc;
+    }
+
+    /* Subject Section lists */
+    .subject-section {
+      margin-bottom: 40px;
+    }
+
+    .subject-section h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      border-bottom: 1px solid #111111;
+      padding-bottom: 6px;
+      margin: 0 0 15px 0;
+    }
+
+    .resource-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .resource-item {
+      padding: 8px 0;
+      border-bottom: 1px dashed #eeeeee;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .resource-item:last-child {
+      border-bottom: none;
+    }
+
+    .resource-link {
+      color: #111111;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+
+    .resource-meta {
+      font-size: 0.8rem;
+      color: #666666;
+      font-family: monospace;
+      margin-left: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+
+    .no-results {
+      padding: 30px 0;
+      text-align: center;
+      color: #666666;
+      display: none;
+      border: 1px dashed #cccccc;
+    }
+
+    footer {
+      margin-top: 60px;
+      border-top: 1px solid #dddddd;
+      padding-top: 20px;
+      font-size: 0.8rem;
+      color: #666666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Title Area -->
+    <header>
+      <h1>M.Tech CSE Exam Preparation</h1>
+            <p class="subtitle">Syllabus, study guides, notes, and past examination papers hosted on GitHub Pages.</p>
+      <div class="meta-links">
+        Repository: <a href="https://github.com/srinu2003/Exam_Prep" target="_blank">srinu2003/Exam_Prep</a> | R25 Regulation
+      </div>
+    </header>
+
+    <!-- Interactive Filtering & Search -->
+    <div class="controls">
+      <input type="text" id="search-input" class="search-box" placeholder="Search resources..." aria-label="Search resources">
+      
+      <div class="filter-group" id="filter-container">
+        <!-- Subject Filters -->
+        <button class="filter-btn active" data-filter="all">All</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="syllabus">Syllabus</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="aca">ACA</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="ads">ADS</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="cs">Cyber Security</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="plsql">PL/SQL</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="papers">Midterm Papers</button>
+        
+        <!-- Type Filters Divider -->
+        <span class="separator">|</span>
+        
+        <!-- Type Filters -->
+        <button class="filter-btn" data-filter="type-pdf">PDFs Only</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="type-html">HTML Pages Only</button>
+      </div>
+    </div>
+
+    <!-- Main List Grid -->
+    <main id="subjects-container">
+      
+      <!-- Section: Syllabus -->
+      <section class="subject-section" data-subject="syllabus">
+        <h2>General Curriculum</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="mtech cse syllabus core regulation r25 pdf">
+            <a href="./MLRS-R25-M.Tech-(CSE)-Syllabus.pdf" class="resource-link" target="_blank">M.Tech (CSE) Official Syllabus</a>
+            <span class="resource-meta">PDF [1.49 MB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Advanced Computer Architecture (ACA) -->
+      <section class="subject-section" data-subject="aca">
+        <h2>Advanced Computer Architecture (ACA)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="advanced computer architecture textbook core reference lecture notes pdf">
+            <a href="./ACA/Advanced-Computer-Architecture.pdf" class="resource-link" target="_blank">ACA Textbook & Core Reference</a>
+            <span class="resource-meta">PDF [391 KB]</span>
+          </li>
+          <li class="resource-item" data-type="pdf" data-keywords="aca unit 1 first lecture notes instructions pipelines pdf">
+            <a href="./ACA/Unit1_Lecture_Notes.pdf" class="resource-link" target="_blank">ACA Unit 1 Lecture Notes</a>
+            <span class="resource-meta">PDF [168 KB]</span>
+          </li>
+          <li class="resource-item" data-type="pdf" data-keywords="aca unit 2 second student notes instruction execution level memory pdf">
+            <a href="./ACA/Unit2_Student_Notes.pdf" class="resource-link" target="_blank">ACA Unit 2 Student Notes</a>
+            <span class="resource-meta">PDF [168 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="aca syllabus advanced computer architecture markdown core topics md">
+            <a href="./ACA/advanced_computer_architecture_syllabus.md" class="resource-link" target="_blank">ACA Course Syllabus</a>
+            <span class="resource-meta">Markdown [3.3 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Advanced Data Structures (ADS) -->
+      <section class="subject-section" data-subject="ads">
+        <h2>Advanced Data Structures (ADS)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="ads unit 5 five trees graphs search data structures notes pdf">
+            <a href="./ADS/Unit5_ADS_Student_Notes.pdf" class="resource-link" target="_blank">ADS Unit 5 Student Notes</a>
+            <span class="resource-meta">PDF [185 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="ads syllabus advanced data structures markdown core topics md">
+            <a href="./ADS/advanced_data_structures_syllabus.md" class="resource-link" target="_blank">ADS Course Syllabus</a>
+            <span class="resource-meta">Markdown [2.5 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Cyber Security (CS) -->
+      <section class="subject-section" data-subject="cs">
+        <h2>Cyber Security (CS)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="html" data-keywords="cs study guide complete dashboard cyber security network safety html index">
+            <a href="./CS/index.html" class="resource-link" target="_blank">Cyber Security Study Guide Dashboard</a>
+            <span class="resource-meta">HTML [63 KB]</span>
+          </li>
+          <li class="resource-item" data-type="html" data-keywords="cs cyber security study guide notes text cryptography threat forensics html">
+            <a href="./CS/cyber_security_study_guide.html" class="resource-link" target="_blank">Cyber Security Complete Study Guide</a>
+            <span class="resource-meta">HTML [61 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="cs syllabus cyber security topics markdown md">
+            <a href="./CS/Cyber_Security_Syllabus.md" class="resource-link" target="_blank">Cyber Security Course Syllabus</a>
+            <span class="resource-meta">Markdown [3.8 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Database Programming (PL/SQL) -->
+      <section class="subject-section" data-subject="plsql">
+        <h2>Database Programming with PL/SQL</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="html" data-keywords="plsql study guide pl sql oracle databases blocks triggers cursors functions procedures html">
+            <a href="./PLSQL/plsql_study_guide.html" class="resource-link" target="_blank">PL/SQL Complete Study Guide</a>
+            <span class="resource-meta">HTML [105 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="plsql database programming syllabus oracle markdown topics md">
+            <a href="./PLSQL/Database_Programming_PLSQL_Syllabus.md" class="resource-link" target="_blank">PL/SQL Course Syllabus</a>
+            <span class="resource-meta">Markdown [3 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Midterm Papers -->
+      <section class="subject-section" data-subject="papers">
+        <h2>Midterm Papers & Exams</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="mid papers aca mid term 2 computer architecture second exam paper pdf">
+            <a href="./mid-papers/ACA-mid-2.pdf" class="resource-link" target="_blank">ACA Mid-Term II Exam Paper</a>
+            <span class="resource-meta">PDF [255 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="mid papers aca mid term 2 computer architecture second exam questions markdown md">
+            <a href="./mid-papers/ACA-mid-2.md" class="resource-link" target="_blank">ACA Mid-Term II Questions</a>
+            <span class="resource-meta">Markdown [19 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Empty State -->
+      <div id="no-results-msg" class="no-results">
+        No matching resources found.
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 srinu2003 / Exam_Prep. All links are relative and ready for GitHub Pages hosting.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('search-input');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const sections = document.querySelectorAll('.subject-section');
+      const noResultsMsg = document.getElementById('no-results-msg');
+
+      let activeFilter = 'all';
+      let searchKeyword = '';
+
+      function updateVisibility() {
+        let totalVisible = 0;
+
+        sections.forEach(section => {
+          const subject = section.getAttribute('data-subject');
+          const items = section.querySelectorAll('.resource-item');
+          let visibleInSection = 0;
+
+          // Check if active filter is a document type filter
+          const isTypeFilter = activeFilter.startsWith('type-');
+          const matchesCategory = (activeFilter === 'all' || isTypeFilter || activeFilter === subject);
+
+          if (matchesCategory) {
+            items.forEach(item => {
+              const itemType = item.getAttribute('data-type');
+              const keywords = item.getAttribute('data-keywords').toLowerCase();
+              const text = item.textContent.toLowerCase();
+              
+              const matchesSearch = (text.includes(searchKeyword) || keywords.includes(searchKeyword));
+              
+              // Validate type matches if it's a type-based filter
+              let matchesType = true;
+              if (isTypeFilter) {
+                const targetType = activeFilter.replace('type-', '');
+                matchesType = (itemType === targetType);
+              }
+
+              if (matchesSearch && matchesType) {
+                item.classList.remove('hidden');
+                visibleInSection++;
+              } else {
+                item.classList.add('hidden');
+              }
+            });
+          }
+
+          if (matchesCategory && visibleInSection > 0) {
+            section.classList.remove('hidden');
+            totalVisible += visibleInSection;
+          } else {
+            section.classList.add('hidden');
+          }
+        });
+
+        if (totalVisible === 0) {
+          noResultsMsg.style.display = 'block';
+        } else {
+          noResultsMsg.style.display = 'none';
+        }
+      }
+
+      searchInput.addEventListener('input', (e) => {
+        searchKeyword = e.target.value.toLowerCase().trim();
+        updateVisibility();
+      });
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.getAttribute('data-filter');
+          updateVisibility();
+        });
+      });
+
+      // ESC key to clear search
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          searchKeyword = '';
+          updateVisibility();
+          searchInput.blur();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
