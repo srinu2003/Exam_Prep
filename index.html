@@ -1,1282 +1,466 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>Cyber Security — Complete Study Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.Tech CSE Exam Preparation Hub</title>
+  <meta name="description" content="Central directory for M.Tech Computer Science & Engineering syllabus, study guides, notes, and past mid-papers.">
   <style>
-    :root {
-      --bg: #fbfaf7;
-      --ink: #1c1b19;
-      --muted: #625f58;
-      --rule: #ddd8cd;
-      --red: #a32d2d;
-      --red-bg: #fcebeb;
-      --black-bg: #eceae5;
-      --blue-bg: #e8eef5;
-      --blue: #29527a;
-    }
-
+    /* Monochrome Minimal Design System */
     * {
       box-sizing: border-box;
     }
 
     body {
+      background-color: #ffffff;
+      color: #111111;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
       margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Georgia, 'Times New Roman', serif;
-      line-height: 1.65;
+      padding: 40px 20px 80px;
     }
 
-    .wrap {
-      max-width: 820px;
+    .container {
+      max-width: 760px;
       margin: 0 auto;
-      padding: 56px 24px 100px;
     }
 
     header {
-      border-bottom: 2px solid var(--ink);
+      margin-bottom: 40px;
+      border-bottom: 2px solid #111111;
       padding-bottom: 20px;
-      margin-bottom: 36px;
-    }
-
-    .eyebrow {
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 0 0 8px;
     }
 
     h1 {
-      font-size: 32px;
-      margin: 0;
-      font-weight: 400;
-    }
-
-    .sub {
-      color: var(--muted);
-      font-size: 16px;
-      margin-top: 8px;
-    }
-
-    nav {
-      background: var(--black-bg);
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 16px 22px;
-      margin-bottom: 40px;
-      font-size: 15px;
-    }
-
-    nav a {
-      color: var(--ink);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--muted);
-    }
-
-    nav ol {
-      margin: 8px 0 0;
-      padding-left: 20px;
-    }
-
-    nav ol ol {
-      margin-top: 4px;
-      margin-bottom: 8px;
-    }
-
-    h2 {
-      font-size: 23px;
-      font-weight: 400;
-      margin: 52px 0 14px;
-      border-left: 3px solid var(--red);
-      padding-left: 12px;
-    }
-
-    h3 {
-      font-size: 18px;
-      font-weight: 400;
-      margin: 28px 0 10px;
-      color: #3a2f2f;
-    }
-
-    h4 {
-      font-size: 15.5px;
+      font-size: 2.2rem;
       font-weight: 700;
-      margin: 18px 0 6px;
-      color: #3a2f2f;
-      font-family: 'Courier New', monospace;
-      text-transform: uppercase;
-      letter-spacing: .04em;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.01em;
     }
 
-    p {
-      font-size: 16.5px;
-      color: #2b2a27;
+    .subtitle {
+      color: #555555;
+      font-size: 1.05rem;
+      margin: 0 0 15px 0;
     }
 
-    .figure {
-      margin: 24px 0;
-      padding: 8px 0;
-      text-align: center;
-      overflow-x: auto;
+    .meta-links {
+      font-size: 0.9rem;
+      color: #666666;
     }
 
-    .caption {
-      font-family: 'Courier New', monospace;
-      font-size: 12.5px;
-      color: var(--muted);
-      text-align: center;
-      margin-top: 6px;
+    .meta-links a {
+      color: #111111;
+      text-decoration: underline;
     }
 
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 8px;
-      font-family: 'Courier New', monospace;
-      font-size: 12.5px;
-      color: var(--muted);
+    .meta-links a:hover {
+      color: #555555;
     }
 
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    /* Simple Controls */
+    .controls {
+      margin-bottom: 35px;
+      padding: 20px 0;
+      border-bottom: 1px solid #dddddd;
     }
 
-    .swatch {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .swatch.black {
-      background: #1c1b19;
-    }
-
-    .swatch.red {
-      background: var(--red);
-    }
-
-    ol,
-    ul {
-      font-size: 16px;
-      color: #2b2a27;
-      padding-left: 22px;
-    }
-
-    li {
-      margin-bottom: 7px;
-    }
-
-    .props,
-    .box {
-      background: var(--black-bg);
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 18px 24px;
-      margin: 18px 0;
-    }
-
-    .note {
-      background: var(--red-bg);
-      border-left: 3px solid var(--red);
-      padding: 14px 18px;
-      font-size: 15px;
-      color: #5a1f1f;
-      margin: 22px 0;
-    }
-
-    .assume {
-      background: var(--blue-bg);
-      border-left: 3px solid var(--blue);
-      padding: 12px 18px;
-      font-size: 14.5px;
-      color: #1f3550;
-      margin: 20px 0;
-    }
-
-    code {
-      font-family: 'Courier New', monospace;
-      background: var(--black-bg);
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-size: 14.5px;
-    }
-
-    table {
+    .search-box {
       width: 100%;
-      border-collapse: collapse;
-      margin: 18px 0;
-      font-size: 15px;
-    }
-
-    th,
-    td {
-      border: 1px solid var(--rule);
+      max-width: 400px;
       padding: 8px 12px;
-      text-align: left;
+      font-size: 0.95rem;
+      border: 1px solid #111111;
+      background: #ffffff;
+      color: #111111;
+      margin-bottom: 15px;
+      display: block;
     }
 
-    th {
-      background: var(--black-bg);
-      font-weight: 400;
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
+    .search-box:focus {
+      outline: 2px solid #111111;
     }
 
-    .step {
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
-      color: var(--muted);
+    .filter-group {
+      font-size: 0.9rem;
+      color: #666666;
+      line-height: 1.8;
     }
 
-    .case {
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 16px 20px;
-      margin: 14px 0;
-      background: #fff;
+    .filter-btn {
+      background: none;
+      border: none;
+      color: #666666;
+      padding: 0;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      cursor: pointer;
     }
 
-    .case h4 {
-      margin-top: 0;
+    .filter-btn:hover {
+      color: #111111;
     }
 
-    .unit-tag {
-      display: inline-block;
-      font-family: 'Courier New', monospace;
-      font-size: 11.5px;
-      color: var(--red);
-      border: 1px solid var(--red);
-      border-radius: 4px;
-      padding: 1px 8px;
-      margin-bottom: 10px;
-      letter-spacing: .05em;
+    .filter-btn.active {
+      color: #111111;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .separator {
+      margin: 0 5px;
+      color: #cccccc;
+    }
+
+    /* Subject Section lists */
+    .subject-section {
+      margin-bottom: 40px;
+    }
+
+    .subject-section h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      border-bottom: 1px solid #111111;
+      padding-bottom: 6px;
+      margin: 0 0 15px 0;
+    }
+
+    .resource-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .resource-item {
+      padding: 8px 0;
+      border-bottom: 1px dashed #eeeeee;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .resource-item:last-child {
+      border-bottom: none;
+    }
+
+    .resource-link {
+      color: #111111;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+
+    .resource-meta {
+      font-size: 0.8rem;
+      color: #666666;
+      font-family: monospace;
+      margin-left: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+
+    .no-results {
+      padding: 30px 0;
+      text-align: center;
+      color: #666666;
+      display: none;
+      border: 1px dashed #cccccc;
     }
 
     footer {
       margin-top: 60px;
-      padding-top: 16px;
-      border-top: 1px solid var(--rule);
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    a.top {
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration: none;
-    }
-
-    hr.sep {
-      border: none;
-      border-top: 1px dashed var(--rule);
-      margin: 34px 0;
+      border-top: 1px solid #dddddd;
+      padding-top: 20px;
+      font-size: 0.8rem;
+      color: #666666;
+      text-align: center;
     }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
 
+  <div class="container">
+    
+    <!-- Title Area -->
     <header>
-      <p class="eyebrow">M.Tech CSE · I Year II Sem · Professional Elective III · L-T-P-C 3-0-0-3</p>
-      <h1>Cyber Security</h1>
-      <p class="sub">A complete unit-wise study guide — attacks, law &amp; forensics, mobile/wireless security,
-        organizational implications, and privacy.</p>
+      <h1>M.Tech CSE Exam Preparation</h1>
+            <p class="subtitle">Syllabus, study guides, notes, and past examination papers hosted on GitHub Pages.</p>
+      <div class="meta-links">
+        Repository: <a href="https://github.com/srinu2003/Exam_Prep" target="_blank">srinu2003/Exam_Prep</a> | R25 Regulation
+      </div>
     </header>
 
-    <nav id="top">
-      <strong>Contents</strong>
-      <ol>
-        <li><a href="#objectives">Course Objectives &amp; Outcomes</a></li>
-        <li><a href="#unit1">Unit I — Introduction to Cyber Security</a>
-          <ol>
-            <li><a href="#u1-basic">Basic Cyber Security Concepts</a></li>
-            <li><a href="#u1-layers">Layers of Security</a></li>
-            <li><a href="#u1-vuln">Vulnerability, Threat, Harmful Acts</a></li>
-            <li><a href="#u1-gov">Internet Governance — Challenges &amp; Constraints</a></li>
-            <li><a href="#u1-crim">Computer Criminals</a></li>
-            <li><a href="#u1-cia">CIA Triad</a></li>
-            <li><a href="#u1-assets">Assets and Threat</a></li>
-            <li><a href="#u1-motive">Motive of Attackers</a></li>
-            <li><a href="#u1-attacks">Active &amp; Passive Attacks</a></li>
-            <li><a href="#u1-swhw">Software Attacks, Hardware Attacks</a></li>
-            <li><a href="#u1-threats">Cyber Threats — Warfare, Crime, Terrorism, Espionage</a></li>
-            <li><a href="#u1-policy">Comprehensive Cyber Security Policy</a></li>
-          </ol>
-        </li>
-        <li><a href="#unit2">Unit II — Cyberspace &amp; the Law, and Cyber Forensics</a>
-          <ol>
-            <li><a href="#u2-intro">Introduction</a></li>
-            <li><a href="#u2-regs">Cyber Security Regulations</a></li>
-            <li><a href="#u2-intl">Role of International Law</a></li>
-            <li><a href="#u2-indian">The Indian Cyberspace</a></li>
-            <li><a href="#u2-ncsp">National Cyber Security Policy</a></li>
-            <li><a href="#u2-fhist">Cyber Forensics: History &amp; Digital Forensics Science</a></li>
-            <li><a href="#u2-need">The Need for Computer Forensics</a></li>
-            <li><a href="#u2-evid">Cyber Forensics and Digital Evidence</a></li>
-            <li><a href="#u2-email">Forensic Analysis of Email</a></li>
-            <li><a href="#u2-lifecycle">Digital Forensics Lifecycle</a></li>
-            <li><a href="#u2-invest">Forensics Investigation</a></li>
-            <li><a href="#u2-challenges">Challenges in Computer Forensics</a></li>
-          </ol>
-        </li>
-        <li><a href="#unit3">Unit III — Cybercrime: Mobile and Wireless Devices</a>
-          <ol>
-            <li><a href="#u3-intro">Introduction</a></li>
-            <li><a href="#u3-prolif">Proliferation of Mobile &amp; Wireless Devices</a></li>
-            <li><a href="#u3-trends">Trends in Mobility</a></li>
-            <li><a href="#u3-fraud">Credit Card Frauds in Mobile/Wireless Computing</a></li>
-            <li><a href="#u3-sec">Security Challenges Posed by Mobile Devices</a></li>
-            <li><a href="#u3-registry">Registry Settings for Mobile Devices</a></li>
-            <li><a href="#u3-auth">Authentication Service Security</a></li>
-            <li><a href="#u3-cellattacks">Attacks on Mobile/Cell Phones</a></li>
-            <li><a href="#u3-orgpolicy">Organizational Policies &amp; Measures</a></li>
-            <li><a href="#u3-laptops">Laptops</a></li>
-          </ol>
-        </li>
-        <li><a href="#unit4">Unit IV — Cyber Security: Organizational Implications</a>
-          <ol>
-            <li><a href="#u4-intro">Introduction</a></li>
-            <li><a href="#u4-cost">Cost of Cybercrimes and IPR Issues</a></li>
-            <li><a href="#u4-web">Web Threats for Organizations</a></li>
-            <li><a href="#u4-privacy">Security and Privacy Implications</a></li>
-            <li><a href="#u4-social">Social Media Marketing: Risks &amp; Perils</a></li>
-            <li><a href="#u4-computing">Social Computing and Challenges</a></li>
-          </ol>
-        </li>
-        <li><a href="#unit5">Unit V — Privacy Issues &amp; Cybercrime Cases</a>
-          <ol>
-            <li><a href="#u5-fund">Fundamental Concepts of Data Privacy</a></li>
-            <li><a href="#u5-attacks">Data Privacy Attacks</a></li>
-            <li><a href="#u5-linking">Data Linking and Profiling</a></li>
-            <li><a href="#u5-policies">Privacy Policies and Specifications</a></li>
-            <li><a href="#u5-lang">Privacy Policy Languages</a></li>
-            <li><a href="#u5-domains">Privacy in Different Domains</a></li>
-            <li><a href="#u5-examples">Cybercrime Examples</a></li>
-            <li><a href="#u5-mini">Mini-Cases</a></li>
-          </ol>
-        </li>
-        <li><a href="#books">Text Books &amp; References</a></li>
-      </ol>
-    </nav>
-
-    <section id="objectives">
-      <h2>Course Objectives &amp; Outcomes</h2>
-
-      <h3>Course Objectives</h3>
-      <div class="props">
-        <ol>
-          <li>To understand various types of cyber-attacks and cyber-crimes.</li>
-          <li>To learn threats and risks within the context of cyber security.</li>
-          <li>To have an overview of cyber laws &amp; concepts of cyber forensics.</li>
-          <li>To study the defensive techniques against these attacks.</li>
-        </ol>
+    <!-- Interactive Filtering & Search -->
+    <div class="controls">
+      <input type="text" id="search-input" class="search-box" placeholder="Search resources..." aria-label="Search resources">
+      
+      <div class="filter-group" id="filter-container">
+        <!-- Subject Filters -->
+        <button class="filter-btn active" data-filter="all">All</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="syllabus">Syllabus</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="aca">ACA</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="ads">ADS</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="cs">Cyber Security</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="plsql">PL/SQL</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="sqe">SQE</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="rpa">RPA</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="papers">Midterm Papers</button>
+        
+        <!-- Type Filters Divider -->
+        <span class="separator">|</span>
+        
+        <!-- Type Filters -->
+        <button class="filter-btn" data-filter="type-pdf">PDFs Only</button>
+        <span class="separator">/</span>
+        <button class="filter-btn" data-filter="type-html">HTML Pages Only</button>
       </div>
+    </div>
 
-      <h3>Course Outcomes</h3>
-      <div class="props">
-        <ol>
-          <li><strong>CO1:</strong> Design cyber security concepts and threat models for secure communication systems in
-            protecting organizational assets.</li>
-          <li><strong>CO2:</strong> Analyze cyber laws, policies, and digital forensic techniques to investigate
-            cybercrimes in preserving admissible digital evidence.</li>
-          <li><strong>CO3:</strong> Evaluate mobile and wireless device vulnerabilities to recommend effective
-            authentication and security policies in enterprise environments.</li>
-          <li><strong>CO4:</strong> Examine organizational implications of cyber threats to formulate strategies
-            mitigating risks in web services, social media, and intellectual property.</li>
-          <li><strong>CO5:</strong> Develop privacy-preserving solutions and policies for sensitive domains such as
-            healthcare and financial systems through real-world case analysis.</li>
-        </ol>
-      </div>
-    </section>
-
-    <hr class="sep">
-
-    <!-- =================== UNIT I =================== -->
-    <section id="unit1">
-      <span class="unit-tag">UNIT I</span>
-      <h2>Introduction to Cyber Security</h2>
-
-      <h3 id="u1-basic">1. Basic Cyber Security Concepts</h3>
-      <p>Cyber security is the practice of protecting systems, networks, programs, and data from digital attacks,
-        unauthorized access, damage, or theft. It spans people, process, and technology: policies and awareness
-        (people), incident-handling procedures (process), and firewalls, encryption, and monitoring tools (technology).
-        The overarching goal is to preserve the trustworthiness of information systems while they remain usable for
-        legitimate purposes.</p>
-      <ul>
-        <li><strong>Cyberspace</strong> — the interconnected digital environment of networks, devices, and data in which
-          communication and computation occur.</li>
-        <li><strong>Security</strong> — freedom from, or resilience against, potential harm caused by others (deliberate
-          or accidental).</li>
-        <li><strong>Risk</strong> — the potential for loss or damage when a threat exploits a vulnerability.</li>
-        <li><strong>Attack surface</strong> — the sum of all points where an unauthorized user could try to enter or
-          extract data.</li>
-      </ul>
-
-      <h3 id="u1-layers">2. Layers of Security</h3>
-      <p>Cyber security is implemented through <em>defense in depth</em> — multiple, overlapping layers so that failure
-        of one control does not compromise the whole system.</p>
-      <table>
-        <tr>
-          <th>Layer</th>
-          <th>Purpose</th>
-          <th>Typical Controls</th>
-        </tr>
-        <tr>
-          <td>Physical Security</td>
-          <td>Protect hardware and premises</td>
-          <td>Locks, biometric access, CCTV</td>
-        </tr>
-        <tr>
-          <td>Perimeter Security</td>
-          <td>Guard the network boundary</td>
-          <td>Firewalls, IDS/IPS, DMZ</td>
-        </tr>
-        <tr>
-          <td>Network Security</td>
-          <td>Protect data in transit</td>
-          <td>VPN, segmentation, encryption</td>
-        </tr>
-        <tr>
-          <td>Host/Endpoint Security</td>
-          <td>Protect individual devices</td>
-          <td>Antivirus, patching, hardening</td>
-        </tr>
-        <tr>
-          <td>Application Security</td>
-          <td>Protect software</td>
-          <td>Secure coding, code review, WAF</td>
-        </tr>
-        <tr>
-          <td>Data Security</td>
-          <td>Protect information at rest</td>
-          <td>Encryption, DLP, access control</td>
-        </tr>
-        <tr>
-          <td>Human Layer</td>
-          <td>Reduce human error</td>
-          <td>Awareness training, policies</td>
-        </tr>
-      </table>
-
-      <h3 id="u1-vuln">3. Vulnerability, Threat, Harmful Acts</h3>
-      <ul>
-        <li><strong>Vulnerability</strong> — a weakness in a system (design flaw, misconfiguration, unpatched software)
-          that can be exploited.</li>
-        <li><strong>Threat</strong> — any circumstance or event with the potential to cause harm by exploiting a
-          vulnerability (e.g., a hacker, malware, natural disaster).</li>
-        <li><strong>Harmful acts</strong> — actual actions that cause damage: unauthorized access, data destruction,
-          denial of service, fraud, sabotage, and misuse of privileges.</li>
-      </ul>
-      <div class="note">Relationship: <strong>Risk ≈ Threat × Vulnerability × Impact</strong>. Removing either the
-        threat or the vulnerability reduces risk even if the other remains.</div>
-
-      <h3 id="u1-gov">4. Internet Governance — Challenges and Constraints</h3>
-      <p>Internet governance refers to the development and application of shared principles, norms, rules, and
-        decision-making procedures that shape the evolution and use of the Internet, involving governments, the private
-        sector, civil society, and technical bodies (e.g., ICANN, IETF, W3C).</p>
-      <ul>
-        <li><strong>Jurisdictional challenges</strong> — the Internet is borderless, but laws are territorial, causing
-          conflicts over which country's law applies.</li>
-        <li><strong>Multi-stakeholder tension</strong> — balancing government control, private-sector innovation, and
-          civil-society rights.</li>
-        <li><strong>Digital divide</strong> — unequal access to infrastructure and skills across regions.</li>
-        <li><strong>Content regulation vs. free speech</strong> — censorship concerns versus the need to curb
-          misinformation and harmful content.</li>
-        <li><strong>Cybersecurity and sovereignty</strong> — nations seeking greater control over data flows (data
-          localization) versus a globally open Internet.</li>
-        <li><strong>Enforcement constraints</strong> — attribution of attacks across borders is difficult, slowing legal
-          action.</li>
-      </ul>
-
-      <h3 id="u1-crim">5. Computer Criminals</h3>
-      <p>Computer criminals are individuals or groups who use computers/networks as a tool, target, or incidental
-        instrument of crime.</p>
-      <table>
-        <tr>
-          <th>Category</th>
-          <th>Description</th>
-        </tr>
-        <tr>
-          <td>Hackers (Black Hat)</td>
-          <td>Break into systems for malicious gain</td>
-        </tr>
-        <tr>
-          <td>Crackers</td>
-          <td>Bypass software protections/licensing</td>
-        </tr>
-        <tr>
-          <td>Script Kiddies</td>
-          <td>Use existing tools/scripts without deep expertise</td>
-        </tr>
-        <tr>
-          <td>Insiders</td>
-          <td>Employees/contractors who misuse authorized access</td>
-        </tr>
-        <tr>
-          <td>Organized Crime Groups</td>
-          <td>Financially motivated, operate as syndicates</td>
-        </tr>
-        <tr>
-          <td>State-Sponsored Actors</td>
-          <td>Government-backed, conduct espionage/sabotage</td>
-        </tr>
-        <tr>
-          <td>Hacktivists</td>
-          <td>Politically/socially motivated attackers</td>
-        </tr>
-        <tr>
-          <td>Cyber Terrorists</td>
-          <td>Aim to cause fear/disruption for ideological ends</td>
-        </tr>
-      </table>
-
-      <h3 id="u1-cia">6. CIA Triad</h3>
-      <p>The CIA Triad is the foundational model for information security objectives.</p>
-      <div class="props">
-        <ul>
-          <li><strong>Confidentiality</strong> — ensuring information is accessible only to authorized parties (achieved
-            via encryption, access control, authentication).</li>
-          <li><strong>Integrity</strong> — ensuring information is accurate and unaltered except by authorized action
-            (achieved via hashing, checksums, version control).</li>
-          <li><strong>Availability</strong> — ensuring authorized users have reliable and timely access to information
-            and resources (achieved via redundancy, backups, DDoS protection).</li>
-        </ul>
-      </div>
-      <p>Extended models add <strong>Authenticity</strong> (verifying identity/origin) and
-        <strong>Non-repudiation</strong> (preventing denial of an action, e.g., via digital signatures).
-      </p>
-
-      <h3 id="u1-assets">7. Assets and Threat</h3>
-      <p>An <strong>asset</strong> is anything of value to an organization — hardware, software, data, personnel,
-        reputation, or intellectual property. Threats are mapped against assets to assess risk.</p>
-      <ul>
-        <li><strong>Tangible assets</strong> — servers, laptops, network devices.</li>
-        <li><strong>Intangible assets</strong> — data, source code, brand reputation, customer trust.</li>
-        <li><strong>Threat agents</strong> — the source of a threat (human, environmental, technical).</li>
-        <li><strong>Asset valuation</strong> — determining criticality/priority for protection based on business impact.
-        </li>
-      </ul>
-
-      <h3 id="u1-motive">8. Motive of Attackers</h3>
-      <table>
-        <tr>
-          <th>Motive</th>
-          <th>Examples</th>
-        </tr>
-        <tr>
-          <td>Financial gain</td>
-          <td>Ransomware, banking fraud, credit-card theft</td>
-        </tr>
-        <tr>
-          <td>Political/ideological</td>
-          <td>Hacktivism, cyber warfare, cyber terrorism</td>
-        </tr>
-        <tr>
-          <td>Espionage</td>
-          <td>Stealing trade secrets or state intelligence</td>
-        </tr>
-        <tr>
-          <td>Revenge/personal grudge</td>
-          <td>Disgruntled employees sabotaging systems</td>
-        </tr>
-        <tr>
-          <td>Curiosity/reputation</td>
-          <td>Proving skill, notoriety among peer groups</td>
-        </tr>
-        <tr>
-          <td>Disruption/sabotage</td>
-          <td>Damaging critical infrastructure or operations</td>
-        </tr>
-      </table>
-
-      <h3 id="u1-attacks">9. Active Attacks and Passive Attacks</h3>
-      <table>
-        <tr>
-          <th>Aspect</th>
-          <th>Passive Attack</th>
-          <th>Active Attack</th>
-        </tr>
-        <tr>
-          <td>Nature</td>
-          <td>Eavesdropping/monitoring without altering data</td>
-          <td>Modifies, injects, or disrupts data/systems</td>
-        </tr>
-        <tr>
-          <td>Detectability</td>
-          <td>Hard to detect (no visible change)</td>
-          <td>Easier to detect (system behavior changes)</td>
-        </tr>
-        <tr>
-          <td>Goal</td>
-          <td>Gain information</td>
-          <td>Cause damage, alter data, deny service</td>
-        </tr>
-        <tr>
-          <td>Examples</td>
-          <td>Traffic analysis, sniffing, wiretapping</td>
-          <td>Spoofing, replay, DoS, message modification</td>
-        </tr>
-        <tr>
-          <td>Prevention focus</td>
-          <td>Encryption</td>
-          <td>Authentication, integrity checks</td>
-        </tr>
-      </table>
-
-      <h3 id="u1-swhw">10. Software Attacks, Hardware Attacks</h3>
-      <h4>Software Attacks</h4>
-      <ul>
-        <li><strong>Malware</strong> — viruses, worms, trojans, ransomware, spyware.</li>
-        <li><strong>Exploits</strong> — buffer overflow, SQL injection, cross-site scripting (XSS).</li>
-        <li><strong>Social engineering</strong> — phishing, pretexting to trick software users.</li>
-        <li><strong>Denial of Service (DoS/DDoS)</strong> — overwhelming a service to make it unavailable.</li>
-      </ul>
-      <h4>Hardware Attacks</h4>
-      <ul>
-        <li><strong>Physical tampering</strong> — inserting rogue devices (keyloggers, skimmers).</li>
-        <li><strong>Side-channel attacks</strong> — exploiting power consumption, electromagnetic leaks, or timing
-          information.</li>
-        <li><strong>Firmware attacks</strong> — malicious modification of BIOS/firmware.</li>
-        <li><strong>Supply-chain attacks</strong> — compromising hardware during manufacturing or distribution.</li>
-      </ul>
-
-      <h3 id="u1-threats">11. Cyber Threats — Cyber Warfare, Cyber Crime, Cyber Terrorism, Cyber Espionage</h3>
-      <table>
-        <tr>
-          <th>Term</th>
-          <th>Definition</th>
-          <th>Typical Actor</th>
-        </tr>
-        <tr>
-          <td>Cyber Warfare</td>
-          <td>State-on-state digital conflict targeting military/critical infrastructure</td>
-          <td>Nation-states</td>
-        </tr>
-        <tr>
-          <td>Cyber Crime</td>
-          <td>Illegal activity conducted via computers/networks for gain or harm</td>
-          <td>Individuals, organized groups</td>
-        </tr>
-        <tr>
-          <td>Cyber Terrorism</td>
-          <td>Politically/ideologically motivated attacks intended to cause fear or mass disruption</td>
-          <td>Extremist groups</td>
-        </tr>
-        <tr>
-          <td>Cyber Espionage</td>
-          <td>Covert theft of confidential information for strategic advantage</td>
-          <td>State-sponsored actors, corporate spies</td>
-        </tr>
-      </table>
-
-      <h3 id="u1-policy">12. Comprehensive Cyber Security Policy</h3>
-      <p>A comprehensive cyber security policy is an organization-wide (or national-level) framework establishing the
-        principles, roles, responsibilities, and procedures for protecting information assets. Key components include:
-      </p>
-      <ul>
-        <li>Scope and objectives aligned with business/national goals.</li>
-        <li>Roles and responsibilities (CISO, security teams, employees).</li>
-        <li>Access control and acceptable-use guidelines.</li>
-        <li>Incident response and business-continuity procedures.</li>
-        <li>Compliance with legal/regulatory requirements.</li>
-        <li>Periodic risk assessment, audit, and policy review cycles.</li>
-        <li>Awareness training and capacity building.</li>
-      </ul>
-      <div class="assume">In India, this maps to the <strong>National Cyber Security Policy 2013</strong>, covered in
-        detail in Unit II.</div>
-      <p><a class="top" href="#top">↑ back to contents</a></p>
-    </section>
-
-    <hr class="sep">
-
-    <!-- =================== UNIT II =================== -->
-    <section id="unit2">
-      <span class="unit-tag">UNIT II</span>
-      <h2>Cyberspace and the Law &amp; Cyber Forensics</h2>
-
-      <h3 id="u2-intro">1. Introduction to Cyberspace and Law</h3>
-      <p>As cyberspace expanded, existing legal frameworks (built for physical-world crime) proved inadequate for issues
-        like data theft, online fraud, and cross-border attacks. Cyber law emerged to address legal recognition of
-        electronic records, digital signatures, and to criminalize computer-related offenses.</p>
-
-      <h3 id="u2-regs">2. Cyber Security Regulations</h3>
-      <p>Regulations set mandatory baseline requirements for organizations to protect information systems. Examples
-        include:</p>
-      <ul>
-        <li><strong>India's IT Act, 2000</strong> (amended 2008) — legal recognition of electronic transactions,
-          penalties for hacking, data theft, and cyber terrorism.</li>
-        <li><strong>GDPR</strong> (EU) — data protection and privacy regulation with extraterritorial reach.</li>
-        <li><strong>HIPAA</strong> (USA) — protects health information.</li>
-        <li><strong>PCI-DSS</strong> — security standard for payment card data (industry regulation, not law).</li>
-        <li><strong>SOX</strong> — financial reporting and IT controls in the USA.</li>
-      </ul>
-
-      <h3 id="u2-intl">3. Role of International Law</h3>
-      <p>Because cybercrime is inherently transnational, international law plays a coordinating role:</p>
-      <ul>
-        <li><strong>Budapest Convention on Cybercrime (2001)</strong> — first international treaty addressing internet
-          and computer crime, harmonizing national laws and enabling cooperation.</li>
-        <li><strong>Mutual Legal Assistance Treaties (MLATs)</strong> — facilitate cross-border evidence sharing and
-          extradition.</li>
-        <li><strong>United Nations initiatives</strong> — norms of responsible state behavior in cyberspace.</li>
-        <li><strong>Challenges</strong> — differing national definitions of cybercrime, sovereignty concerns, and slow
-          treaty ratification.</li>
-      </ul>
-
-      <h3 id="u2-indian">4. The Indian Cyberspace</h3>
-      <p>India's cyberspace is governed primarily by the <strong>Information Technology Act, 2000</strong>, which:</p>
-      <ul>
-        <li>Grants legal recognition to electronic records and digital signatures.</li>
-        <li>Defines offenses such as hacking (Sec. 66), identity theft (Sec. 66C), cyberterrorism (Sec. 66F), and
-          publishing obscene material (Sec. 67).</li>
-        <li>Establishes <strong>CERT-In</strong> (Indian Computer Emergency Response Team) as the national nodal agency
-          for incident response.</li>
-        <li>Provides for adjudicating officers and the Cyber Appellate Tribunal for dispute resolution.</li>
-      </ul>
-
-      <h3 id="u2-ncsp">5. National Cyber Security Policy</h3>
-      <p>India's <strong>National Cyber Security Policy, 2013</strong> aims to build a secure and resilient cyberspace.
-        Key goals:</p>
-      <ul>
-        <li>Create a secure cyber ecosystem and generate trust in IT systems.</li>
-        <li>Strengthen the regulatory framework and encourage compliance.</li>
-        <li>Build national and sectoral 24x7 mechanisms (CERTs) for threat monitoring and response.</li>
-        <li>Protect critical information infrastructure (CII) through the National Critical Information Infrastructure
-          Protection Centre (NCIIPC).</li>
-        <li>Promote R&amp;D, indigenous security technologies, and a skilled cybersecurity workforce (500,000
-          professionals target).</li>
-        <li>Encourage public-private partnerships for information sharing.</li>
-      </ul>
-
-      <hr class="sep">
-
-      <h3 id="u2-fhist">6. Cyber Forensics — Historical Background &amp; Digital Forensics Science</h3>
-      <p>Digital forensics originated in the 1980s–90s as law enforcement began encountering computers as evidence
-        sources. Early efforts were ad hoc; the field matured with standardized tools, certifications, and legal
-        admissibility standards.</p>
-      <ul>
-        <li><strong>Digital Forensics Science</strong> — the scientific application of forensic techniques
-          (identification, preservation, extraction, documentation, and interpretation) to digital evidence, ensuring
-          findings are reliable and legally admissible.</li>
-        <li>Sub-branches: computer forensics, network forensics, mobile forensics, cloud forensics, and memory
-          forensics.</li>
-      </ul>
-
-      <h3 id="u2-need">7. The Need for Computer Forensics</h3>
-      <ul>
-        <li>To identify, collect, and preserve evidence of a crime committed using or against computer systems.</li>
-        <li>To reconstruct events during a security incident (who, what, when, how).</li>
-        <li>To support prosecution or civil litigation with legally admissible evidence.</li>
-        <li>To recover data lost through deletion, corruption, or hardware failure.</li>
-        <li>To identify the scope of a breach and support organizational remediation.</li>
-      </ul>
-
-      <h3 id="u2-evid">8. Cyber Forensics and Digital Evidence</h3>
-      <p>Digital evidence is any information of probative value stored or transmitted in digital form. Its handling must
-        satisfy the <strong>chain of custody</strong> to remain admissible in court.</p>
-      <div class="props">
-        <ul>
-          <li><strong>Order of volatility</strong> — collect the most volatile data first (RAM, cache, network state)
-            before less volatile data (disk, backups).</li>
-          <li><strong>Integrity</strong> — evidence must be hashed (e.g., MD5/SHA-256) at collection to prove it wasn't
-            altered.</li>
-          <li><strong>Chain of custody</strong> — a documented, unbroken record of who handled evidence, when, and why.
+    <!-- Main List Grid -->
+    <main id="subjects-container">
+      
+      <!-- Section: Syllabus -->
+      <section class="subject-section" data-subject="syllabus">
+        <h2>General Curriculum</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="mtech cse syllabus core regulation r25 pdf">
+            <a href="./MLRS-R25-M.Tech-(CSE)-Syllabus.pdf" class="resource-link">M.Tech (CSE) Official Syllabus</a>
+            <span class="resource-meta">PDF [1.49 MB]</span>
           </li>
-          <li><strong>Types</strong> — log files, emails, documents, images, metadata, browser history,
-            deleted/recovered files.</li>
         </ul>
-      </div>
+      </section>
 
-      <h3 id="u2-email">9. Forensic Analysis of Email</h3>
-      <p>Email forensics investigates the origin, content, and authenticity of email evidence.</p>
-      <ul>
-        <li><strong>Header analysis</strong> — examining "Received," "Return-Path," and "Message-ID" fields to trace the
-          sender's actual origin (IP/server path) and detect spoofing.</li>
-        <li><strong>Server-side investigation</strong> — analyzing mail server logs for send/receive timestamps and
-          authentication records.</li>
-        <li><strong>Content analysis</strong> — reviewing attachments, embedded links, and language patterns for
-          malicious intent.</li>
-        <li><strong>Authentication protocols</strong> — verifying SPF, DKIM, and DMARC records to detect spoofed
-          senders.</li>
-        <li><strong>Tools</strong> — EnCase, FTK, MailXaminer, and manual header/log parsing.</li>
-      </ul>
-
-      <h3 id="u2-lifecycle">10. Digital Forensics Lifecycle</h3>
-      <div class="props">
-        <ol>
-          <li><strong>Identification</strong> — recognizing potential sources of evidence.</li>
-          <li><strong>Preservation</strong> — isolating and protecting evidence from alteration (write blockers,
-            imaging).</li>
-          <li><strong>Collection</strong> — acquiring data using forensically sound methods (bit-by-bit imaging).</li>
-          <li><strong>Examination</strong> — extracting relevant data using forensic tools.</li>
-          <li><strong>Analysis</strong> — interpreting data to draw conclusions about the incident.</li>
-          <li><strong>Presentation</strong> — documenting and presenting findings in a clear report, often for court.
+      <!-- Section: Advanced Computer Architecture (ACA) -->
+      <section class="subject-section" data-subject="aca">
+        <h2>Advanced Computer Architecture (ACA)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="advanced computer architecture textbook core reference lecture notes pdf">
+            <a href="./ACA/Advanced-Computer-Architecture.pdf" class="resource-link">ACA Textbook & Core Reference</a>
+            <span class="resource-meta">PDF [391 KB]</span>
           </li>
-        </ol>
+          <li class="resource-item" data-type="pdf" data-keywords="aca unit 1 first lecture notes instructions pipelines pdf">
+            <a href="./ACA/Unit1_Lecture_Notes.pdf" class="resource-link">ACA Unit 1 Lecture Notes</a>
+            <span class="resource-meta">PDF [168 KB]</span>
+          </li>
+          <li class="resource-item" data-type="pdf" data-keywords="aca unit 2 second student notes instruction execution level memory pdf">
+            <a href="./ACA/Unit2_Student_Notes.pdf" class="resource-link">ACA Unit 2 Student Notes</a>
+            <span class="resource-meta">PDF [168 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="aca syllabus advanced computer architecture markdown core topics md">
+            <a href="./ACA/advanced_computer_architecture_syllabus.md" class="resource-link">ACA Course Syllabus</a>
+            <span class="resource-meta">Markdown [3.3 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Advanced Data Structures (ADS) -->
+      <section class="subject-section" data-subject="ads">
+        <h2>Advanced Data Structures (ADS)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="ads unit 5 five trees graphs search data structures notes pdf">
+            <a href="./ADS/Unit5_ADS_Student_Notes.pdf" class="resource-link">ADS Unit 5 Student Notes</a>
+            <span class="resource-meta">PDF [185 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="ads syllabus advanced data structures markdown core topics md">
+            <a href="./ADS/advanced_data_structures_syllabus.md" class="resource-link">ADS Course Syllabus</a>
+            <span class="resource-meta">Markdown [2.5 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Cyber Security (CS) -->
+      <section class="subject-section" data-subject="cs">
+        <h2>Cyber Security (CS)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="html" data-keywords="cs study guide complete dashboard cyber security network safety html index">
+            <a href="./CS/index.html" class="resource-link">Cyber Security Study Guide Dashboard</a>
+            <span class="resource-meta">HTML [63 KB]</span>
+          </li>
+          <li class="resource-item" data-type="html" data-keywords="cs cyber security study guide notes text cryptography threat forensics html">
+            <a href="./CS/cyber_security_study_guide.html" class="resource-link">Cyber Security Complete Study Guide</a>
+            <span class="resource-meta">HTML [61 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="cs syllabus cyber security topics markdown md">
+            <a href="./CS/Cyber_Security_Syllabus.md" class="resource-link">Cyber Security Course Syllabus</a>
+            <span class="resource-meta">Markdown [3.8 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Database Programming (PL/SQL) -->
+      <section class="subject-section" data-subject="plsql">
+        <h2>Database Programming with PL/SQL</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="html" data-keywords="plsql study guide pl sql oracle databases blocks triggers cursors functions procedures html">
+            <a href="./PLSQL/plsql_study_guide.html" class="resource-link">PL/SQL Complete Study Guide</a>
+            <span class="resource-meta">HTML [105 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="plsql database programming syllabus oracle markdown topics md">
+            <a href="./PLSQL/Database_Programming_PLSQL_Syllabus.md" class="resource-link">PL/SQL Course Syllabus</a>
+            <span class="resource-meta">Markdown [3 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Software Quality Engineering (SQE) -->
+      <section class="subject-section" data-subject="sqe">
+        <h2>Software Quality Engineering (SQE)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="md" data-keywords="sqe software quality engineering syllabus markdown topics md">
+            <a href="./SQE/Software_Quality_Engineering_Syllabus.md" class="resource-link">SQE Course Syllabus</a>
+            <span class="resource-meta">Markdown [2.4 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Robotic Process Automation (RPA) -->
+      <section class="subject-section" data-subject="rpa">
+        <h2>Robotic Process Automation (RPA)</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="html" data-keywords="rpa study guide robotic process automation anywhere bots variables triggers commands error handling html">
+            <a href="./RPA/RPA_Complete_Study_Guide.html" class="resource-link">RPA Complete Study Guide</a>
+            <span class="resource-meta">HTML [83 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="rpa study guide robotic process automation anywhere bots variables markdown md">
+            <a href="./RPA/RPA_Complete_Study_Guide.md" class="resource-link">RPA Complete Study Guide Notes</a>
+            <span class="resource-meta">Markdown [34 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="rpa syllabus robotic process automation elective topics markdown md">
+            <a href="./RAP/Robotic_Process_Automation_Syllabus.md" class="resource-link">RPA Course Syllabus</a>
+            <span class="resource-meta">Markdown [2.5 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Section: Midterm Papers -->
+      <section class="subject-section" data-subject="papers">
+        <h2>Midterm Papers & Exams</h2>
+        <ul class="resource-list">
+          <li class="resource-item" data-type="pdf" data-keywords="mid papers aca mid term 2 computer architecture second exam paper pdf">
+            <a href="./mid-papers/ACA-mid-2.pdf" class="resource-link">ACA Mid-Term II Exam Paper</a>
+            <span class="resource-meta">PDF [255 KB]</span>
+          </li>
+          <li class="resource-item" data-type="md" data-keywords="mid papers aca mid term 2 computer architecture second exam questions markdown md">
+            <a href="./mid-papers/ACA-mid-2.md" class="resource-link">ACA Mid-Term II Questions</a>
+            <span class="resource-meta">Markdown [19 KB]</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Empty State -->
+      <div id="no-results-msg" class="no-results">
+        No matching resources found.
       </div>
 
-      <h3 id="u2-invest">11. Forensics Investigation</h3>
-      <p>An investigation follows a structured methodology to ensure legal defensibility:</p>
-      <ul>
-        <li><strong>Planning</strong> — define scope, obtain authorization/warrants.</li>
-        <li><strong>Evidence acquisition</strong> — image drives/devices without altering originals.</li>
-        <li><strong>Analysis</strong> — timeline reconstruction, keyword search, file carving, log correlation.</li>
-        <li><strong>Reporting</strong> — objective, reproducible documentation of methodology and findings.</li>
-        <li><strong>Testimony</strong> — investigators may need to explain findings as expert witnesses in court.</li>
-      </ul>
+    </main>
 
-      <h3 id="u2-challenges">12. Challenges in Computer Forensics</h3>
-      <ul>
-        <li><strong>Volume and volatility</strong> — massive data volumes and volatile memory that must be captured
-          quickly.</li>
-        <li><strong>Encryption</strong> — encrypted drives/communications can block access to evidence.</li>
-        <li><strong>Anti-forensics techniques</strong> — data wiping, steganography, log manipulation by attackers.</li>
-        <li><strong>Cloud and jurisdiction</strong> — data stored across borders/multiple providers complicates legal
-          access.</li>
-        <li><strong>Rapid technology change</strong> — new devices, file systems, and apps outpace tool development.
-        </li>
-        <li><strong>Chain-of-custody errors</strong> — improper handling can render evidence inadmissible.</li>
-        <li><strong>Cost and skill shortage</strong> — specialized tools and trained forensic examiners are scarce.</li>
-      </ul>
-      <p><a class="top" href="#top">↑ back to contents</a></p>
-    </section>
-
-    <hr class="sep">
-
-    <!-- =================== UNIT III =================== -->
-    <section id="unit3">
-      <span class="unit-tag">UNIT III</span>
-      <h2>Cybercrime: Mobile and Wireless Devices</h2>
-
-      <h3 id="u3-intro">1. Introduction</h3>
-      <p>The explosive growth of smartphones, tablets, and wireless networks has expanded the attack surface far beyond
-        traditional desktop computing, introducing new vectors for data theft, fraud, and malware distribution.</p>
-
-      <h3 id="u3-prolif">2. Proliferation of Mobile and Wireless Devices</h3>
-      <p>Mobile devices have become the primary computing platform for billions of users, driven by falling hardware
-        costs, ubiquitous connectivity (3G/4G/5G, Wi-Fi), and app ecosystems. This proliferation means sensitive
-        personal and corporate data increasingly resides on devices that are small, easily lost or stolen, and often
-        used outside controlled network perimeters.</p>
-
-      <h3 id="u3-trends">3. Trends in Mobility</h3>
-      <ul>
-        <li><strong>BYOD (Bring Your Own Device)</strong> — employees use personal devices for work, blurring the line
-          between personal and corporate data.</li>
-        <li><strong>Mobile commerce and banking</strong> — growing reliance on mobile apps for financial transactions.
-        </li>
-        <li><strong>Wearables and IoT convergence</strong> — expanding the mobile ecosystem to smartwatches, fitness
-          trackers, etc.</li>
-        <li><strong>Cloud-synced mobile data</strong> — contacts, photos, and documents automatically synced, increasing
-          exposure if credentials are compromised.</li>
-        <li><strong>App-store driven distribution</strong> — reliance on app marketplaces for software, with associated
-          risks of malicious apps.</li>
-      </ul>
-
-      <h3 id="u3-fraud">4. Credit Card Frauds in Mobile and Wireless Computing Era</h3>
-      <ul>
-        <li><strong>Mobile phishing (smishing)</strong> — SMS-based phishing tricking users into revealing card details.
-        </li>
-        <li><strong>Malicious apps</strong> — apps that capture card information entered on-device.</li>
-        <li><strong>Unsecured Wi-Fi interception</strong> — attackers on open networks sniff unencrypted transaction
-          data.</li>
-        <li><strong>SIM swap fraud</strong> — attackers hijack a victim's phone number to intercept OTPs used for card
-          verification.</li>
-        <li><strong>Card-not-present fraud</strong> — using stolen card details for mobile/online purchases without the
-          physical card.</li>
-        <li><strong>Skimming devices</strong> synced with wireless transmitters to relay stolen card data in real time.
-        </li>
-      </ul>
-
-      <h3 id="u3-sec">5. Security Challenges Posed by Mobile Devices</h3>
-      <ul>
-        <li>Small form factor makes devices easy to lose or steal.</li>
-        <li>Diverse OS versions and fragmented patching (especially Android) leave many devices unpatched.</li>
-        <li>Users often disable security features (screen locks, encryption) for convenience.</li>
-        <li>Sideloading apps from untrusted sources bypasses official app-store vetting.</li>
-        <li>Limited built-in malware detection compared to desktop endpoints.</li>
-        <li>Constant connectivity across untrusted networks (public Wi-Fi, Bluetooth) increases exposure.</li>
-        <li>Blending of personal and corporate data raises data-leakage risk.</li>
-      </ul>
-
-      <h3 id="u3-registry">6. Registry Settings for Mobile Devices</h3>
-      <p>Mobile operating systems maintain configuration stores (analogous to the Windows Registry) that govern device
-        behavior — permissions, network settings, security policies, and app configurations.</p>
-      <ul>
-        <li>Improperly configured or default settings (e.g., unrestricted app permissions, debugging enabled) create
-          exploitable weaknesses.</li>
-        <li>Mobile Device Management (MDM) solutions push standardized, secure configuration profiles to enforce
-          settings like password complexity, encryption, and remote wipe.</li>
-        <li>Attackers who gain root/jailbreak access can directly modify configuration stores to disable security
-          controls.</li>
-      </ul>
-
-      <h3 id="u3-auth">7. Authentication Service Security</h3>
-      <p>Authentication mechanisms verify a user's identity before granting device or app access.</p>
-      <ul>
-        <li><strong>Knowledge-based</strong> — PINs, passwords, pattern locks (vulnerable to shoulder-surfing, smudge
-          attacks).</li>
-        <li><strong>Biometric</strong> — fingerprint, face, iris recognition (convenient but raise spoofing and privacy
-          concerns).</li>
-        <li><strong>Token-based / OTP</strong> — one-time passwords via SMS or authenticator apps (SMS OTP vulnerable to
-          SIM swap).</li>
-        <li><strong>Multi-factor authentication (MFA)</strong> — combining two or more factors significantly raises the
-          bar for attackers.</li>
-        <li><strong>Risks</strong> — weak session management, insecure storage of credentials, and vulnerable
-          authentication APIs on the backend.</li>
-      </ul>
-
-      <h3 id="u3-cellattacks">8. Attacks on Mobile/Cell Phones</h3>
-      <table>
-        <tr>
-          <th>Attack</th>
-          <th>Description</th>
-        </tr>
-        <tr>
-          <td>Mobile Malware</td>
-          <td>Trojans, spyware, ransomware targeting mobile OS</td>
-        </tr>
-        <tr>
-          <td>Phishing/Smishing</td>
-          <td>Deceptive messages/links to steal credentials</td>
-        </tr>
-        <tr>
-          <td>SIM Swapping</td>
-          <td>Fraudulently porting a victim's number to attacker's SIM</td>
-        </tr>
-        <tr>
-          <td>Bluetooth Attacks</td>
-          <td>Bluejacking, bluesnarfing to access data via Bluetooth</td>
-        </tr>
-        <tr>
-          <td>Man-in-the-Middle (Wi-Fi)</td>
-          <td>Intercepting traffic over rogue/open access points</td>
-        </tr>
-        <tr>
-          <td>Mobile Botnets</td>
-          <td>Compromised devices used for coordinated attacks</td>
-        </tr>
-        <tr>
-          <td>OS/App Vulnerability Exploits</td>
-          <td>Exploiting unpatched OS or app flaws</td>
-        </tr>
-        <tr>
-          <td>Premium-rate SMS Fraud</td>
-          <td>Malware silently sends messages incurring charges</td>
-        </tr>
-      </table>
-
-      <h3 id="u3-orgpolicy">9. Organizational Security Policies and Measures in Mobile Computing Era</h3>
-      <ul>
-        <li><strong>Mobile Device Management (MDM)</strong> — centralized control over enrolled devices (policy
-          enforcement, remote wipe).</li>
-        <li><strong>BYOD policy</strong> — clear rules on acceptable use, data separation (containerization), and
-          monitoring.</li>
-        <li><strong>Mandatory encryption</strong> for data at rest and in transit on mobile endpoints.</li>
-        <li><strong>App whitelisting/blacklisting</strong> to control approved software.</li>
-        <li><strong>Regular patching and update enforcement.</strong></li>
-        <li><strong>Employee awareness training</strong> on phishing, safe Wi-Fi use, and device hygiene.</li>
-        <li><strong>Incident response procedures</strong> for lost/stolen devices, including remote lock and wipe.</li>
-      </ul>
-
-      <h3 id="u3-laptops">10. Laptops</h3>
-      <p>Laptops present a hybrid of traditional endpoint and mobile-device risk: they hold substantial corporate data
-        yet travel outside secured premises.</p>
-      <ul>
-        <li><strong>Physical theft/loss</strong> — a leading cause of data breaches; mitigated with full-disk encryption
-          (e.g., BitLocker).</li>
-        <li><strong>Unsecured network use</strong> — connecting to public/hotel Wi-Fi without a VPN exposes traffic.
-        </li>
-        <li><strong>Endpoint protection</strong> — antivirus, host firewalls, and EDR (Endpoint Detection &amp;
-          Response) tools.</li>
-        <li><strong>Asset tracking</strong> — inventory management and remote-wipe capability for lost devices.</li>
-        <li><strong>BIOS/firmware passwords</strong> and secure boot to prevent tampering.</li>
-      </ul>
-      <p><a class="top" href="#top">↑ back to contents</a></p>
-    </section>
-
-    <hr class="sep">
-
-    <!-- =================== UNIT IV =================== -->
-    <section id="unit4">
-      <span class="unit-tag">UNIT IV</span>
-      <h2>Cyber Security: Organizational Implications</h2>
-
-      <h3 id="u4-intro">1. Introduction</h3>
-      <p>Beyond technical damage, cyber incidents carry significant organizational consequences — financial loss, legal
-        liability, reputational harm, and strategic disruption. Organizations must therefore treat cyber security as a
-        business risk-management issue, not merely an IT concern.</p>
-
-      <h3 id="u4-cost">2. Cost of Cybercrimes and IPR Issues</h3>
-      <h4>Cost of Cybercrime</h4>
-      <ul>
-        <li><strong>Direct costs</strong> — incident response, system recovery, regulatory fines, legal fees, ransom
-          payments.</li>
-        <li><strong>Indirect costs</strong> — reputational damage, customer churn, loss of competitive advantage,
-          increased insurance premiums.</li>
-        <li><strong>Downtime costs</strong> — lost productivity and revenue during service disruption.</li>
-      </ul>
-      <h4>Intellectual Property Rights (IPR) Issues</h4>
-      <ul>
-        <li>Theft of trade secrets, source code, and proprietary designs via cyber intrusion.</li>
-        <li>Software piracy and unauthorized distribution of copyrighted digital content.</li>
-        <li>Difficulty enforcing IPR across jurisdictions when infringement occurs online.</li>
-        <li>Need for digital rights management (DRM) and watermarking to protect assets.</li>
-      </ul>
-
-      <h3 id="u4-web">3. Web Threats for Organizations</h3>
-      <ul>
-        <li><strong>SQL Injection / XSS</strong> — exploiting web application flaws to steal or manipulate data.</li>
-        <li><strong>Website defacement</strong> — unauthorized alteration of a website's content, often for propaganda.
-        </li>
-        <li><strong>DDoS attacks</strong> — overwhelming web infrastructure to deny service to legitimate users.</li>
-        <li><strong>Drive-by downloads</strong> — malware delivered simply by visiting a compromised page.</li>
-        <li><strong>Credential stuffing</strong> — using breached credentials to gain unauthorized access to web
-          accounts.</li>
-        <li><strong>Supply-chain/third-party web risks</strong> — compromised plugins, CDNs, or vendor scripts.</li>
-      </ul>
-
-      <h3 id="u4-privacy">4. Security and Privacy Implications</h3>
-      <ul>
-        <li>Data breaches expose customer PII, triggering regulatory obligations (breach notification laws).</li>
-        <li>Loss of stakeholder trust following a publicized incident can outlast the technical remediation.</li>
-        <li>Cross-border data transfer restrictions (e.g., GDPR) constrain how organizations architect systems.</li>
-        <li>Balancing operational monitoring/analytics with employee and customer privacy expectations.</li>
-      </ul>
-
-      <h3 id="u4-social">5. Social Media Marketing: Security Risks and Perils for Organizations</h3>
-      <ul>
-        <li><strong>Account hijacking</strong> — compromised brand accounts used to spread misinformation or scams.</li>
-        <li><strong>Impersonation/fake accounts</strong> — damaging brand reputation or defrauding customers.</li>
-        <li><strong>Data leakage</strong> — employees inadvertently sharing sensitive information via social channels.
-        </li>
-        <li><strong>Social engineering reconnaissance</strong> — attackers mining social profiles to craft targeted
-          phishing (spear phishing).</li>
-        <li><strong>Malicious links/ads</strong> — distributing malware through sponsored or organic social content.
-        </li>
-        <li><strong>Reputational risk</strong> — viral negative content spreading rapidly with limited organizational
-          control.</li>
-      </ul>
-
-      <h3 id="u4-computing">6. Social Computing and the Associated Challenges for Organizations</h3>
-      <p>Social computing refers to collaborative and interactive technologies (social networks, wikis, forums,
-        crowdsourcing platforms) that organizations use for engagement and knowledge sharing.</p>
-      <ul>
-        <li><strong>Governance challenge</strong> — establishing policies for acceptable employee use of social
-          platforms.</li>
-        <li><strong>Information leakage</strong> — informal collaboration tools may bypass formal security controls.
-        </li>
-        <li><strong>Identity and access management</strong> across numerous third-party platforms.</li>
-        <li><strong>Monitoring vs. privacy</strong> — the tension between tracking brand mentions/threats and respecting
-          user privacy.</li>
-        <li><strong>Crowdsourced misinformation</strong> — challenges in verifying content authenticity at scale.</li>
-      </ul>
-      <p><a class="top" href="#top">↑ back to contents</a></p>
-    </section>
-
-    <hr class="sep">
-
-    <!-- =================== UNIT V =================== -->
-    <section id="unit5">
-      <span class="unit-tag">UNIT V</span>
-      <h2>Privacy Issues &amp; Cybercrime Cases</h2>
-
-      <h3 id="u5-fund">1. Fundamental Concepts of Data Privacy</h3>
-      <ul>
-        <li><strong>Privacy</strong> — an individual's right to control the collection, use, and disclosure of their
-          personal information.</li>
-        <li><strong>Personally Identifiable Information (PII)</strong> — data that can identify a specific individual
-          (name, ID number, biometric data).</li>
-        <li><strong>Data minimization</strong> — collecting only the data necessary for a stated purpose.</li>
-        <li><strong>Consent and purpose limitation</strong> — data should be used only for the purpose it was collected,
-          with informed consent.</li>
-        <li><strong>Anonymization vs. pseudonymization</strong> — techniques to reduce identifiability of data while
-          retaining utility.</li>
-      </ul>
-
-      <h3 id="u5-attacks">2. Data Privacy Attacks</h3>
-      <table>
-        <tr>
-          <th>Attack</th>
-          <th>Description</th>
-        </tr>
-        <tr>
-          <td>Re-identification attack</td>
-          <td>Combining "anonymized" data with external sources to identify individuals</td>
-        </tr>
-        <tr>
-          <td>Membership inference</td>
-          <td>Determining whether a specific record was used in a dataset/model</td>
-        </tr>
-        <tr>
-          <td>Data breach/exfiltration</td>
-          <td>Unauthorized extraction of stored personal data</td>
-        </tr>
-        <tr>
-          <td>Tracking/profiling</td>
-          <td>Covertly monitoring behavior across sites/services</td>
-        </tr>
-        <tr>
-          <td>Inference attacks</td>
-          <td>Deriving sensitive attributes from seemingly non-sensitive data</td>
-        </tr>
-      </table>
-
-      <h3 id="u5-linking">3. Data Linking and Profiling</h3>
-      <p><strong>Data linking</strong> combines records from multiple sources (often using common identifiers) to build
-        a more complete picture of an individual — even when no single source reveals identity on its own.
-        <strong>Profiling</strong> uses linked data to infer patterns, preferences, or predict future behavior (e.g.,
-        credit scoring, targeted advertising). While valuable for personalization and analytics, these practices raise
-        significant privacy concerns around consent, transparency, and potential discrimination.
-      </p>
-
-      <h3 id="u5-policies">4. Privacy Policies and Their Specifications</h3>
-      <p>A privacy policy is a formal statement disclosing how an organization collects, uses, stores, and shares
-        personal data. Key specification elements:</p>
-      <ul>
-        <li>Types of data collected and collection methods.</li>
-        <li>Purpose(s) of data use and legal basis.</li>
-        <li>Data retention periods and deletion procedures.</li>
-        <li>Third-party sharing and cross-border transfer disclosures.</li>
-        <li>User rights (access, correction, deletion/erasure, opt-out).</li>
-        <li>Security measures protecting the data.</li>
-      </ul>
-
-      <h3 id="u5-lang">5. Privacy Policy Languages</h3>
-      <p>Formal languages allow privacy policies to be expressed machine-readably so systems can automatically check
-        compliance:</p>
-      <ul>
-        <li><strong>P3P (Platform for Privacy Preferences)</strong> — an early W3C standard allowing websites to encode
-          privacy practices for automated comparison against user preferences.</li>
-        <li><strong>EPAL (Enterprise Privacy Authorization Language)</strong> — formalizes fine-grained privacy
-          authorization rules within enterprises.</li>
-        <li><strong>XACML-based privacy extensions</strong> — access-control policy languages extended for privacy-aware
-          authorization.</li>
-        <li>Purpose: enabling automated policy enforcement, auditing, and user-facing consent management.</li>
-      </ul>
-
-      <h3 id="u5-domains">6. Privacy in Different Domains — Medical, Financial, etc.</h3>
-      <h4>Medical / Healthcare Domain</h4>
-      <ul>
-        <li>Electronic Health Records (EHR) contain highly sensitive data requiring strict access controls.</li>
-        <li>Regulations like <strong>HIPAA</strong> mandate safeguards and breach-notification requirements.</li>
-        <li>Challenges: data sharing for research vs. patient confidentiality; interoperability across providers.</li>
-      </ul>
-      <h4>Financial Domain</h4>
-      <ul>
-        <li>Banking and payment data are prime targets for fraud; protected under standards like
-          <strong>PCI-DSS</strong>.
-        </li>
-        <li>Privacy concerns include transaction profiling, credit scoring, and cross-institution data sharing.</li>
-        <li>Strong authentication and encryption are mandated for online banking and payment systems.</li>
-      </ul>
-      <h4>Other Domains</h4>
-      <ul>
-        <li><strong>Government/e-governance</strong> — citizen data (Aadhaar-like ID systems) requiring robust
-          safeguards.</li>
-        <li><strong>Location-based services</strong> — geolocation data raising continuous-tracking concerns.</li>
-        <li><strong>Education</strong> — student records protected under domain-specific privacy norms.</li>
-      </ul>
-
-      <hr class="sep">
-
-      <h3 id="u5-examples">7. Cybercrime: Examples</h3>
-
-      <div class="case">
-        <h4>Official Website of Maharashtra Government Hacked</h4>
-        <p>A widely cited incident in which the official Maharashtra government website was defaced/compromised,
-          illustrating vulnerabilities in government web infrastructure and the reputational impact of website
-          defacement attacks on public institutions.</p>
-      </div>
-
-      <div class="case">
-        <h4>Indian Banks Lose Millions of Rupees</h4>
-        <p>Multiple Indian banks suffered significant financial losses due to cyberattacks (including ATM malware,
-          card-skimming networks, and SWIFT-related fraud), highlighting the need for robust transaction monitoring and
-          layered banking-sector security.</p>
-      </div>
-
-      <div class="case">
-        <h4>Parliament Attack (Cyber Angle)</h4>
-        <p>Referenced in cyber security literature to illustrate how digital forensics and
-          geo-location/communication-trace evidence (e.g., mobile call records, IP tracing) played a role in
-          investigating a major security incident, underscoring the intersection of physical terrorism investigations
-          with digital evidence.</p>
-      </div>
-
-      <div class="case">
-        <h4>Pune City Police Bust Nigerian Racket</h4>
-        <p>A case in which Pune police uncovered a network running online lottery and financial-fraud scams
-          (advance-fee/"419"-style fraud), demonstrating law-enforcement coordination in dismantling organized
-          cybercrime rings operating from within India.</p>
-      </div>
-
-      <div class="case">
-        <h4>E-mail Spoofing Instances</h4>
-        <p>Cases where attackers forged the "From" header of emails to impersonate trusted senders — used for phishing,
-          business email compromise (BEC), and spreading malware — highlighting the importance of email-authentication
-          protocols (SPF/DKIM/DMARC) covered under email forensics.</p>
-      </div>
-
-      <h3 id="u5-mini">8. Mini-Cases</h3>
-
-      <div class="case">
-        <h4>The Indian Case of Online Gambling</h4>
-        <p>Illustrates the legal ambiguity around online gambling/betting platforms operating across state and national
-          boundaries in India, raising questions about applicable law, licensing, and enforcement jurisdiction under the
-          IT Act and state gambling statutes.</p>
-      </div>
-
-      <div class="case">
-        <h4>An Indian Case of Intellectual Property Crime</h4>
-        <p>Examines the theft or unauthorized use of proprietary software, trade secrets, or copyrighted digital
-          content, showing how IPR provisions under Indian law (Copyright Act, IT Act) are applied alongside digital
-          forensic evidence to prosecute offenders.</p>
-      </div>
-
-      <div class="case">
-        <h4>Financial Frauds in Cyber Domain</h4>
-        <p>Covers phishing-driven bank fraud, fraudulent online transactions, and identity theft used to siphon funds —
-          emphasizing multi-factor authentication, transaction anomaly detection, and rapid incident response as core
-          mitigations.</p>
-      </div>
-
-      <p><a class="top" href="#top">↑ back to contents</a></p>
-    </section>
-
-    <hr class="sep">
-
-    <section id="books">
-      <h2>Text Books &amp; References</h2>
-      <h3>Text Books</h3>
-      <ol>
-        <li>Nina Godbole and Sunit Belpure, <em>Cyber Security: Understanding Cyber Crimes, Computer Forensics and Legal
-            Perspectives</em>, Wiley.</li>
-        <li>B.B. Gupta, D.P. Agrawal, Haoxiang Wang, <em>Computer and Cyber Security: Principles, Algorithm,
-            Applications, and Perspectives</em>, CRC Press, ISBN 9780815371335, 2018.</li>
-      </ol>
-      <h3>References</h3>
-      <ol>
-        <li>James Graham, Richard Howard, Ryan Otson, <em>Cyber Security Essentials</em>, CRC Press.</li>
-        <li>Chwan-Hwa (John) Wu, J. David Irwin, <em>Introduction to Cyber Security</em>, CRC Press, T&amp;F Group.</li>
-      </ol>
-    </section>
-
+    <!-- Footer -->
     <footer>
-      Study Guide · Cyber Security (Professional Elective III) · M.Tech CSE I Year II Sem · L-T-P-C 3-0-0-3
+      <p>&copy; 2026 srinu2003 / Exam_Prep. All links are relative and ready for GitHub Pages hosting.</p>
     </footer>
 
   </div>
-</body>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('search-input');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const sections = document.querySelectorAll('.subject-section');
+      const noResultsMsg = document.getElementById('no-results-msg');
+
+      let activeFilter = 'all';
+      let searchKeyword = '';
+
+      function updateVisibility() {
+        let totalVisible = 0;
+
+        sections.forEach(section => {
+          const subject = section.getAttribute('data-subject');
+          const items = section.querySelectorAll('.resource-item');
+          let visibleInSection = 0;
+
+          // Check if active filter is a document type filter
+          const isTypeFilter = activeFilter.startsWith('type-');
+          const matchesCategory = (activeFilter === 'all' || isTypeFilter || activeFilter === subject);
+
+          if (matchesCategory) {
+            items.forEach(item => {
+              const itemType = item.getAttribute('data-type');
+              const keywords = item.getAttribute('data-keywords').toLowerCase();
+              const text = item.textContent.toLowerCase();
+              
+              const matchesSearch = (text.includes(searchKeyword) || keywords.includes(searchKeyword));
+              
+              // Validate type matches if it's a type-based filter
+              let matchesType = true;
+              if (isTypeFilter) {
+                const targetType = activeFilter.replace('type-', '');
+                matchesType = (itemType === targetType);
+              }
+
+              if (matchesSearch && matchesType) {
+                item.classList.remove('hidden');
+                visibleInSection++;
+              } else {
+                item.classList.add('hidden');
+              }
+            });
+          }
+
+          if (matchesCategory && visibleInSection > 0) {
+            section.classList.remove('hidden');
+            totalVisible += visibleInSection;
+          } else {
+            section.classList.add('hidden');
+          }
+        });
+
+        if (totalVisible === 0) {
+          noResultsMsg.style.display = 'block';
+        } else {
+          noResultsMsg.style.display = 'none';
+        }
+      }
+
+      searchInput.addEventListener('input', (e) => {
+        searchKeyword = e.target.value.toLowerCase().trim();
+        updateVisibility();
+      });
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.getAttribute('data-filter');
+          updateVisibility();
+        });
+      });
+
+      // ESC key to clear search
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          searchKeyword = '';
+          updateVisibility();
+          searchInput.blur();
+        }
+      });
+    });
+  </script>
+</body>
 </html>

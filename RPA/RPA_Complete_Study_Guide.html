@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotic Process Automation — Study Guide</title>
+    <meta name="description" content="Study guide for Robotic Process Automation (RPA) Elective. Includes Unit I-V notes, key terms, exam Q&As, and a checklist.">
+    <style>
+        /* Simple Clean Document Style */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #24292e;
+            background-color: #ffffff;
+            display: flex;
+        }
+
+        /* Sidebar Layout */
+        .sidebar {
+            width: 280px;
+            background-color: #f6f8fa;
+            border-right: 1px solid #e1e4e8;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #0366d6;
+        }
+
+        .sidebar-brand p {
+            font-size: 0.75rem;
+            color: #586069;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .search-container {
+            margin: 1.25rem 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.85rem;
+            border: 1px solid #d1d5da;
+            border-radius: 4px;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .search-input:focus {
+            border-color: #0366d6;
+            box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.15);
+        }
+
+        .search-results {
+            margin-top: 0.4rem;
+            font-size: 0.75rem;
+            color: #586069;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: #0366d6;
+            cursor: pointer;
+            font-weight: 500;
+            padding: 0.1rem 0.25rem;
+        }
+
+        .search-btn:hover {
+            text-decoration: underline;
+        }
+
+        .nav-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #586069;
+            text-transform: uppercase;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: #0366d6;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.25rem 0;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+            color: #24292e;
+            text-decoration: none;
+        }
+
+        .nav-badge {
+            font-size: 0.75rem;
+            color: #6a737d;
+            background-color: #e1e4e8;
+            padding: 0.1rem 0.35rem;
+            border-radius: 10px;
+        }
+
+        .progress-container {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e1e4e8;
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #586069;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background-color: #e1e4e8;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #28a745;
+            transition: width 0.25s;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 3rem 4rem;
+            max-width: 900px;
+            min-height: 100vh;
+        }
+
+        /* Document Typography */
+        header {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #24292e;
+        }
+
+        header p {
+            color: #586069;
+            font-size: 0.95rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.3em;
+            border-bottom: 1px solid #eaecef;
+            color: #24292e;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+            color: #24292e;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #24292e;
+        }
+
+        ul, ol {
+            margin-bottom: 1rem;
+            padding-left: 1.75rem;
+        }
+
+        li {
+            margin-bottom: 0.35rem;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #f6f8fa;
+            font-weight: 600;
+            padding: 0.65rem 0.85rem;
+            border-bottom: 1px solid #e1e4e8;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.65rem 0.85rem;
+            border-bottom: 1px solid #e1e4e8;
+            color: #24292e;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fafbfc;
+        }
+
+        /* Callouts / Alerts */
+        .alert {
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-left: 0.25em solid;
+            border-radius: 3px;
+        }
+
+        .alert-info {
+            background-color: #f1f8ff;
+            border-color: #0366d6;
+            color: #24292e;
+        }
+
+        .alert-warning {
+            background-color: #fffbdd;
+            border-color: #d1b315;
+            color: #24292e;
+        }
+
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85em;
+            background-color: rgba(27,31,35,0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            color: #24292e;
+        }
+
+        /* Question & Answer Cards */
+        .qa-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .qa-block {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 1rem;
+            background-color: #fff;
+        }
+
+        .qa-q {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .qa-badge {
+            background-color: #f1f8ff;
+            color: #0366d6;
+            padding: 0.1rem 0.35rem;
+            font-size: 0.75rem;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .qa-a {
+            color: #586069;
+            font-size: 0.95rem;
+        }
+
+        /* Checklist Styles */
+        .checklist-section {
+            margin: 1.5rem 0;
+        }
+
+        .checklist-group {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .checklist-header {
+            background-color: #f6f8fa;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .checklist-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist-item {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-top: 0.25rem;
+            cursor: pointer;
+        }
+
+        .checklist-text {
+            color: #24292e;
+        }
+
+        .checklist-item input:checked + .checklist-text {
+            color: #959da5;
+            text-decoration: line-through;
+        }
+
+        /* Floating Top Button */
+        .top-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #24292e;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .top-btn:hover {
+            background-color: #0366d6;
+        }
+
+        /* Search Highlighting */
+        .search-match {
+            background-color: #ffdf5d;
+        }
+
+        .search-match.active-match {
+            background-color: #ff9632;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid #e1e4e8;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <h1>RPA Study Guide</h1>
+            <p>M.Tech CSE — Elective IV</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search in guide..." onkeyup="handleSearch(event)">
+            <div class="search-results" id="search-nav" style="display: none;">
+                <span id="match-count">0 matches</span>
+                <div>
+                    <button class="search-btn" onclick="prevMatch()">Prev</button> &middot; 
+                    <button class="search-btn" onclick="nextMatch()">Next</button>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav-title">Syllabus Outlines</div>
+            <ul class="nav-links">
+                <li><a href="#how-to-use" class="nav-link">How to Use This Guide</a></li>
+                <li><a href="#co-map" class="nav-link">Course Outcomes Map</a></li>
+                <li>
+                    <a href="#unit-1" class="nav-link" data-unit-badge="unit-1">
+                        Unit I: Fundamentals
+                        <span class="nav-badge">0%</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#unit-2" class="nav-link" data-unit-badge="unit-2">
+                        Unit II: Web Control Room
+                        <span class="nav-badge">0%</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#unit-3" class="nav-link" data-unit-badge="unit-3">
+                        Unit III: Administration & APIs
+                        <span class="nav-badge">0%</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#unit-4" class="nav-link" data-unit-badge="unit-4">
+                        Unit IV: Creator & Recorders
+                        <span class="nav-badge">0%</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#unit-5" class="nav-link" data-unit-badge="unit-5">
+                        Unit V: Advanced Tasks
+                        <span class="nav-badge">0%</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-title">Self Evaluation</div>
+            <ul class="nav-links">
+                <li><a href="#checklist" class="nav-link">Master Revision Checklist</a></li>
+                <li><a href="#reference" class="nav-link">References</a></li>
+            </ul>
+        </nav>
+
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>Checklist Progress</span>
+                <span id="global-progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="global-progress-bar"></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="main-content">
+        <header>
+            <h1>ROBOTIC PROCESS AUTOMATION</h1>
+            <p>Professional Elective – IV | M.Tech CSE I Year II Sem | L-T-P-C: 3-0-0-3</p>
+        </header>
+
+        <!-- HOW TO USE -->
+        <section id="how-to-use">
+            <h2>How To Use This Guide</h2>
+            <p>Each unit below is broken into: <strong>Concept Notes</strong> (explained in simple language) &rarr; <strong>Key Terms Table</strong> &rarr; <strong>Important Q&A</strong> (exam style, short + long answer) &rarr; <strong>Quick Revision Points</strong>. Every single topic listed in your syllabus is covered — nothing is skipped. Read Unit-wise, then use the <strong>Master Revision Checklist</strong> at the end before exams.</p>
+        </section>
+
+        <!-- COURSE OUTCOMES MAP -->
+        <section id="co-map">
+            <h2>Course Outcomes (CO) Map</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">CO</th>
+                            <th>Statement</th>
+                            <th style="width: 150px;">Mapped Unit(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>CO1</strong></td>
+                            <td>Apply RPA concepts and Automation Anywhere features to automate repetitive business processes</td>
+                            <td>Unit I</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CO2</strong></td>
+                            <td>Analyze Web Control Room components to manage enterprise-level automation</td>
+                            <td>Unit II</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CO3</strong></td>
+                            <td>Evaluate device pools, workloads, and administration settings for secure, scalable RPA deployment</td>
+                            <td>Unit III</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CO4</strong></td>
+                            <td>Distinguish recording tools and command libraries for real-world task automation</td>
+                            <td>Unit IV</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CO5</strong></td>
+                            <td>Create advanced automation workflows using object cloning, error handling, PDF/FTP/PGP integration, and workflow designers</td>
+                            <td>Unit V</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- UNIT I -->
+        <section id="unit-1">
+            <h2>Unit I — Introduction to RPA & Bot Creation</h2>
+            
+            <h3>1.1 Introduction to RPA</h3>
+            <p><strong>Robotic Process Automation (RPA)</strong> is a technology that uses software "robots" (bots) to mimic human actions performed on a computer — clicking, typing, reading screens, copying data, logging into applications — in order to automate rule-based, repetitive, high-volume digital tasks <strong>without changing the underlying IT systems</strong>.</p>
+            
+            <p>Key characteristics of RPA:</p>
+            <ul>
+                <li><strong>Non-invasive</strong>: works on top of existing applications via the UI layer (no need to change legacy systems or write APIs).</li>
+                <li><strong>Rule-based</strong>: best suited for tasks with clear, structured, repeatable logic — not for tasks requiring judgment (unless combined with AI/ML &rarr; "Intelligent Automation").</li>
+                <li><strong>Software robot / "bot"</strong>: a configured set of instructions that performs a business process the way a human would.</li>
+                <li><strong>Attended vs Unattended bots</strong>:
+                    <ul>
+                        <li><em>Attended</em> bots run on a user's desktop, triggered by the user, assisting them in real time (e.g., call-center agent support).</li>
+                        <li><em>Unattended</em> bots run on a server/virtual machine without human intervention, often on a schedule (e.g., nightly batch invoice processing).</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Why RPA? (Business Drivers)</h3>
+            <ul>
+                <li>Reduces manual, repetitive workload &rarr; frees employees for higher-value work</li>
+                <li>Improves accuracy (eliminates human data-entry errors)</li>
+                <li>Runs 24/7, increasing throughput and speed</li>
+                <li>Provides audit trails/logs for compliance</li>
+                <li>Lower cost than system re-engineering; fast ROI</li>
+                <li>Scalable — bots can be spun up/down based on demand</li>
+            </ul>
+
+            <h3>RPA Use Cases</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Industry</th>
+                            <th>Example Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Banking & Finance</td>
+                            <td>Account opening, KYC verification, loan processing, reconciliation</td>
+                        </tr>
+                        <tr>
+                            <td>Insurance</td>
+                            <td>Claims processing, policy renewal, underwriting data entry</td>
+                        </tr>
+                        <tr>
+                            <td>Healthcare</td>
+                            <td>Patient record updates, insurance claim validation, appointment scheduling</td>
+                        </tr>
+                        <tr>
+                            <td>HR</td>
+                            <td>Employee onboarding/offboarding, payroll processing, leave management</td>
+                        </tr>
+                        <tr>
+                            <td>IT / ITES</td>
+                            <td>Password resets, ticket triage, system monitoring, report generation</td>
+                        </tr>
+                        <tr>
+                            <td>Retail/Supply Chain</td>
+                            <td>Order processing, inventory updates, invoice matching</td>
+                        </tr>
+                        <tr>
+                            <td>Telecom</td>
+                            <td>SIM activation, billing reconciliation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>RPA vs Traditional Automation vs AI</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Traditional (Macro/Script)</th>
+                            <th>RPA</th>
+                            <th>AI / Cognitive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Works across apps</strong></td>
+                            <td>Limited, app-specific</td>
+                            <td>Yes, cross-application via UI</td>
+                            <td>Yes, plus unstructured data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Handles unstructured data</strong></td>
+                            <td>No</td>
+                            <td>Limited</td>
+                            <td>Yes (NLP, ML, OCR)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Requires coding</strong></td>
+                            <td>Often heavy scripting</td>
+                            <td>Low-code / drag-and-drop</td>
+                            <td>Model training required</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Decision-making</strong></td>
+                            <td>None</td>
+                            <td>Rule-based only</td>
+                            <td>Can learn & predict</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>1.2 Automation Anywhere Enterprise Platform</h3>
+            <p><strong>Automation Anywhere (AA)</strong> is one of the leading enterprise RPA platforms. It provides an end-to-end ecosystem to <strong>build, manage, and run</strong> software bots at enterprise scale.</p>
+            <p>Core architecture components:</p>
+            <ol>
+                <li><strong>Bot Creator</strong> – the client/desktop application (Bot Editor / Enterprise Client) where developers design and build automation tasks/bots using recorders and the Task Editor / Command Library.</li>
+                <li><strong>Control Room</strong> – the web-based, centralized server application that manages bot deployment, scheduling, credentials, user roles, licensing, analytics, and monitoring.</li>
+                <li><strong>Bot Runner</strong> – the machine (physical or virtual) where the bots actually execute (attended or unattended).</li>
+            </ol>
+
+            <h3>Advanced Features of Automation Anywhere</h3>
+            <ul>
+                <li>Centralized Web-based Control Room for governance across the enterprise.</li>
+                <li>Bot Store – marketplace of pre-built, reusable bots and integrations.</li>
+                <li>IQ Bot / Document Automation – AI-based extraction of data from semi-structured documents using OCR + ML.</li>
+                <li>Bot Insight – real-time analytics and dashboards on bot performance and business KPIs.</li>
+                <li>AISense (Universal Recorder) – advanced object-recognition based recorder that captures actions across Citrix/virtual environments.</li>
+                <li>Security & Credential Vault – encrypted, centralized storage of credentials.</li>
+                <li>Role-Based Access Control (RBAC) – governs who can create, edit, run, or approve bots.</li>
+                <li>Scalability – supports device pools, load balancing of bot runners, and queue-based workload distribution.</li>
+                <li>Version control & Migration Utility – manage bot versions between Dev, Test, and Prod environments.</li>
+                <li>API/Integration support – exposed REST APIs to trigger bots from external systems.</li>
+            </ul>
+
+            <h3>1.3 Ways to Create Bots</h3>
+            <p>Automation Anywhere provides multiple approaches to building a bot:</p>
+            <ol>
+                <li><strong>Recorder-based creation</strong> — Record user actions on screen and the tool auto-generates the steps.</li>
+                <li><strong>Task Editor / Drag-and-drop Command Library</strong> — Manually build logic by dragging pre-built commands (loops, conditions, Excel, etc.) into a task.</li>
+                <li><strong>Object Cloning</strong> — Capture and reuse specific UI object properties (buttons, text fields) for more robust, resolution-independent automation.</li>
+                <li><strong>Workflow Designer</strong> — Visual, flowchart/diagram-style design of the bot logic showing decision branches and loops graphically.</li>
+                <li><strong>Scripting</strong> — Embedding VBScript/JavaScript/Python snippets for specific logic.</li>
+                <li><strong>Bot Store / Reusable Templates</strong> — Downloading and customizing pre-built bots.</li>
+            </ol>
+
+            <div class="alert alert-info">
+                <strong>Exam tip:</strong> A common question is "What are the different ways of creating a bot in Automation Anywhere?" &rarr; Answer: Recorder (Smart/Web/Screen), Task Editor with Command Library, Object Cloning, and the Workflow Designer.
+            </div>
+
+            <h3>Unit I — Key Terms</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Term</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bot</td>
+                            <td>Software robot that automates a task</td>
+                        </tr>
+                        <tr>
+                            <td>Attended Automation</td>
+                            <td>Bot runs with human trigger/supervision on a desktop</td>
+                        </tr>
+                        <tr>
+                            <td>Unattended Automation</td>
+                            <td>Bot runs independently, usually server-side/scheduled</td>
+                        </tr>
+                        <tr>
+                            <td>Control Room</td>
+                            <td>Central web console to manage/deploy/monitor bots</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Creator</td>
+                            <td>Client tool used to design bots</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Runner</td>
+                            <td>Machine that executes the bot</td>
+                        </tr>
+                        <tr>
+                            <td>IQ Bot</td>
+                            <td>AI-based document data extraction module</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Insight</td>
+                            <td>Analytics/dashboard module for bots</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Unit I — Sample Q&A</h3>
+            <div class="qa-container">
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Define RPA and list three benefits.</div>
+                    <div class="qa-a"><strong>Answer:</strong> RPA is software-based automation of rule-based digital tasks mimicking human UI interaction. Three key benefits are: (1) reduced errors, (2) 24/7 operation, (3) faster processing and lower cost.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Differentiate attended and unattended bots.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Attended = human-triggered, runs on user desktop, provides real-time assistance. Unattended = scheduled/server-run, no human involvement, processes backend files in batches.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is the Bot Store?</div>
+                    <div class="qa-a"><strong>Answer:</strong> A digital marketplace within Automation Anywhere offering pre-built bots and connectors that can be downloaded and customized.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> List the ways to create a bot.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Recorder-based, Task Editor/Command Library, Object Cloning, Workflow Designer, and Scripting.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UNIT II -->
+        <section id="unit-2">
+            <h2>Unit II — Web Control Room and Client Introduction</h2>
+            <p>The <strong>Control Room (CR)</strong> is the browser-based administrative hub of Automation Anywhere. It is organized into a <strong>Features Panel</strong> with multiple modules. Unit II focuses on the <strong>Dashboard</strong> and <strong>Activity/Bots</strong> modules.</p>
+
+            <h3>2.1 Features Panel — Dashboard</h3>
+            <p>The Dashboard gives a bird's-eye view of the entire automation estate. Its sub-sections:</p>
+            <ul>
+                <li><strong>Home</strong> — Landing/overview page showing summary widgets: bots run, success/failure counts, active devices, recent activity — a quick health snapshot of the automation environment.</li>
+                <li><strong>Bots</strong> — Dashboard view summarizing bot-level statistics: number of bots deployed, most-used bots, bot execution trends over time.</li>
+                <li><strong>Devices</strong> — Overview of connected Bot Runner/Bot Creator machines, their status (online/offline/busy), and utilization.</li>
+                <li><strong>Audit</strong> — Summary visualization of logged/audited actions across the Control Room.</li>
+                <li><strong>Workload</strong> — Dashboard summary of queue-based work items: items pending, in-progress, completed, and SLA compliance trends.</li>
+                <li><strong>Insights</strong> — Business-value analytics (powered by Bot Insight) — ROI metrics, time saved, transaction volumes, business KPIs.</li>
+            </ul>
+
+            <h3>2.2 Features Panel — Activity</h3>
+            <p>The Activity section tracks the <strong>real-time and scheduled execution</strong> of bots:</p>
+            <ul>
+                <li><strong>View Tasks in Progress</strong> — Shows all bots/tasks currently executing across all devices — task name, device, user who triggered it, start time, and current status.</li>
+                <li><strong>Scheduled Tasks</strong> — Shows all bots that have been scheduled to run at a future time/recurring interval — displays schedule details and allows editing or cancelling schedules.</li>
+            </ul>
+
+            <h3>2.3 Features Panel — Bots</h3>
+            <p>This section manages the bot artifacts themselves (as opposed to their live execution):</p>
+            <ul>
+                <li><strong>View Bots Uploaded</strong> — A repository/list of all bots that have been uploaded (published) to the Control Room from Bot Creator clients. This is essentially the centralized bot repository enabling reuse and governance.</li>
+                <li><strong>Credentials</strong> — The secure <strong>Credential Vault</strong> management screen. Allows administrators to:
+                    <ul>
+                        <li>Create and store encrypted credentials (usernames/passwords) used by bots to log into applications.</li>
+                        <li>Assign/lock credentials to specific bots, users, or roles so bots never need hard-coded passwords.</li>
+                        <li>Manage credential attributes without exposing the actual secret value to bot developers.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Unit II — Key Terms</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Term</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Control Room</td>
+                            <td>Centralized web console for governance of bots</td>
+                        </tr>
+                        <tr>
+                            <td>Dashboard</td>
+                            <td>Visual "at-a-glance" summary widgets</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Insight</td>
+                            <td>Powers the "Insights" analytics tab</td>
+                        </tr>
+                        <tr>
+                            <td>Credential Vault</td>
+                            <td>Secure encrypted store for login credentials used by bots</td>
+                        </tr>
+                        <tr>
+                            <td>Scheduled Task</td>
+                            <td>A bot execution set to run automatically at defined times</td>
+                        </tr>
+                        <tr>
+                            <td>Tasks in Progress</td>
+                            <td>Live monitoring view of currently running bots</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Unit II — Sample Q&A</h3>
+            <div class="qa-container">
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What sub-modules exist under the Dashboard in Control Room?</div>
+                    <div class="qa-a"><strong>Answer:</strong> Home, Bots, Devices, Audit, Workload, and Insights.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is the purpose of the Credentials feature in Control Room?</div>
+                    <div class="qa-a"><strong>Answer:</strong> Securely stores and manages login credentials in an encrypted vault so bots can authenticate without exposing passwords to developers.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Differentiate "Tasks in Progress" from "Scheduled Tasks."</div>
+                    <div class="qa-a"><strong>Answer:</strong> Tasks in Progress shows bots currently executing in real time; Scheduled Tasks shows bots configured to run at a future/recurring time.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What does "View Bots Uploaded" show?</div>
+                    <div class="qa-a"><strong>Answer:</strong> A centralized repository listing of all bots published to the Control Room with version, owner, and last-modified metadata.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UNIT III -->
+        <section id="unit-3">
+            <h2>Unit III — Devices, Workload, Audit Log, Administration, APIs & Client</h2>
+            
+            <h3>3.1 Devices</h3>
+            <ul>
+                <li><strong>Development and Runtime Clients</strong>:
+                    <ul>
+                        <li><strong>Development Client (Bot Creator)</strong> — machines where developers author/edit bots using the Bot Editor.</li>
+                        <li><strong>Runtime Client (Bot Runner)</strong> — machines dedicated to executing bots (attended or unattended) in production.</li>
+                        <li>Control Room tracks connection status, client version, and health of each registered client machine.</li>
+                    </ul>
+                </li>
+                <li><strong>Device Pools</strong> — Logical groupings of Bot Runner devices that can be treated as a single unit for workload distribution. Benefits:
+                    <ul>
+                        <li>Load balancing — work items/queue tasks are distributed automatically across all devices in the pool.</li>
+                        <li>High availability — if one device goes down, others in the pool continue processing.</li>
+                        <li>Simplifies scheduling — you assign work to a <em>pool</em> rather than to individual machines.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>3.2 Workload</h3>
+            <p>Handles <strong>queue-based automation</strong> — where bots pick up discrete "work items" from a queue rather than running one monolithic task.</p>
+            <ul>
+                <li><strong>Queues</strong> — A queue holds a list of work items to be processed. Bots pull items from the queue, process them, and mark them complete/failed. This enables parallel processing and automatic retry of failed items.</li>
+                <li><strong>SLA Calculator</strong> — A tool to calculate and track <strong>Service Level Agreement</strong> compliance — estimating how many bots/devices are needed to process a given workload volume within a target time.</li>
+            </ul>
+
+            <h3>3.3 Audit Log</h3>
+            <p><strong>View Activities Logged</strong> — A detailed, tamper-evident log of every significant action performed in the Control Room: user logins, bot deployments, credential changes, role/permission modifications, schedule changes, etc.</p>
+            <ul>
+                <li>Used for <strong>compliance, security review, and troubleshooting</strong> ("who changed what, when").</li>
+                <li>Filterable by user, date range, and activity type.</li>
+            </ul>
+
+            <h3>3.4 Administration</h3>
+            <p>The Administration section governs the overall configuration of the RPA environment:</p>
+            <ul>
+                <li><strong>Configure Settings</strong> — General settings: email/SMTP setup, session timeouts, password policies, system preferences.</li>
+                <li><strong>Users</strong> — Create/manage user accounts, assign them to roles, activate/deactivate/lock accounts.</li>
+                <li><strong>Roles</strong> — Define <strong>Role-Based Access Control (RBAC)</strong> — sets of permissions bundled into roles assigned to users, enforcing least-privilege security.</li>
+                <li><strong>License</strong> — Manage and allocate Automation Anywhere licenses (Bot Creator, Bot Runner, IQ Bot, etc.).</li>
+                <li><strong>Migration</strong> — Utilities to migrate bots, credentials, and configuration data between Dev, Test, and Prod Control Rooms.</li>
+            </ul>
+
+            <h3>3.5 Demo of Exposed APIs</h3>
+            <p>Automation Anywhere Control Room exposes <strong>REST APIs</strong> that allow external systems to interact programmatically with the RPA platform, e.g.:</p>
+            <ul>
+                <li>Trigger/deploy a bot remotely from an external application.</li>
+                <li>Query bot execution status.</li>
+                <li>Manage queues/work items externally.</li>
+                <li>Integrate RPA into broader enterprise workflows (e.g., a ticketing system automatically triggering a bot via API when a new ticket is created).</li>
+            </ul>
+
+            <h3>3.6 Client Introduction and Conclusion</h3>
+            <p>The <strong>Bot Creator Client</strong> (the desktop authoring application) is introduced as the counterpart to the Web Control Room — while the Control Room governs and orchestrates, the <strong>Client</strong> is where actual bot-building happens (recorders, Task Editor, Command Library).</p>
+
+            <h3>Unit III — Key Terms</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Term</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Device Pool</td>
+                            <td>Group of Bot Runner machines treated as one unit for load balancing</td>
+                        </tr>
+                        <tr>
+                            <td>Queue</td>
+                            <td>Holding area of discrete work items for bots to process</td>
+                        </tr>
+                        <tr>
+                            <td>SLA Calculator</td>
+                            <td>Tool to plan/monitor turnaround-time compliance for queue workloads</td>
+                        </tr>
+                        <tr>
+                            <td>Audit Log</td>
+                            <td>Detailed record of all Control Room actions for compliance</td>
+                        </tr>
+                        <tr>
+                            <td>RBAC</td>
+                            <td>Role-Based Access Control — permission model via roles</td>
+                        </tr>
+                        <tr>
+                            <td>Migration</td>
+                            <td>Moving bots/settings between Dev/Test/Prod environments</td>
+                        </tr>
+                        <tr>
+                            <td>REST API (exposed)</td>
+                            <td>Programmatic interface to trigger/manage bots externally</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Unit III — Sample Q&A</h3>
+            <div class="qa-container">
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is a Device Pool and why is it useful?</div>
+                    <div class="qa-a"><strong>Answer:</strong> A logical group of Bot Runner devices used for load balancing and high availability, allowing workload to be distributed automatically rather than tied to one machine.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Explain the role of Queues and the SLA Calculator in Workload management.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Queues hold discrete work items for parallel/automatic processing by bots; the SLA Calculator estimates resources needed and tracks whether processing will meet the target turnaround time.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is captured in the Audit Log?</div>
+                    <div class="qa-a"><strong>Answer:</strong> All significant Control Room activities (logins, deployments, credential/role changes, schedule edits) for security and compliance tracking.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> List the components managed under Administration.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Configure Settings, Users, Roles, License, and Migration.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Why does Automation Anywhere expose REST APIs?</div>
+                    <div class="qa-a"><strong>Answer:</strong> To let external systems trigger bots, check status, and integrate RPA into larger enterprise workflows programmatically.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UNIT IV -->
+        <section id="unit-4">
+            <h2>Unit IV — Bot Creator: Recorders, Task Editor & Core Command Library</h2>
+            
+            <h3>4.1 Recorders</h3>
+            <p>Recorders capture user actions on screen and convert them into automation steps automatically.</p>
+            <ul>
+                <li><strong>Smart Recorder</strong> — Captures actions based on <strong>object properties</strong> (e.g., a button's name/ID) rather than screen coordinates. Best for desktop applications.</li>
+                <li><strong>Web Recorder</strong> — Specifically designed to record actions within a <strong>web browser</strong> — captures interactions with HTML elements using the page's DOM structure.</li>
+                <li><strong>Screen Recorder</strong> — Captures actions based on <strong>screen coordinates / images</strong> (pixel position). Useful for Citrix or virtual desktops, but fragile if screen layout changes.</li>
+            </ul>
+
+            <h3>4.2 Task Editor</h3>
+            <p>The <strong>Task Editor</strong> is the main workspace in Bot Creator where an automation "task" (bot) is built — either from recorded steps or manually by dragging commands from the Command Library.</p>
+
+            <h3>4.3 Variables</h3>
+            <p><strong>Variables</strong> store and pass data within a bot. Common variable types include:</p>
+            <ul>
+                <li><strong>Value variables</strong> — hold a single value at a time (text, number, boolean, date).</li>
+                <li><strong>Array variables</strong> (List variables) — hold multiple values, useful for looping over data sets.</li>
+                <li><strong>Session/temporary variables</strong> — hold data only for the duration of the bot run.</li>
+                <li><strong>Random & Clipboard variables</strong> — special-purpose (e.g., generate a random number, capture clipboard contents).</li>
+            </ul>
+
+            <h3>4.4 Command Library</h3>
+            <p>Core command packages covered in this unit:</p>
+            <ul>
+                <li><strong>Loop Command</strong>: Repeats a set of actions multiple times, based on conditions (e.g., a fixed count, for each row in Excel, or while a condition is true).</li>
+                <li><strong>Excel Command</strong>: Automates Excel operations: open/close workbooks, read/write cell values, insert rows/cols, save, apply formulas, or loop through sheets.</li>
+                <li><strong>Database Command</strong>: Connects to relational databases, runs SQL statements (SELECT/INSERT/UPDATE/DELETE), retrieves query results into variables.</li>
+                <li><strong>String Operation Command</strong>: Text-manipulation functions like split, concatenation, trim, uppercase, lowercase, find/replace, and substring extraction.</li>
+                <li><strong>XML Command</strong>: Parses XML files, reads specific node/attribute values, updates nodes, and saves XML output.</li>
+            </ul>
+
+            <h3>Unit IV — Key Terms</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Term</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Smart Recorder</td>
+                            <td>Records based on object properties</td>
+                        </tr>
+                        <tr>
+                            <td>Web Recorder</td>
+                            <td>Records browser/DOM-based actions</td>
+                        </tr>
+                        <tr>
+                            <td>Screen Recorder</td>
+                            <td>Records based on screen coordinates/images</td>
+                        </tr>
+                        <tr>
+                            <td>Task Editor</td>
+                            <td>Main bot-building workspace</td>
+                        </tr>
+                        <tr>
+                            <td>Variable</td>
+                            <td>Container to store/pass data within a bot</td>
+                        </tr>
+                        <tr>
+                            <td>Loop Command</td>
+                            <td>Repeats actions over a data set/condition</td>
+                        </tr>
+                        <tr>
+                            <td>Excel/Database/String/XML Commands</td>
+                            <td>Command Library modules for respective data types</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Unit IV — Sample Q&A</h3>
+            <div class="qa-container">
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Differentiate Smart Recorder, Web Recorder, and Screen Recorder.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Smart Recorder = object-property based (desktop apps); Web Recorder = DOM-based (browser apps); Screen Recorder = coordinate/image-based (legacy/Citrix apps, least robust to UI changes).</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is the role of Variables in bot building?</div>
+                    <div class="qa-a"><strong>Answer:</strong> They store/pass dynamic data (values, lists, session data) so bots aren't hard-coded and can process varying inputs.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Explain the Loop command with an example.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Repeats a block of steps — e.g., looping through each row of an Excel sheet to process every record automatically.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What can the Database command do?</div>
+                    <div class="qa-a"><strong>Answer:</strong> Connect to a database, run SQL queries, and retrieve/update data directly without going through an application UI.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Name common String Operation functions.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Concatenate, trim, split, case conversion, find/replace, and substring extraction.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UNIT V -->
+        <section id="unit-5">
+            <h2>Unit V — Advanced Commands, Error Handling & Workflow/Report Designers</h2>
+            
+            <h3>5.1 Terminal Emulator Command</h3>
+            <p>Automates interaction with mainframe/legacy terminal systems (e.g., 3270/5250 green-screen applications) by connecting through terminal emulation protocols — sending keystrokes and reading screen fields.</p>
+
+            <h3>5.2 PDF Integration Command</h3>
+            <p>Automates working with PDF documents: extracts text or tables from PDF files, merges/splits PDF files, converts PDF to text/images, and extracts specific page ranges.</p>
+
+            <h3>5.3 FTP Command</h3>
+            <p>Automates file transfers: connects to an FTP/SFTP server, uploads/downloads files, lists directory contents, deletes/renames remote files, and disconnects.</p>
+
+            <h3>5.4 PGP Command</h3>
+            <p>Automates Pretty Good Privacy (PGP) operations: encrypts files before transmission, decrypts received encrypted files, and signs/verifies digital signatures.</p>
+
+            <h3>5.5 Object Cloning Command</h3>
+            <p>Captures the properties of a UI object (e.g., a button, text box) rather than screen coordinates. This makes automation resolution-independent, robust, and reliable since the bot can find the control even if the window is resized or moved.</p>
+
+            <h3>5.6 Error Handling Command</h3>
+            <p>Provides try-catch style resilience for bots: defines a block of steps to monitor; if an error occurs, control passes to a recovery path (e.g., retry step, skip step, log error, send email, or end task gracefully).</p>
+
+            <h3>5.7 Manage Windows Control Command</h3>
+            <p>Enables controlling active application windows during automation: activate/bring to foreground, resize, move, close/minimize/maximize, or wait for windows to appear/disappear.</p>
+
+            <h3>5.8 Workflow Designer</h3>
+            <p>A visual, flowchart-based bot-building interface (alternative to the linear Task Editor). Developers can design complex automation logic as a flowchart with decision nodes, loops, and branches graphically.</p>
+
+            <h3>5.9 Report Designer</h3>
+            <p>A tool to design custom reports on bot execution: formatting data, extracting execution metrics/variables, and scheduling reports for business stakeholders.</p>
+
+            <h3>Unit V — Key Terms</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 200px;">Term</th>
+                            <th>Meaning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Terminal Emulator Command</td>
+                            <td>Automates mainframe/legacy green-screen systems</td>
+                        </tr>
+                        <tr>
+                            <td>PDF Integration</td>
+                            <td>Extracts/merges/splits data from PDF files</td>
+                        </tr>
+                        <tr>
+                            <td>FTP Command</td>
+                            <td>Automates file upload/download via FTP/SFTP</td>
+                        </tr>
+                        <tr>
+                            <td>PGP Command</td>
+                            <td>Encrypts/decrypts files for secure transfer</td>
+                        </tr>
+                        <tr>
+                            <td>Object Cloning</td>
+                            <td>Captures UI object properties for robust automation</td>
+                        </tr>
+                        <tr>
+                            <td>Error Handling</td>
+                            <td>Try-catch-like resilience mechanism for bots</td>
+                        </tr>
+                        <tr>
+                            <td>Manage Windows Control</td>
+                            <td>Controls focus/size/state of application windows</td>
+                        </tr>
+                        <tr>
+                            <td>Workflow Designer</td>
+                            <td>Flowchart-based visual bot design tool</td>
+                        </tr>
+                        <tr>
+                            <td>Report Designer</td>
+                            <td>Tool to build custom execution/business reports</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Unit V — Sample Q&A</h3>
+            <div class="qa-container">
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Why is Error Handling important in unattended bots?</div>
+                    <div class="qa-a"><strong>Answer:</strong> Because no human is present to fix issues live; error handling lets the bot retry, skip, log, or notify automatically, keeping the process resilient and auditable.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is Object Cloning and why is it preferred over screen-coordinate automation?</div>
+                    <div class="qa-a"><strong>Answer:</strong> It captures actual UI object properties (ID, class, name) instead of pixel positions, making bots robust to window resizing/movement/resolution changes.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> How do PGP and FTP commands work together?</div>
+                    <div class="qa-a"><strong>Answer:</strong> A file is PGP-encrypted before being uploaded via FTP/SFTP to a partner server, and PGP-decrypted after download, securing automated file exchanges.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> Differentiate Task Editor and Workflow Designer.</div>
+                    <div class="qa-a"><strong>Answer:</strong> Task Editor is a linear, step-list view best for straightforward tasks; Workflow Designer is a visual flowchart view best for complex, branching business processes.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What does the PDF Integration command allow?</div>
+                    <div class="qa-a"><strong>Answer:</strong> Extracting text/tables/fields from PDFs, merging/splitting PDFs, and converting PDF content to other formats.</div>
+                </div>
+                <div class="qa-block">
+                    <div class="qa-q"><span class="qa-badge">Q</span> What is the purpose of the Report Designer?</div>
+                    <div class="qa-a"><strong>Answer:</strong> To build custom, business-friendly reports from bot execution data and logs for stakeholders.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHECKLIST -->
+        <section id="checklist">
+            <h2>Master Revision Checklist</h2>
+            <p>Track your study progress. Ticking items updates the sidebar metrics.</p>
+
+            <div class="checklist-section">
+                <!-- Unit I -->
+                <div class="checklist-group">
+                    <div class="checklist-header">Unit I — Fundamentals & Bot Basics</div>
+                    <ul class="checklist-list">
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-1" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">Definition of RPA + key characteristics (non-invasive, rule-based)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-2" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">Attended vs Unattended bots (differences, deployment style)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-3" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">RPA use cases across industries (finance, healthcare, HR, retail)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-4" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">RPA vs Traditional Automation vs AI comparison matrices</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-5" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">Automation Anywhere architecture: Bot Creator, Control Room, Bot Runner</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-6" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">Advanced AA features: Bot Store, IQ Bot, Bot Insight, AISense, Credential Vault, RBAC</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u1-7" data-unit="unit-1" onchange="updateProgress()">
+                            <span class="checklist-text">Ways to create bots: Recorders, Task Editor, Object Cloning, Workflow, Scripts</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Unit II -->
+                <div class="checklist-group">
+                    <div class="checklist-header">Unit II — Web Control Room Basics</div>
+                    <ul class="checklist-list">
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u2-1" data-unit="unit-2" onchange="updateProgress()">
+                            <span class="checklist-text">Dashboard sub-tabs: Home, Bots, Devices, Audit, Workload, Insights</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u2-2" data-unit="unit-2" onchange="updateProgress()">
+                            <span class="checklist-text">Activity views: Tasks in Progress vs Scheduled Tasks</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u2-3" data-unit="unit-2" onchange="updateProgress()">
+                            <span class="checklist-text">Bots panel: View Bots Uploaded metadata tracking</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u2-4" data-unit="unit-2" onchange="updateProgress()">
+                            <span class="checklist-text">Credential Vault configuration: Lockers, Credentials, Attributes</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Unit III -->
+                <div class="checklist-group">
+                    <div class="checklist-header">Unit III — Advanced Governance & APIs</div>
+                    <ul class="checklist-list">
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-1" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">Devices: Development (Creator) vs Runtime (Runner) client configuration</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-2" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">Device Pools setup (load-balancing, high availability)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-3" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">Workload management: Queues setup, work item tracking</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-4" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">SLA Calculator inputs and tracking utility</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-5" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">Audit Log purpose (tamper-evident records, compliance tracing)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-6" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">Administration panel: Settings, Users, Roles (RBAC), Licenses, Migration</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u3-7" data-unit="unit-3" onchange="updateProgress()">
+                            <span class="checklist-text">Exposed REST APIs use cases (deploying bots, checking status externally)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Unit IV -->
+                <div class="checklist-group">
+                    <div class="checklist-header">Unit IV — Creator & Core Commands</div>
+                    <ul class="checklist-list">
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-1" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">Recorders comparison: Smart vs Web vs Screen recorders</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-2" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">Task Editor interface capabilities</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-3" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">Variables types: Value, Array (List), Session, Clipboard, Random</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-4" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">Loop Command types (Excel, CSV, elements, folders, while)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-5" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">Excel Command capabilities (read, write, activate, save, delete rows)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-6" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">Database Command functions (connections, executing SQL statements)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-7" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">String Operation functions (concatenation, trim, split, replace, find)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u4-8" data-unit="unit-4" onchange="updateProgress()">
+                            <span class="checklist-text">XML Command capabilities (parse, nodes, attributes, saving XML sheets)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Unit V -->
+                <div class="checklist-group">
+                    <div class="checklist-header">Unit V — Advanced Automation Blocks</div>
+                    <ul class="checklist-list">
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-1" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">Terminal Emulator Command (connecting to mainframe green-screens)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-2" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">PDF Integration (extracting text/tables, split, merge, convert pages)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-3" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">FTP Command (automating directory listings, uploads, downloads)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-4" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">PGP Command (encryption, decryption, digital signature checks)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-5" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">Object Cloning Command (capturing attributes, robust web/app targets)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-6" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">Error Handling blocks (try-catch, fallback behaviors, email notifications)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-7" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">Manage Windows Control Command (minimize, maximize, focus targets)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-8" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">Workflow Designer (flowchart blocks, branching, sub-tasks)</span>
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox" id="chk-u5-9" data-unit="unit-5" onchange="updateProgress()">
+                            <span class="checklist-text">Report Designer (custom reports, analytics tracking)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- REFERENCE -->
+        <section id="reference">
+            <h2>References</h2>
+            <p><strong>Text Book:</strong> <em>Learning Robotic Process Automation</em> — Create software robots and automate business processes with UiPath (Kindle Edition).</p>
+            <p><strong>Reference Book:</strong> <em>Robotic Process Automation: A Complete Guide</em> — 2020 Edition (Kindle Edition).</p>
+            
+            <div class="alert alert-warning">
+                <strong>Syllabus Framework Note:</strong> The textbook and reference book focus on <strong>UiPath</strong>, while the syllabus units cover <strong>Automation Anywhere</strong>. Review the table below for equivalent concepts:
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 300px;">Automation Anywhere Concept</th>
+                            <th>UiPath Equivalent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Control Room</td>
+                            <td>Orchestrator</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Creator (Client)</td>
+                            <td>UiPath Studio</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Runner</td>
+                            <td>UiPath Robot</td>
+                        </tr>
+                        <tr>
+                            <td>Credential Vault</td>
+                            <td>Orchestrator Credential/Asset Store</td>
+                        </tr>
+                        <tr>
+                            <td>IQ Bot</td>
+                            <td>Document Understanding</td>
+                        </tr>
+                        <tr>
+                            <td>Bot Insight</td>
+                            <td>Insights (UiPath Analytics)</td>
+                        </tr>
+                        <tr>
+                            <td>Queues</td>
+                            <td>Orchestrator Queues</td>
+                        </tr>
+                        <tr>
+                            <td>Workflow Designer</td>
+                            <td>Studio Workflow (Flowchart/Sequence)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <button class="top-btn" id="top-btn" onclick="scrollToTop()">Back to Top</button>
+
+    <script>
+        // SCROLLSPY & SCROLL TO TOP FAB
+        const topBtn = document.getElementById('top-btn');
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            // Scroll to top button visibility
+            if (window.scrollY > 300) {
+                topBtn.style.display = 'block';
+            } else {
+                topBtn.style.display = 'none';
+            }
+
+            // Scrollspy active indicators
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // FULL TEXT LIVE SEARCH SYSTEM
+        let matches = [];
+        let currentMatchIndex = -1;
+
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                if (event.shiftKey) {
+                    prevMatch();
+                } else {
+                    nextMatch();
+                }
+                return;
+            }
+            searchContent();
+        }
+
+        function searchContent() {
+            const query = document.getElementById('search-input').value.trim();
+            clearSearchHighlights();
+            
+            const matchControls = document.getElementById('search-nav');
+            const matchCountEl = document.getElementById('match-count');
+
+            if (!query || query.length < 2) {
+                matchControls.style.display = 'none';
+                return;
+            }
+
+            const mainContent = document.getElementById('main-content');
+            highlightTextNodes(mainContent, query);
+
+            matches = Array.from(mainContent.querySelectorAll('.search-match'));
+            
+            if (matches.length > 0) {
+                currentMatchIndex = 0;
+                matchCountEl.textContent = `1 of ${matches.length} matches`;
+                matchControls.style.display = 'flex';
+                scrollToMatch(currentMatchIndex);
+            } else {
+                currentMatchIndex = -1;
+                matchCountEl.textContent = '0 matches';
+                matchControls.style.display = 'flex';
+            }
+        }
+
+        function highlightTextNodes(element, query) {
+            const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+
+            function traverse(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const val = node.nodeValue;
+                    if (regex.test(val)) {
+                        const fragment = document.createDocumentFragment();
+                        let lastIndex = 0;
+                        val.replace(regex, (match, p1, index) => {
+                            const before = val.substring(lastIndex, index);
+                            if (before) fragment.appendChild(document.createTextNode(before));
+                            
+                            const span = document.createElement('span');
+                            span.className = 'search-match';
+                            span.textContent = match;
+                            fragment.appendChild(span);
+                            
+                            lastIndex = index + match.length;
+                        });
+                        const after = val.substring(lastIndex);
+                        if (after) fragment.appendChild(document.createTextNode(after));
+                        node.parentNode.replaceChild(fragment, node);
+                    }
+                } else if (node.nodeType === Node.ELEMENT_NODE && 
+                           node.nodeName !== 'SCRIPT' && 
+                           node.nodeName !== 'STYLE' && 
+                           node.nodeName !== 'INPUT') {
+                    if (!node.classList.contains('search-match')) {
+                        Array.from(node.childNodes).forEach(traverse);
+                    }
+                }
+            }
+            traverse(element);
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function clearSearchHighlights() {
+            const mainContent = document.getElementById('main-content');
+            const highlights = mainContent.querySelectorAll('.search-match');
+            highlights.forEach(span => {
+                const text = span.textContent;
+                const textNode = document.createTextNode(text);
+                span.parentNode.replaceChild(textNode, span);
+            });
+            mainContent.normalize();
+            matches = [];
+            currentMatchIndex = -1;
+        }
+
+        function scrollToMatch(index) {
+            matches.forEach((m, idx) => {
+                m.classList.toggle('active-match', idx === index);
+            });
+            if (matches[index]) {
+                matches[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function nextMatch() {
+            if (matches.length === 0) return;
+            currentMatchIndex = (currentMatchIndex + 1) % matches.length;
+            document.getElementById('match-count').textContent = `${currentMatchIndex + 1} of ${matches.length} matches`;
+            scrollToMatch(currentMatchIndex);
+        }
+
+        // Cycle backwards through search results
+        function prevMatch() {
+            if (matches.length === 0) return;
+            currentMatchIndex = (currentMatchIndex - 1 + matches.length) % matches.length;
+            document.getElementById('match-count').textContent = `${currentMatchIndex + 1} of ${matches.length} matches`;
+            scrollToMatch(currentMatchIndex);
+        }
+
+        // CHECKLIST STATE & PROGRESS WIDGET
+        const checklistInputs = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+        const totalPoints = checklistInputs.length;
+
+        function updateProgress() {
+            let completedCount = 0;
+            const unitCounts = {};
+            const unitTotals = {};
+
+            checklistInputs.forEach(input => {
+                const unit = input.dataset.unit;
+                if (!unitCounts[unit]) {
+                    unitCounts[unit] = 0;
+                    unitTotals[unit] = 0;
+                }
+                unitTotals[unit]++;
+
+                if (input.checked) {
+                    completedCount++;
+                    unitCounts[unit]++;
+                    localStorage.setItem(input.id, 'checked');
+                } else {
+                    localStorage.removeItem(input.id);
+                }
+            });
+
+            // Update Global Metrics
+            const globalPercent = totalPoints > 0 ? Math.round((completedCount / totalPoints) * 100) : 0;
+            document.getElementById('global-progress-percent').textContent = `${globalPercent}%`;
+            document.getElementById('global-progress-bar').style.width = `${globalPercent}%`;
+
+            // Update Sidebar Badges per Unit
+            for (const unit in unitTotals) {
+                const unitPercent = Math.round((unitCounts[unit] / unitTotals[unit]) * 100);
+                const badge = document.querySelector(`.nav-link[data-unit-badge="${unit}"] .nav-badge`);
+                if (badge) {
+                    badge.textContent = `${unitPercent}%`;
+                }
+            }
+        }
+
+        function loadChecklistState() {
+            checklistInputs.forEach(input => {
+                const state = localStorage.getItem(input.id);
+                if (state === 'checked') {
+                    input.checked = true;
+                }
+            });
+            updateProgress();
+        }
+
+        // Focus search input with '/' key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('search-input').focus();
+            }
+        });
+
+        // Initialize state on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadChecklistState();
+        });
+    </script>
+</body>
+</html>

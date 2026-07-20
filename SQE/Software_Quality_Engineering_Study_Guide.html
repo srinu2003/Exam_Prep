@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Quality Engineering — Perfect Study Guide</title>
+<style>
+  :root{
+    --paper:#f6f3ec;
+    --ink:#1f2a24;
+    --rule:#c9c0aa;
+    --accent:#7a3b2e;
+    --accent2:#25554a;
+    --gold:#a9812f;
+    --card:#ffffff;
+    --code:#2d3733;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    line-height:1.62;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px 90px;}
+
+  /* ---------- Header / Cover ---------- */
+  header.cover{
+    background:
+      linear-gradient(180deg, rgba(31,42,36,0.94), rgba(31,42,36,0.86)),
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 26px);
+    color:#f3ede0;
+    padding:64px 28px 46px;
+    border-bottom:6px solid var(--gold);
+  }
+  .cover-inner{max-width:1180px;margin:0 auto;}
+  .eyebrow{
+    font-family:"Courier New",monospace;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:12.5px;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  h1.title{
+    font-family:Georgia,"Times New Roman",serif;
+    font-weight:700;
+    font-size:clamp(30px,4.4vw,54px);
+    line-height:1.08;
+    margin:0 0 10px;
+    letter-spacing:-.01em;
+  }
+  .subtitle{font-size:19px;color:#d8cfba;max-width:760px;margin-bottom:26px;font-style:italic;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .meta-chip{
+    border:1px solid rgba(243,237,224,0.35);
+    padding:7px 14px;
+    border-radius:2px;
+    font-size:13.5px;
+    font-family:"Courier New",monospace;
+    letter-spacing:.02em;
+    color:#efe8d6;
+  }
+
+  /* ---------- Course outcomes note ---------- */
+  .co-note{
+    max-width:1180px;margin:26px auto 0;padding:16px 22px;
+    background:#fff8ea;border-left:5px solid var(--gold);
+    font-size:14.5px; color:#4a3c1c;
+  }
+
+  /* ---------- TOC ---------- */
+  nav.toc{
+    background:var(--card);
+    margin-top:38px;
+    border:1px solid var(--rule);
+    padding:26px 30px 30px;
+  }
+  nav.toc h2{margin-top:0;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:none;}
+  .toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px 30px;margin-top:10px;}
+  .toc-unit{}
+  .toc-unit .unum{font-family:"Courier New",monospace;color:var(--gold);font-weight:700;font-size:13px;}
+  .toc-unit h3{margin:2px 0 8px;font-size:16.5px;}
+  .toc-unit ul{list-style:none;margin:0;padding:0;}
+  .toc-unit li{margin:4px 0;font-size:14px;}
+  .toc-unit a{color:var(--accent2);text-decoration:none;border-bottom:1px dotted var(--accent2);}
+  .toc-unit a:hover{color:var(--accent);}
+
+  /* ---------- Unit sections ---------- */
+  section.unit{margin-top:64px;}
+  .unit-head{
+    display:flex;align-items:baseline;gap:18px;
+    border-bottom:3px solid var(--accent);
+    padding-bottom:10px;margin-bottom:6px;
+  }
+  .unit-num{
+    font-family:"Courier New",monospace;font-size:15px;color:#fff;
+    background:var(--accent);padding:5px 12px;letter-spacing:.08em;
+  }
+  .unit-head h2{margin:0;font-size:clamp(22px,3vw,30px);border:none;padding:0;}
+  .unit-sub{color:#6b6252;font-size:14px;font-style:italic;margin:6px 0 26px;}
+
+  h3.topic{
+    font-size:20px;color:var(--accent2);
+    margin:38px 0 8px;
+    padding-bottom:4px;
+    border-bottom:1px solid var(--rule);
+  }
+  h4.sub{font-size:16px;color:var(--accent);margin:20px 0 6px;}
+  p{margin:10px 0;}
+  ul,ol{margin:8px 0;padding-left:24px;}
+  li{margin:4px 0;}
+
+  .callout{
+    background:var(--card);
+    border-left:4px solid var(--accent2);
+    padding:14px 18px;
+    margin:16px 0;
+    font-size:14.8px;
+  }
+  .callout.def{border-left-color:var(--gold);background:#fffaf0;}
+  .callout.def .lbl{font-family:"Courier New",monospace;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px;color:var(--gold);display:block;margin-bottom:4px;}
+  .callout.eq{border-left-color:var(--accent);background:#fbf3f0;font-family:"Iowan Old Style",Georgia,serif;font-style:italic;}
+  .callout.case{border-left-color:#3a5c8a;background:#f1f5fa;}
+  .callout.case .lbl{font-family:"Courier New",monospace;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px;color:#3a5c8a;display:block;margin-bottom:4px;}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.3px;background:var(--card);}
+  th,td{border:1px solid var(--rule);padding:8px 12px;text-align:left;vertical-align:top;}
+  th{background:#eee6d3;font-family:"Courier New",monospace;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);}
+  tr:nth-child(even) td{background:#faf8f2;}
+
+  /* diagram boxes */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:20px 0;}
+  .flow .node{
+    background:var(--card);border:1.5px solid var(--accent2);
+    padding:10px 14px;font-size:13.5px;text-align:center;min-width:110px;
+    border-radius:3px;
+  }
+  .flow .node.hi{border-color:var(--accent);background:#fbf3f0;font-weight:600;}
+  .flow .arrow{font-size:20px;color:var(--gold);}
+
+  .three-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:18px 0;}
+  .pillar{background:var(--card);border-top:4px solid var(--accent2);padding:14px 16px;font-size:14px;}
+  .pillar h5{margin:0 0 6px;font-size:14.5px;color:var(--accent2);}
+
+  .keyword{background:#eee6d3;padding:1px 6px;border-radius:2px;font-family:"Courier New",monospace;font-size:.92em;}
+
+  .qa-block{margin-top:14px;background:#f4f6f1;border:1px dashed #7d9483;padding:14px 18px;font-size:14px;}
+  .qa-block .lbl{font-family:"Courier New",monospace;letter-spacing:.1em;text-transform:uppercase;font-size:11px;color:#3f6650;}
+  .qa-block ol{margin-top:8px;}
+
+  .glossary dt{font-weight:700;color:var(--accent);margin-top:10px;}
+  .glossary dd{margin:2px 0 0;font-size:14.3px;}
+
+  .unit-summary{
+    margin-top:30px;background:#1f2a24;color:#f3ede0;padding:22px 26px;
+  }
+  .unit-summary h4{color:var(--gold);margin-top:0;font-size:14.5px;letter-spacing:.1em;text-transform:uppercase;}
+  .unit-summary ul{margin:6px 0 0;}
+
+  footer{
+    margin-top:70px;padding-top:22px;border-top:1px solid var(--rule);
+    font-size:13px;color:#79705c;
+  }
+  .backlink{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;
+    padding:9px 14px;font-size:12.5px;text-decoration:none;border-radius:3px;
+    font-family:"Courier New",monospace;letter-spacing:.05em;opacity:.92;}
+  .backlink:hover{opacity:1;}
+
+  @media print{
+    .backlink{display:none;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <div class="eyebrow">M.Tech CSE · I Year, I Semester · Professional Elective&nbsp;II · L T P C — 3 0 0 3</div>
+    <h1 class="title">Software Quality Engineering</h1>
+    <div class="subtitle">A complete unit-by-unit study guide — grounded in Jeff Tian's <em>Software Quality Engineering: Testing, Quality Assurance, and Quantifiable Improvement</em> (Wiley–IEEE Computer Society Press, 2005) — covering every topic on the syllabus in depth, with definitions, diagrams, worked examples, and revision summaries.</div>
+    <div class="meta-row">
+      <span class="meta-chip">5 Units</span>
+      <span class="meta-chip">Primary Text: Jeff Tian (2005)</span>
+      <span class="meta-chip">Focus: Correctness-centered Quality</span>
+      <span class="meta-chip">Testing → QA → Quality Engineering</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="co-note">
+    <strong>A note on scope.</strong> This guide is built directly from the prescribed textbook (Jeff Tian, <em>Software Quality Engineering</em>) and follows your syllabus Units I–V exactly (Software Quality → Quality Assurance → Quality Engineering → Test Activities/Management/Automation → Coverage &amp; Usage Testing). The five course-outcome statements printed on your syllabus describe a cryptography course, not this one — they appear to have been carried over from a different subject template and do not correspond to Jeff Tian's book or to Units I–V below. This guide therefore covers the five units as written, since that is the actual content of the course.
+  </div>
+
+  <!-- ================= TOC ================= -->
+  <nav class="toc" id="toc">
+    <h2>Contents</h2>
+    <div class="toc-grid">
+      <div class="toc-unit">
+        <div class="unum">UNIT I</div>
+        <h3>Software Quality</h3>
+        <ul>
+          <li><a href="#u1-t1">Quality: Perspectives &amp; Expectations</a></li>
+          <li><a href="#u1-t2">Quality Frameworks &amp; ISO-9126</a></li>
+          <li><a href="#u1-t3">Correctness &amp; Defects</a></li>
+          <li><a href="#u1-t4">A Historical Perspective of Quality</a></li>
+          <li><a href="#u1-t5">Software Quality — Recap</a></li>
+        </ul>
+      </div>
+      <div class="toc-unit">
+        <div class="unum">UNIT II</div>
+        <h3>Quality Assurance</h3>
+        <ul>
+          <li><a href="#u2-t1">Classification: QA as Dealing with Defects</a></li>
+          <li><a href="#u2-t2">Defect Prevention</a></li>
+          <li><a href="#u2-t3">Defect Reduction</a></li>
+          <li><a href="#u2-t4">Defect Containment</a></li>
+        </ul>
+      </div>
+      <div class="toc-unit">
+        <div class="unum">UNIT III</div>
+        <h3>Quality Engineering</h3>
+        <ul>
+          <li><a href="#u3-t1">QE: Activities &amp; Process</a></li>
+          <li><a href="#u3-t2">Quality Planning: Goals &amp; Strategy</a></li>
+          <li><a href="#u3-t3">Quality Assessment &amp; Improvement</a></li>
+          <li><a href="#u3-t4">QE in the Software Process</a></li>
+        </ul>
+      </div>
+      <div class="toc-unit">
+        <div class="unum">UNIT IV</div>
+        <h3>Test Activities, Management &amp; Automation</h3>
+        <ul>
+          <li><a href="#u4-t1">Test Planning &amp; Preparation</a></li>
+          <li><a href="#u4-t2">Test Execution</a></li>
+          <li><a href="#u4-t3">Result Checking &amp; Measurement</a></li>
+          <li><a href="#u4-t4">Analysis &amp; Follow-up</a></li>
+          <li><a href="#u4-t5">Activities, People &amp; Management</a></li>
+          <li><a href="#u4-t6">Test Automation</a></li>
+        </ul>
+      </div>
+      <div class="toc-unit">
+        <div class="unum">UNIT V</div>
+        <h3>Coverage &amp; Usage Testing (Checklists / Partitions)</h3>
+        <ul>
+          <li><a href="#u5-t1">Checklist-Based Testing &amp; Its Limitations</a></li>
+          <li><a href="#u5-t2">Testing for Partition Coverage</a></li>
+          <li><a href="#u5-t3">Usage-Based Statistical Testing (Musa's OP)</a></li>
+          <li><a href="#u5-t4">Constructing Operational Profiles</a></li>
+          <li><a href="#u5-t5">Case Study: OP for Cartridge Support Software</a></li>
+        </ul>
+      </div>
+      <div class="toc-unit">
+        <div class="unum">EXTRA</div>
+        <h3>Reference Material</h3>
+        <ul>
+          <li><a href="#glossary">Master Glossary of Terms</a></li>
+          <li><a href="#revision">One-Page Revision Grid</a></li>
+          <li><a href="#books">Text &amp; Reference Books</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================================================================= -->
+  <!-- UNIT I -->
+  <!-- ================================================================= -->
+  <section class="unit" id="unit1">
+    <div class="unit-head">
+      <span class="unit-num">UNIT I</span>
+      <h2>Software Quality</h2>
+    </div>
+    <div class="unit-sub">Quality: perspectives and expectations · Quality frameworks and ISO-9126 · Correctness and defects: definitions, properties and measurements · A historical perspective of quality · Software quality</div>
+
+    <p>Before any assurance activity can be planned, we need a working definition of "quality" itself. Unit I builds that definition from the ground up: first by surveying how different stakeholders <em>perceive</em> quality, then by looking at formal frameworks that decompose quality into measurable attributes, then by pinning down the vocabulary of defects that the rest of the course relies on, and finally by tracing how the very idea of software quality has evolved over time.</p>
+
+    <h3 class="topic" id="u1-t1">1. Quality: Perspectives and Expectations</h3>
+    <p>There is no single, universally agreed definition of quality — the "right" definition depends on who is asking and why. Kitchenham and Pfleeger identify five classic views of quality, each useful in a different context:</p>
+    <div class="three-col">
+      <div class="pillar"><h5>Transcendental view</h5>Quality is an abstract, almost indescribable property — you cannot define it precisely, but you recognize it ("delight") when you experience it.</div>
+      <div class="pillar"><h5>User view</h5>Quality is fitness for purpose — how well the software meets the actual needs of the people using it.</div>
+      <div class="pillar"><h5>Manufacturing view</h5>Quality means conformance to a defined process or specification — "build it the way it was specified."</div>
+      <div class="pillar"><h5>Product view</h5>Quality is rooted in internal product characteristics (structure, design) on the assumption that good internal properties produce good external behaviour.</div>
+      <div class="pillar"><h5>Value-based view</h5>Quality is whatever a customer is willing to pay for — it ties quality directly to economic value.</div>
+    </div>
+
+    <h4 class="sub">People's roles and responsibilities</h4>
+    <p>The book divides stakeholders into two broad groups, which map onto two complementary vantage points:</p>
+    <ul>
+      <li><strong>Consumers</strong> (customers and users, and by extension "non-human users" such as interoperating hardware/software) — they mostly see the software as a <strong>black box</strong> and judge it by observable, <em>external</em> behaviour.</li>
+      <li><strong>Producers</strong> (developers, managers, testers, marketing, third-party IV&amp;V participants, packagers) — they see the software as a <strong>white/clear box</strong> and are concerned with <em>internal</em> characteristics that lead to that external behaviour.</li>
+    </ul>
+
+    <h4 class="sub">Quality expectations — consumer side</h4>
+    <ul>
+      <li><strong>Right functions</strong> — the software does what it is supposed to do (fit for use / validation concern).</li>
+      <li><strong>Correct performance of those functions</strong> — it does them right, repeatedly and reliably (verification concern).</li>
+      <li>For many mass-market users, <strong>usability</strong> (ease of use, "plug-and-play") can matter as much as reliability; different user segments weight usability vs. reliability differently — novice users lean toward usability, sophisticated users lean toward reliability.</li>
+      <li>Customers additionally care about <strong>cost</strong> — the value-based view: is the customer willing to pay for the quality delivered?</li>
+    </ul>
+
+    <h4 class="sub">Quality expectations — producer side</h4>
+    <ul>
+      <li>Fulfilling <strong>contractual obligations</strong> — conformance to specifications / service agreements.</li>
+      <li>Internal properties that make conformance easier — good design, conceptual integrity, low coupling.</li>
+      <li>Managers additionally value process adherence, appropriate tools/methodologies, and translating customer expectations into internally manageable goals.</li>
+      <li>Different producer roles emphasize different "-ilities": usability/modifiability for service staff, maintainability for maintenance staff, portability for packaging/third parties, profitability for marketing.</li>
+    </ul>
+
+    <div class="callout def">
+      <span class="lbl">Key idea</span>
+      Quality is not one thing — it is a bundle of attributes whose relative importance shifts with the stakeholder's role and the type of product (e.g., reliability dominates for banking software; usability dominates for a consumer utility; safety dominates for an avionics system).
+    </div>
+
+    <h3 class="topic" id="u1-t2">2. Quality Frameworks and ISO-9126</h3>
+    <p>Because quality has so many facets ("-ilities" such as reliability, usability, portability, maintainability), the field needed a structured way to organize them. <strong>ISO-9126</strong> is the most influential such framework — it defines quality as a hierarchy of <em>characteristics</em>, each broken into non-overlapping <em>sub-characteristics</em>.</p>
+
+    <table>
+      <tr><th>Characteristic</th><th>Meaning</th><th>Sub-characteristics</th></tr>
+      <tr><td><strong>Functionality</strong></td><td>Existence of required functions with specified properties</td><td>Suitability · Accuracy · Interoperability · Security</td></tr>
+      <tr><td><strong>Reliability</strong></td><td>Ability to maintain performance under stated conditions over time</td><td>Maturity · Fault tolerance · Recoverability</td></tr>
+      <tr><td><strong>Usability</strong></td><td>Effort needed to use the software, and users' assessment of that use</td><td>Understandability · Learnability · Operability</td></tr>
+      <tr><td><strong>Efficiency</strong></td><td>Performance relative to resources consumed</td><td>Time behaviour · Resource behaviour</td></tr>
+      <tr><td><strong>Maintainability</strong></td><td>Effort needed to make specified modifications</td><td>Analyzability · Changeability · Stability · Testability</td></tr>
+      <tr><td><strong>Portability</strong></td><td>Ability to be transferred from one environment to another</td><td>Adaptability · Installability · Conformance · Replaceability</td></tr>
+    </table>
+
+    <h4 class="sub">Alternative / adapted frameworks</h4>
+    <ul>
+      <li>ISO-9126 is a strict hierarchy — no sub-characteristic is shared across characteristics — yet in practice some product properties (e.g., redundancy) influence more than one characteristic (both efficiency and maintainability), which motivates alternative, more flexible frameworks (e.g., Dromey's model).</li>
+      <li><strong>IBM's CUPRIMDSO</strong> — Capability, Usability, Performance, Reliability, Installation, Maintenance, Documentation, Service, and overall customer Satisfaction — a company-specific adaptation.</li>
+      <li><strong>Web-application quality attributes (Offutt)</strong> — primary: reliability, usability, security; secondary: availability, scalability, maintainability, time-to-market.</li>
+      <li>Priorities are domain-specific: real-time software prizes performance/reliability over usability; mass-market software may do the reverse.</li>
+    </ul>
+
+    <h4 class="sub">Why this book centers on correctness</h4>
+    <p>Among all the "-ilities," <strong>correctness</strong> (conformance/absence of problems) touches several ISO-9126 characteristics at once (functionality-accuracy and reliability). Correctness matters most where daily life or business depends on the software (networks, financial databases, real-time control) but remains foundational even for feature/usability-driven products. The book therefore adopts a <strong>correctness-centered view of quality</strong> as the lens for all subsequent QA and quality-engineering discussion.</p>
+
+    <h3 class="topic" id="u1-t3">3. Correctness and Defects: Definitions, Properties, and Measurements</h3>
+    <p>Precise vocabulary is essential because the rest of the course (QA classification, defect prevention/reduction/containment) is built entirely on the relationships between these four terms.</p>
+
+    <div class="callout def">
+      <span class="lbl">IEEE Std 610.12 definitions</span>
+      <strong>Failure</strong> — the inability of a system/component to perform its required function within specified performance requirements (an externally observed deviation).<br>
+      <strong>Fault</strong> — an incorrect step, process, or data definition in a program (an internal defect in the artifact).<br>
+      <strong>Error</strong> — a human action that produces an incorrect result (the human act, or its root "error source," that injects a fault).
+    </div>
+
+    <p>These three, taken together, are collectively called <strong>defects</strong>. The book deliberately avoids the informal term "bug" (imprecise, and arguably evades responsibility) and avoids "debugging," preferring the phrase <em>defect detection and removal</em>.</p>
+
+    <div class="callout eq">
+      Causal chain: <strong>errors → faults → failures</strong><br>
+      An error source may inject several faults; a single fault may trigger many failures on repeated execution; conversely, several distinct faults can combine to cause one observed failure (e.g., an interface/interaction failure). A fault that never manifests as a failure under the scenarios exercised so far is called a <strong>dormant / latent fault</strong> — it can still surface later under different conditions.
+    </div>
+
+    <h4 class="sub">Correctness-centered properties by view and attribute</h4>
+    <table>
+      <tr><th></th><th>Correctness attribute</th><th>Other attributes ("-ilities")</th></tr>
+      <tr><td><strong>Consumer / External view</strong></td><td>Failure-related properties: failure count/distribution/density, failure likelihood (reliability), failure severity (safety)</td><td>Usability, maintainability, portability, performance, installability, readability, etc.</td></tr>
+      <tr><td><strong>Producer / Internal view</strong></td><td>Fault-related properties: fault type, cause, location, distribution/density over phases and components</td><td>Design, size, change history, complexity, etc.</td></tr>
+    </table>
+
+    <ul>
+      <li><strong>Reliability</strong> — the probability of failure-free operation for a specified period of time or for a given input set (a direct measure meaningful to consumers).</li>
+      <li><strong>Failure severity / safety assurance</strong> — an <em>accident</em> is defined as a failure with severe consequences; safety-critical systems must specifically avoid, contain, or mitigate accidents.</li>
+      <li>On the producer side, fault analysis (type, cause, injection phase, distribution across components) feeds directly into <em>defect classification and analysis</em> and <em>risk identification</em> techniques covered later in the course.</li>
+    </ul>
+
+    <p>Framed this way, ensuring quality reduces to <strong>defect management</strong>: preventing defects, detecting and removing them, or containing their impact — the three generic strategies elaborated fully in Unit II.</p>
+
+    <h3 class="topic" id="u1-t4">4. A Historical Perspective of Quality</h3>
+    <p>Quality thinking did not originate with software — it was inherited (and adapted) from manufacturing and services.</p>
+    <ul>
+      <li><strong>Manufacturing era</strong> — quality meant conformance to physical specifications (dimensions, tolerances). Statistical quality control reduced variance in manufacturing. Example: J.D. Power's "initial quality" for automobiles = average reported problems per 100 vehicles.</li>
+      <li><strong>Service era</strong> — the focus shifted from "zero defects in the product" toward "zero defection of customers" — retaining loyal customers by continuously meeting shifting expectations, not just a fixed spec.</li>
+      <li><strong>Software's synthesis</strong> — Prahalad &amp; Krishnan argue software quality blends both traditions: high-quality software rests on three elements — <strong>conformance, adaptability, and innovation</strong>. Physical-world assumptions (fixed constraints, continuity, easy decomposition) don't map cleanly onto the flexible, ever-changing nature of software, which is why software needs its own QA techniques.</li>
+    </ul>
+
+    <h4 class="sub">Four progressive stages of software engineering (Musa &amp; Everett)</h4>
+    <div class="flow">
+      <div class="node">1. Functional stage<br><small>automate manual work</small></div>
+      <div class="arrow">→</div>
+      <div class="node">2. Schedule stage<br><small>timely delivery of features</small></div>
+      <div class="arrow">→</div>
+      <div class="node">3. Cost stage<br><small>competitive pricing, PC era</small></div>
+      <div class="arrow">→</div>
+      <div class="node hi">4. Reliability stage<br><small>managing quality expectations</small></div>
+    </div>
+    <p>This progression shows quality's <em>steadily increasing</em> importance within software engineering as society's dependence on software (and the cost of software failure) has grown.</p>
+
+    <h3 class="topic" id="u1-t5">5. So, What Is Software Quality? (Chapter Wrap-Up)</h3>
+    <ul>
+      <li>Software quality is multi-attribute and perceived differently depending on role/responsibility — there is no single scalar "quality number."</li>
+      <li>This course adopts the <strong>correctness-centered view</strong>: high quality means few (or no) problems, and any remaining problems cause minimal damage to customers — problems experienced by users and traced to internal software defects.</li>
+      <li>The rest of the course answers the follow-up question — <em>how do we ensure this kind of quality?</em> — through Quality Assurance (Unit II) and Quality Engineering (Unit III), then through detailed testing techniques (Units IV–V).</li>
+    </ul>
+
+    <div class="unit-summary">
+      <h4>Unit I — Fast Recap</h4>
+      <ul>
+        <li>5 quality views: transcendental, user, manufacturing, product, value-based.</li>
+        <li>Two stakeholder groups: consumers (external/black-box) vs. producers (internal/white-box).</li>
+        <li>ISO-9126: 6 characteristics — Functionality, Reliability, Usability, Efficiency, Maintainability, Portability — each with its own exclusive sub-characteristics.</li>
+        <li>Defect vocabulary: Error → Fault → Failure (collectively, "defects"); dormant/latent faults; reliability = probability of failure-free operation; accident = failure with severe consequences.</li>
+        <li>Historical arc: manufacturing conformance → service-based customer retention → software's blend of conformance + adaptability + innovation; four stages: functional → schedule → cost → reliability.</li>
+        <li>Course stance: correctness-centered quality definition.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- UNIT II -->
+  <!-- ================================================================= -->
+  <section class="unit" id="unit2">
+    <div class="unit-head">
+      <span class="unit-num">UNIT II</span>
+      <h2>Quality Assurance</h2>
+    </div>
+    <div class="unit-sub">Classification: QA as dealing with defects · Defect prevention (education &amp; training, formal methods, other techniques) · Defect reduction (inspection, testing, other techniques &amp; risk identification) · Defect containment (fault tolerance, safety assurance &amp; failure containment)</div>
+
+    <p>Given the correctness-centered definition of quality from Unit I, Quality Assurance (QA) can be framed very concretely: <strong>QA is the set of activities that deal with defects</strong> — preventing them, detecting/removing them, or containing their impact. Unit II builds a classification scheme for every QA technique the rest of the course discusses.</p>
+
+    <h3 class="topic" id="u2-t1">1. Classification: QA as Dealing with Defects</h3>
+    <p>Every QA alternative can be placed into exactly one of three generic categories, based on <em>which link in the error → fault → failure chain it breaks</em>:</p>
+
+    <div class="three-col">
+      <div class="pillar"><h5>① Defect Prevention</h5>Blocks the <span class="keyword">error → fault</span> link. Either eliminates error sources (e.g., correcting misconceptions through training) or blocks the faulty action from producing a fault (formal methods, standards, tools).</div>
+      <div class="pillar"><h5>② Defect Reduction</h5>Detects and removes faults already present. Acts on <span class="keyword">faults</span> directly (inspection, static analysis) or via observed <span class="keyword">failures</span> (testing).</div>
+      <div class="pillar"><h5>③ Defect Containment</h5>Blocks the <span class="keyword">fault → failure</span> link (fault tolerance) or limits the damage once a failure/accident occurs (safety assurance, failure containment).</div>
+    </div>
+
+    <p>Graphically, the book depicts this as a series of "barriers": a barrier between the human/process inputs and the software artifact (prevention), a barrier between the software and its execution/usage scenarios (fault removal via inspection/testing), a further barrier that stops local faults from becoming global failures (fault tolerance), and a last barrier around especially severe failure instances (failure containment).</p>
+
+    <h4 class="sub">Pre-release vs. post-release defects</h4>
+    <ul>
+      <li>Defect prevention and reduction act mainly <strong>pre-release</strong> — they reduce the number of faults ("dormant defects") shipped in the product.</li>
+      <li>Post-release, customer-reported failures still need fixing, but relying on this alone is costly — fixes are far more expensive after release (multiplied across installations) and damage vendor reputation. <strong>Beta testing</strong> is a controlled way to blend pre- and post-release feedback.</li>
+      <li>Defect containment activities minimize the <em>impact</em> of whatever faults remain after release; because they require redundancy/duplication, they are typically reserved for systems where field failures cause serious damage (databases, telecom networks, medical devices, nuclear systems).</li>
+    </ul>
+
+    <h3 class="topic" id="u2-t2">2. Defect Prevention</h3>
+    <p>Defect prevention assumes we can identify a known error source or a missing/incorrect human action, and then either remove the source or block the action.</p>
+
+    <h4 class="sub">2.1 Education and training</h4>
+    <p>A people-centric route to eliminating error sources. Since people are the biggest determinant of project success, training targets four knowledge areas:</p>
+    <ul>
+      <li><strong>Product / domain knowledge</strong> — unfamiliarity with the application domain (e.g., embedded constraints) leads to wrong solutions.</li>
+      <li><strong>Software development knowledge/expertise</strong> — weak requirements/specification skills cause rework downstream.</li>
+      <li><strong>Methodology, technology, and tool knowledge</strong> — e.g., using Cleanroom without understanding formal verification/statistical testing defeats the method.</li>
+      <li><strong>Development process knowledge</strong> — not understanding how increments fit together causes interface/coordination problems.</li>
+    </ul>
+
+    <h4 class="sub">2.2 Formal method</h4>
+    <p>Formal methods eliminate error sources by making specifications unambiguous (<strong>formal specification</strong>) and then proving the implementation conforms to them (<strong>formal verification</strong>). Key approaches (detailed further as a QA topic beyond testing):</p>
+    <ul>
+      <li><strong>Axiomatic approach</strong> (Hoare) — programs are proven correct against pre-conditions and post-conditions using axioms and rules of inference.</li>
+      <li><strong>Weakest-precondition / predicate transformer</strong> (Dijkstra) and <strong>functional/program-calculus</strong> approaches based on mathematical functions and symbolic execution.</li>
+      <li><strong>Semi-formal / limited-scope techniques</strong> — model checking, form/table-based methods — check specific properties rather than proving full correctness; popular because full formal methods are labor-intensive and costly without strong tool automation.</li>
+    </ul>
+
+    <h4 class="sub">2.3 Other defect prevention techniques</h4>
+    <ul>
+      <li><strong>Better methodologies/technologies</strong> — disciplined methods and the <em>information hiding</em> principle reduce interface complexity and "fat software" problems.</li>
+      <li><strong>Process definition &amp; conformance</strong> — a well-managed, consistently followed process (e.g., configuration management) prevents systemic problems.</li>
+      <li><strong>Standards enforcement</strong> — coding/design standards reduce injected faults for specific product types.</li>
+      <li><strong>Tool support</strong> — e.g., a syntax-directed editor that auto-balances braces prevents a class of syntax errors.</li>
+    </ul>
+    <p>Root-cause analysis (covered later under defect classification/risk identification) is what establishes the causal link needed before appropriate prevention techniques can be chosen.</p>
+
+    <h3 class="topic" id="u2-t3">3. Defect Reduction</h3>
+    <p>Because prevention can never be 100% effective for large systems, we need techniques that detect and remove faults that were injected despite our best efforts.</p>
+
+    <h4 class="sub">3.1 Inspection: direct fault detection and removal</h4>
+    <p>Inspection is a <em>static</em>, human-driven critical examination of software artifacts (code, design, specs, test plans) — faults are found directly, without executing the software.</p>
+    <ul>
+      <li>Rooted in <strong>Fagan inspection</strong> — the earliest and most influential form.</li>
+      <li>Typically multiple inspectors, a coordinated process, possibly multiple sessions; faults are logged and their removal verified.</li>
+      <li>Can be applied to virtually any artifact and at any phase — including before anything is executable — making it economical (defects found early are cheaper to fix).</li>
+      <li>A side-benefit: inspection sessions can incorporate <strong>causal analysis</strong> (e.g., as in Gilb inspection) which feeds back into defect prevention.</li>
+    </ul>
+
+    <h4 class="sub">3.2 Testing: failure observation and fault removal</h4>
+    <p>Testing is <em>dynamic</em> — it executes the software and observes behaviour; if a failure is seen, the execution record is analyzed to locate and fix the underlying fault(s). Testing can be classified along three questions (elaborated fully in Unit IV/V):</p>
+    <ul>
+      <li><strong>When can it be performed?</strong> — requires an executable artifact; organized into sub-phases: unit → component → integration → system → acceptance → beta testing.</li>
+      <li><strong>What is tested, and what faults are found?</strong> — black-box/functional testing (external behaviour, product-facing faults) vs. white-box/structural testing (internal implementation faults).</li>
+      <li><strong>When/at what defect level do we stop?</strong> — coverage-based criteria (higher coverage ⇒ assumed lower defects) vs. usage-based/reliability criteria (statistically representative of real customer usage).</li>
+    </ul>
+
+    <h4 class="sub">3.3 Other techniques and risk identification</h4>
+    <ul>
+      <li>Other static techniques: algorithm analysis, decision-table analysis, boundary-value analysis, finite-state-machine/Petri-net modeling, control-/data-flow analysis, software fault trees.</li>
+      <li>Other dynamic techniques: symbolic execution, simulation, prototyping — useful early, before large-scale testing is feasible.</li>
+      <li>In-field measurement/analysis (timing/performance analysis, accident reconstruction) mainly feeds <em>future</em> QA rather than counting as pre-release QA itself.</li>
+      <li><strong>The 80:20 rule</strong> — empirically, roughly 20% of components are responsible for roughly 80% of the problems, so <strong>risk identification</strong> techniques (statistical analysis, principal component/discriminant analysis, neural networks, tree-based modeling, pattern matching, learning algorithms) are used to focus inspection/testing effort on the highest-risk components.</li>
+    </ul>
+
+    <h3 class="topic" id="u2-t4">4. Defect Containment</h3>
+    <p>Even after prevention and reduction, large complex systems retain some residual faults; for systems where the consequences of failure are severe, this residual risk still needs to be managed — by breaking the fault→failure link or by limiting damage after a failure occurs.</p>
+
+    <h4 class="sub">4.1 Software fault tolerance</h4>
+    <p>Borrowed from hardware fault-tolerance ideas (spares, redundancy). Two primary techniques:</p>
+    <ul>
+      <li><strong>Recovery blocks</strong> — redundancy <em>over time</em>: if a local failure is detected, a portion of execution is re-attempted, hopefully avoiding the same failure; local failures thus do not propagate to global failures (at the cost of some delay).</li>
+      <li><strong>N-Version Programming (NVP)</strong> — redundancy <em>in parallel</em>: N independently developed versions run simultaneously; a decision algorithm combines their outputs so that a minority of failing versions cannot corrupt the overall result.</li>
+    </ul>
+    <p>Important nuance: fault-tolerance techniques typically <em>tolerate</em> faults dynamically without identifying or removing them — a sharp contrast with inspection/testing.</p>
+
+    <h4 class="sub">4.2 Safety assurance and failure containment</h4>
+    <p>For safety-critical systems, even low failure probabilities are unacceptable if they can lead to an <strong>accident</strong> (a failure with severe consequences). Safety techniques, based on hazard analysis, fall into four groups:</p>
+    <ol>
+      <li><strong>Hazard elimination</strong> — substitution, simplification, decoupling, removing specific human errors, reducing hazardous materials/conditions.</li>
+      <li><strong>Hazard reduction</strong> — design for controllability (e.g., automatic pressure release), locking devices/interlocks, safety margins and redundancy.</li>
+      <li><strong>Hazard control</strong> — reducing exposure, isolation/containment (barriers), active protection systems, fail-safe design.</li>
+      <li><strong>Damage control</strong> — escape routes, safe abandonment procedures, devices that limit physical damage.</li>
+    </ol>
+    <p>Hazard control and damage control are <em>post-failure</em> activities specific to safety-critical systems — the aim is to stop a failure from becoming an accident, or to limit the accident's damage if it does occur.</p>
+
+    <div class="unit-summary">
+      <h4>Unit II — Fast Recap</h4>
+      <ul>
+        <li>Three generic ways to deal with defects: <strong>Prevention</strong> (error→fault), <strong>Reduction</strong> (detect &amp; remove faults), <strong>Containment</strong> (fault→failure, and post-failure damage control).</li>
+        <li>Prevention: education/training, formal methods (axiomatic, weakest-precondition, functional, semi-formal), process/standard/tool-based prevention.</li>
+        <li>Reduction: inspection (static, e.g. Fagan) vs. testing (dynamic, black-box/white-box, coverage-based/usage-based); risk identification via the 80:20 rule.</li>
+        <li>Containment: fault tolerance (recovery blocks, N-version programming) and safety assurance (hazard elimination → reduction → control → damage control).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- UNIT III -->
+  <!-- ================================================================= -->
+  <section class="unit" id="unit3">
+    <div class="unit-head">
+      <span class="unit-num">UNIT III</span>
+      <h2>Quality Engineering</h2>
+    </div>
+    <div class="unit-sub">Quality engineering: activities and process · Quality planning: goal setting and strategy formation · Quality assessment and improvement · Quality engineering in software process</div>
+
+    <p>QA activities alone are not enough — someone has to decide <em>which</em> QA activities to run, set measurable targets, and use the resulting data to steer the project. <strong>Quality Engineering (QE)</strong> is this larger management wrapper around QA: quality goal-setting <em>before</em> QA activities, execution of QA itself, and measurement/feedback <em>after and alongside</em> QA activities.</p>
+
+    <h3 class="topic" id="u3-t1">1. Quality Engineering: Activities and Process</h3>
+    <p>QE reframes quality management as an engineering problem: meet or exceed customer quality expectations by selecting and executing the right QA activities, while minimizing cost and risk under project constraints. It comprises three chronological groups of activities:</p>
+
+    <div class="flow">
+      <div class="node hi">Pre-QA<br><small>Quality Planning</small></div>
+      <div class="arrow">→</div>
+      <div class="node hi">In-QA<br><small>Execute QA, handle defects</small></div>
+      <div class="arrow">→</div>
+      <div class="node hi">Post-QA<br><small>Measurement, Assessment, Improvement</small></div>
+    </div>
+
+    <ol>
+      <li><strong>Pre-QA (quality planning)</strong> — (a) set specific quality goals; (b) form an overall QA strategy — select QA activities to perform, and select measurements/models for feedback and assessment.</li>
+      <li><strong>In-QA</strong> — execute the selected QA activities and handle discovered defects (this is where most Unit II techniques are actually applied).</li>
+      <li><strong>Post-QA</strong> — measurement, assessment, and improvement, carried out in parallel with and after QA activities to feed back into decision-making.</li>
+    </ol>
+
+    <p><strong>Note:</strong> "post-QA" does not mean "after QA finishes" — much of this measurement/analysis work runs concurrently with ongoing QA activities.</p>
+
+    <h4 class="sub">Two kinds of feedback</h4>
+    <ul>
+      <li><strong>Short-term / direct feedback</strong> to the QA activities themselves — progress tracking, activity scheduling, flagging areas needing attention (e.g., IBM Toronto Lab's test-effort tracking and reliability monitoring).</li>
+      <li><strong>Long-term feedback</strong> to the overall QE process, in two forms: (i) back to <em>quality planning</em> (renegotiate goals, revise the QA strategy) and (ii) back to <em>quality assessment/improvement</em> (e.g., swap out an unstable model for a better one).</li>
+    </ul>
+
+    <h4 class="sub">Relationship to QIP (Quality Improvement Paradigm)</h4>
+    <p>QE closely parallels the TAME project's <strong>QIP</strong>: <em>understand → assess → package</em>. Pre-QA activities roughly correspond to "understand"; execution of selected QA strategies corresponds to the "changes" introduced in "assess"; and the analysis/feedback activities span both "assess" (short-term analysis) and "package" (longer-term organizational learning).</p>
+
+    <h3 class="topic" id="u3-t2">2. Quality Planning: Goal Setting and Strategy Formation</h3>
+    <p>Pre-QA planning has two parts: setting quality goals, and forming a QA strategy to reach them.</p>
+
+    <h4 class="sub">Setting quality goals</h4>
+    <ol>
+      <li>Identify which quality views/attributes matter to the target customers (reliability for business/commercial systems; safety for real-time control; usability for mass-market utilities).</li>
+      <li>Select direct quality measures meaningful from the customer's perspective (e.g., reliability, safety).</li>
+      <li>Quantify these measures into concrete numeric goals, balancing market conditions, competitive pressure, and cost.</li>
+    </ol>
+    <p>Zero-defect is not realistically achievable, and — echoing the service-quality lesson from Unit I — should not even be the goal; the more useful target is <em>zero defection</em> of customers through well-managed expectations.</p>
+
+    <div class="callout eq">
+      Total failure cost: <strong>C<sub>f</sub> = c<sub>f</sub> × p<sub>f</sub></strong>, where c<sub>f</sub> is the average single-failure cost and p<sub>f</sub> is the failure probability over a defined period. Since p<sub>f</sub> = 1 − R (R = reliability), reducing p<sub>f</sub> (i.e., raising reliability) generally costs additional development effort (more testing, more QA), while c<sub>f</sub> is largely fixed by the application domain (except in safety-critical systems, where extra cost buys containment/barriers).
+    </div>
+
+    <h4 class="sub">Forming a QA strategy</h4>
+    <p>Two factors drive the choice of QA alternatives:</p>
+    <ul>
+      <li><strong>Influence of quality perspectives/attributes</strong> — different QA techniques are effective for different attributes (e.g., usability testing suits usability goals but not correctness).</li>
+      <li><strong>Influence of quality levels</strong> — higher quantitative targets may justify costlier techniques (e.g., fault tolerance is worth the extra cost only for highly dependable / safety-critical systems).</li>
+    </ul>
+    <p>This selection also requires choosing appropriate <strong>direct and indirect quality measures</strong>. Direct measures (e.g., post-accident safety data) often arrive too late to be useful for control, so <strong>indirect measures/indicators</strong> — related to direct measures via historical data or models — provide earlier warning, which is valuable because the cost of fixing a problem grows the later it is found.</p>
+
+    <h3 class="topic" id="u3-t3">3. Quality Assessment and Improvement</h3>
+    <p>The parallel/post-QA activities that close the quality-engineering loop, enabling decisions such as product release and driving improvement initiatives.</p>
+    <div class="three-col">
+      <div class="pillar"><h5>Measurement</h5>Beyond defect data collected during normal defect handling, other measurements are taken to track QA activities and support project management.</div>
+      <div class="pillar"><h5>Analysis &amp; Modeling</h5>Measurement data is fit to analytical models providing objective assessment of current quality, prediction of future quality, and identification of problem areas.</div>
+      <div class="pillar"><h5>Feedback &amp; Improvement</h5>Results feed into scheduling, resourcing, and other management decisions; problematic areas trigger remedial actions.</div>
+      <div class="pillar"><h5>Follow-up</h5>Longer-term changes to the QE process or development process are queued to avoid disrupting the current project.</div>
+    </div>
+
+    <h3 class="topic" id="u3-t4">4. Quality Engineering in Software Processes</h3>
+    <p>QE integrates into whichever development process is used — but the pattern differs by process type.</p>
+
+    <h4 class="sub">Waterfall integration</h4>
+    <p>Quality planning starts at requirement analysis; QA activities run mostly in the dedicated test phase (plus reviews/inspections at phase-transition "quality gates"); measurement/analysis follow, feeding adjustments back into the plan.</p>
+
+    <h4 class="sub">Iterative / incremental / spiral / XP processes</h4>
+    <p>Pre-QA planning happens repeatedly — once per increment/iteration, not just once at project start — because each sub-part effectively contains all the waterfall-like phases in miniature. The overall quality goal evolves iteratively from these sub-goals.</p>
+
+    <h4 class="sub">On-line vs. off-line activities</h4>
+    <ul>
+      <li>Measurement must happen <strong>"on-line"</strong> (during development) because it needs the development team's involvement (defect handling, project tracking).</li>
+      <li>Analysis/modeling can mostly happen <strong>"off-line"</strong> to minimize disruption — but must still be timely (e.g., an IBM case: daily data collection, weekly analyst feedback to the testing team).</li>
+    </ul>
+
+    <h4 class="sub">Effort profile</h4>
+    <p>The three QE activity groups do not consume effort uniformly over time:</p>
+    <ul>
+      <li><strong>Quality planning</strong> dominates early, then tapers to occasional adjustments.</li>
+      <li><strong>QA execution effort</strong> gradually builds up, peaks just before product release (testing dominates near the end), then drops sharply after release.</li>
+      <li><strong>Measurement/assessment effort</strong> starts after QA is well under way, peaks around release, and follows the QA curve with a time delay and a heavier tail.</li>
+      <li>A common post-release adjustment: an initial wave of customer-reported problems typically causes a temporary <em>upswing</em> in both QA and measurement effort — a bump that <strong>usage-based testing</strong> (Unit V) helps smooth out by making pre-release testing resemble real customer usage.</li>
+      <li>Waterfall processes show pronounced peaks/valleys in this profile; incremental/iterative/spiral/XP processes spread the same activities more evenly across time.</li>
+    </ul>
+
+    <div class="unit-summary">
+      <h4>Unit III — Fast Recap</h4>
+      <ul>
+        <li>QE = Pre-QA (quality planning) + In-QA (execute QA / handle defects) + Post-QA (measurement, assessment, improvement) — mapped loosely onto QIP's understand → assess → package.</li>
+        <li>Quality planning = set quantified goals (guided by C<sub>f</sub> = c<sub>f</sub> × p<sub>f</sub>) + form a QA strategy (choose techniques + choose direct/indirect measures and models).</li>
+        <li>Quality assessment/improvement = measurement → analysis/modeling → feedback → follow-up.</li>
+        <li>QE integrates differently by process: concentrated peaks in waterfall vs. evenly spread in iterative/incremental/spiral/XP; typical effort profile peaks near release and tapers after, with a possible post-release bump usage-based testing helps reduce.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- UNIT IV -->
+  <!-- ================================================================= -->
+  <section class="unit" id="unit4">
+    <div class="unit-head">
+      <span class="unit-num">UNIT IV</span>
+      <h2>Test Activities, Management and Automation</h2>
+    </div>
+    <div class="unit-sub">Test planning and preparation · Test execution · Result checking and measurement · Analysis and follow-up · Activities, People and Management · Test Automation</div>
+
+    <p>Unit II already told us <em>why</em> testing matters (defect reduction via failure observation) and Unit III told us how it is <em>managed</em> at the quality-engineering level. Unit IV goes inside the testing process itself: the concrete activities every systematic test effort performs, who performs them, and which parts can realistically be automated.</p>
+
+    <h4 class="sub">The generic testing process (context recap)</h4>
+    <p>Testing serves two purposes — <strong>demonstrating</strong> correct behaviour (quality evidence) and <strong>detecting/fixing</strong> defects. All systematic testing follows the same three-stage generic process:</p>
+    <div class="flow">
+      <div class="node hi">Planning &amp; Preparation<br><small>goals, models, test cases, procedure</small></div>
+      <div class="arrow">→</div>
+      <div class="node hi">Execution<br><small>run tests, observe, measure</small></div>
+      <div class="arrow">→</div>
+      <div class="node hi">Analysis &amp; Follow-up<br><small>diagnose, fix, verify, report</small></div>
+    </div>
+    <p>Planning &amp; preparation is the largest, most decision-heavy stage for any formal/systematic testing effort — most of what "counts" as sound testing strategy is decided here.</p>
+
+    <h3 class="topic" id="u4-t1">1. Test Planning and Preparation</h3>
+
+    <h4 class="sub">1.1 Test planning: goals, strategies, techniques</h4>
+    <ul>
+      <li>High-level planning sets goals (reliability goal → usage-based statistical testing; or coverage goal → black-/white-box coverage testing) and decides the general testing strategy.</li>
+      <li>Key decision: object &amp; focus — <strong>functional/black-box</strong> testing (external behaviour) vs. <strong>structural/white-box</strong> testing (internal implementation).</li>
+      <li>Resource/staffing allocation follows strategy selection; simple models (checklists/partitions) need less expertise than complex formal models.</li>
+    </ul>
+
+    <h4 class="sub">1.2 Testing models and test cases</h4>
+    <p>Generic steps in model construction:</p>
+    <ol>
+      <li><strong>Information source identification &amp; data collection</strong> — e.g., customer usage data for operational profiles, or the unit's own structure for white-box unit testing.</li>
+      <li><strong>Analysis &amp; initial model construction</strong> — the hardest step to automate; requires human expertise.</li>
+      <li><strong>Model validation &amp; incremental improvement</strong> — especially important for customer-facing models.</li>
+    </ol>
+    <div class="callout def">
+      <span class="lbl">Definitions</span>
+      <strong>Test case</strong> — a collection of entities/information that lets one test be executed (a "static" artifact).<br>
+      <strong>Test run</strong> — a single dynamic execution of a test case in the overall testing sequence (also called an "attempt"); one test case can correspond to many test runs.<br>
+      <strong>Test sensitization</strong> — the act of assigning concrete input values across a planned test run, derived from the testing model.
+    </div>
+    <p>Test cases can also come from <strong>record-and-replay</strong> of actual in-field runs — practical for smaller systems, less so for large systems with huge state.</p>
+
+    <h4 class="sub">1.3 Test suite preparation and management</h4>
+    <ul>
+      <li>A <strong>test suite</strong> is the full collection of test cases to be run until stopping criteria are met.</li>
+      <li>Allocation of test cases follows the chosen technique: proportional to usage probability for usage-based testing; dictated by coverage criteria for coverage-based testing (e.g., number of paths for all-path coverage).</li>
+      <li><strong>Regression testing</strong> reuses test cases from earlier product versions to confirm old functionality still works alongside new functionality.</li>
+      <li>Test suites are valuable, reusable assets — they should be organized (commonly hierarchically, e.g., by scenario-class / scenario-number / variation-number, as used at IBM) and stored with metadata (author, area) for future reuse.</li>
+    </ul>
+
+    <h4 class="sub">1.4 Preparation of test procedure</h4>
+    <p>Test <em>procedure</em> decides the sequencing of test cases and the transition from one run to the next. Sequencing concerns include:</p>
+    <ul>
+      <li><strong>Dependencies</strong> between test cases (one sets up state for another).</li>
+      <li><strong>Defect-detection sequencing</strong> — test components individually before integration, so interface defects aren't masked.</li>
+      <li><strong>Accident-avoidance sequencing</strong> — e.g., verify non-safety functions before exercising safety features in embedded/safety-critical software.</li>
+      <li><strong>Problem-diagnosis sequencing</strong> — run simpler tests first to narrow down complex failure scenarios ("simple to complex" progression).</li>
+      <li><strong>Natural grouping</strong> — by functional/structural area or usage frequency, useful for parallel/interleaved testing when no strict order is required.</li>
+    </ul>
+
+    <h3 class="topic" id="u4-t2">2. Test Execution, Result Checking, and Measurement</h3>
+    <p><em>(The syllabus separates "Test execution" and "Result checking and measurement" — the book treats them as one integrated activity group; both aspects are covered here in full.)</em></p>
+
+    <h4 class="sub">2.1 General steps in test execution</h4>
+    <ol>
+      <li>Allocate test time and resources.</li>
+      <li>Invoke and run tests; collect execution information and measurements.</li>
+      <li>Check testing results and identify system failures.</li>
+    </ol>
+    <p>A key operational concern: a failed test run must not block execution of other test cases. When re-verifying a fix, the originally triggering test case (and closely related ones) should be suspended until the fix lands, to avoid wasteful repeated observation of the same known failure.</p>
+
+    <h4 class="sub">2.2 Result checking — the "test oracle" problem</h4>
+    <div class="callout def">
+      <span class="lbl">Definition</span>
+      A <strong>test oracle</strong> is any means used to determine whether an observed test result is correct or represents a failure. Result-checking in general is a theoretically <em>undecidable</em> problem — there is no fully automatable, general-purpose solution.
+    </div>
+    <p>Practical approximations used when a perfect oracle isn't available:</p>
+    <ul>
+      <li>Some failures (crashes, unresponsiveness) are trivially recognizable.</li>
+      <li><strong>Heuristic/domain guesses</strong> — compare against similar products, previous releases, or competitor behaviour.</li>
+      <li><strong>Implementation-knowledge checks</strong> — e.g., if an internal component that should support an external function was never invoked, that's a strong signal something is wrong; developers/experts can be consulted for hard cases.</li>
+      <li><strong>Consistency checking</strong> — e.g., database consistency checks, sampled either online during execution or offline afterward.</li>
+    </ul>
+
+    <h4 class="sub">2.3 Test measurement</h4>
+    <ul>
+      <li>Failures must be recorded and tracked to resolution (defect handling/tracking, treated as part of the testing process itself).</li>
+      <li>Recorded defect data typically covers type, severity, impact area, possible cause, when-injected (linked to later Defect Classification &amp; Analysis).</li>
+      <li>Successful executions are recorded too — useful documentation, future oracle reference, and essential for regression testing and legacy products.</li>
+      <li>A representative measurement template (used at IBM) records, per test run: <strong>rid</strong> (scenario class · scenario number · variation number · attempt number), <strong>timing</strong> (start/end), <strong>tester</strong>, <strong>transactions handled</strong>, and <strong>result</strong> (success/failure).</li>
+    </ul>
+
+    <h3 class="topic" id="u4-t3">3. Result Checking and Measurement — Summary Table</h3>
+    <table>
+      <tr><th>Aspect</th><th>What it covers</th></tr>
+      <tr><td>Allocate resources</td><td>Time, staff, environment/facility setup — mirrors the plan from Section 1</td></tr>
+      <tr><td>Invoke &amp; run</td><td>Execute sensitized test cases in the pre-planned (or dynamically generated) sequence</td></tr>
+      <tr><td>Result checking</td><td>Solve the oracle problem via crash-detection, heuristics, implementation knowledge, or consistency checks</td></tr>
+      <tr><td>Measurement</td><td>Record failure details (for diagnosis/fixing) and success details (for documentation/regression/reliability analysis)</td></tr>
+    </table>
+
+    <h3 class="topic" id="u4-t4">4. Analysis and Follow-up</h3>
+    <h4 class="sub">4.1 Follow-up on individual test runs</h4>
+    <ol>
+      <li><strong>Understand</strong> the problem from the execution record.</li>
+      <li><strong>Recreate</strong> the same problem scenario — confirms it isn't a transient environmental/user-error artifact and supports diagnosis.</li>
+      <li><strong>Diagnose</strong> — determine what/where/when/possible cause, sometimes with extra diagnostic runs.</li>
+      <li><strong>Locate</strong> the exact fault(s).</li>
+      <li><strong>Fix</strong> — correct code (and, if needed, design/requirements), then re-run the failed case(s) to verify the fix.</li>
+    </ol>
+
+    <h4 class="sub">4.2 Follow-up on overall testing results</h4>
+    <ul>
+      <li><strong>Reliability analysis</strong> (for usage-based testing) — assesses current reliability against the pre-set goal; informs release/continue-testing decisions and estimates remaining time/resources; can flag low-reliability areas for focused effort.</li>
+      <li><strong>Coverage analysis</strong> (for coverage-based testing) — used as a surrogate stopping criterion and management input.</li>
+      <li><strong>Overall defect analysis</strong> — examines defect distribution to spot high-defect areas, often combined with size/complexity metrics, for focused remedial action.</li>
+    </ul>
+
+    <h3 class="topic" id="u4-t5">5. Activities, People, and Management</h3>
+    <h4 class="sub">People's roles: informal vs. formal testing</h4>
+    <ul>
+      <li>Informal/simple testing (just run and observe) can be done with minimal prior product knowledge; some formal testing (e.g., usability testing) deliberately uses novice users as testers.</li>
+      <li>Misconception to avoid: "testing is easy, anyone can do it" — this leads to under-skilled staffing of test teams; the fix is recognizing testing's real technical skill requirements and building a respected tester career path.</li>
+      <li>Developers are involved (often indirectly) in follow-up defect fixing; in unit/component testing, the same person may play <strong>dual roles</strong> as developer and tester.</li>
+      <li>For system-level integration/system/acceptance testing, dedicated professional testers are typically used.</li>
+    </ul>
+
+    <h4 class="sub">Organizing testing teams</h4>
+    <table>
+      <tr><th>Model</th><th>Structure</th><th>Trade-off</th></tr>
+      <tr><td><strong>Vertical</strong></td><td>Organized around one product; dedicated team(s) perform all test types (unit → acceptance) for that product.</td><td>Staffing level fluctuates with that product's phase — risk of "programmers pulled in during the test peak" causing Brooks's-law-style delays and defect slippage.</td></tr>
+      <tr><td><strong>Horizontal</strong></td><td>A team performs one kind of testing (e.g., system testing) across many products in the organization.</td><td>Smoother staffing (different projects have different schedules) but less product-specific depth.</td></tr>
+      <tr><td><strong>Mixed (common in practice)</strong></td><td>Dedicated low-level testers + shared system-testing team + centralized "experience factory" project-support unit.</td><td>Balances depth and staffing efficiency; centralizes process/tool/technology support and packages lessons learned.</td></tr>
+    </table>
+
+    <h4 class="sub">External participants</h4>
+    <ul>
+      <li><strong>Users / customers</strong> — expanded to include non-human "users" (interoperating software/hardware); essential contributors to usage-based testing models; sometimes act informally as testers (usability studies, beta testing).</li>
+      <li><strong>Independent Verification &amp; Validation (IV&amp;V)</strong> — third-party testing/verification, common in defense/government and other high-assurance domains; related to <strong>certification models</strong> and increasingly relevant for COTS/component-based development where independent testing supports component selection/reuse decisions.</li>
+    </ul>
+
+    <h3 class="topic" id="u4-t6">6. Test Automation</h3>
+    <p>Demand for automation is high (manual testing end-to-end is tedious and error-prone) — but <strong>full</strong> automation is theoretically impossible, since core sub-activities like the oracle problem are undecidable. The practical goal is to automate what's feasible and set realistic expectations. Considerations before adopting a tool: specific need/potential, availability of existing tools, cost of building custom tools, training needs, total cost of ownership, and schedule/resourcing impact.</p>
+
+    <h4 class="sub">By activity</h4>
+    <div class="three-col">
+      <div class="pillar"><h5>Execution — highest automation payoff</h5>Debuggers (semi-automatic — testers still intervene); task-sequencing/dispatch tools; information-recording tools (e.g., IBM's internal <span class="keyword">T3</span> tool generated workload, monitored execution, and recorded results).</div>
+      <div class="pillar"><h5>Planning &amp; preparation — mixed</h5>High-level strategy/procedure planning stays manual (needs expertise). Test-case preparation has real automation potential: comparing legacy versions for regression-test selection; script-driven dynamic test/workload generation (from human-written, much cheaper, high-level scripts); algorithmic test-case generation once a formal model (e.g., a Markov chain) exists.</div>
+      <div class="pillar"><h5>Analysis &amp; follow-up — mixed</h5>Actual problem-fixing/remedial action stays manual, but analysis itself (reliability analysis, coverage analysis) can be tool-supported once the right models/data pipeline are established.</div>
+    </div>
+
+    <h4 class="sub">Named coverage-analysis tools (from the book)</h4>
+    <ul>
+      <li><strong>McCabe Test</strong> (McCabe &amp; Associates) — control-flow coverage.</li>
+      <li><strong>S-TCAT</strong> (Software Research, Inc. / SRI) — function-level coverage and call-pair information; part of the <em>Testworks</em> suite; also usable to gather usage information for usage-based testing.</li>
+      <li><strong>ATAC</strong> (Telcordia) — data-flow coverage for white-box testing.</li>
+    </ul>
+    <p>Typical tool workflow: <strong>instrument</strong> the source → run the <strong>instrumented test driver</strong> → collect raw coverage data → <strong>generate reports</strong> against a reference model.</p>
+
+    <div class="unit-summary">
+      <h4>Unit IV — Fast Recap</h4>
+      <ul>
+        <li>Three test activity groups: <strong>Planning &amp; Preparation</strong> (goals/strategy → model &amp; test-case construction → test suite → test procedure) → <strong>Execution</strong> (allocate resources → run → check results / oracle problem → measure) → <strong>Analysis &amp; Follow-up</strong> (per-run diagnosis/fix cycle + overall reliability/coverage/defect analysis).</li>
+        <li>Test case vs. test run vs. test suite vs. sensitization — precise vocabulary matters.</li>
+        <li>Test oracle problem is undecidable in general; practical oracles use heuristics, implementation knowledge, and consistency checks.</li>
+        <li>People: dual developer/tester roles at unit level; dedicated testers at system level; vertical vs. horizontal vs. mixed team organization; external IV&amp;V and user participation.</li>
+        <li>Automation: strongest for execution and measurement; weakest for high-level planning and remedial follow-up; named tools — McCabe Test, S-TCAT, ATAC.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- UNIT V -->
+  <!-- ================================================================= -->
+  <section class="unit" id="unit5">
+    <div class="unit-head">
+      <span class="unit-num">UNIT V</span>
+      <h2>Coverage and Usage Testing Based on Checklist and Partitions</h2>
+    </div>
+    <div class="unit-sub">Checklist based testing and its limitations · Testing for partition coverage · Usage based statistical testing with Musa's operational profiles · Constructing operational profiles · Case study: OP for the Cartridge Support Software (CSS)</div>
+
+    <p>Unit IV covered testing <em>process</em> in general; Unit V introduces the first (and simplest) family of concrete testing <strong>techniques</strong>: those built on checklists, partitions, and — when enriched with usage-frequency data — Musa's operational profiles. This corresponds directly to Chapter 8 of the textbook and closes with a real industrial case study.</p>
+
+    <h3 class="topic" id="u5-t1">1. Checklist-Based Testing and Its Limitations</h3>
+    <p>The simplest form of testing is <strong>ad hoc testing</strong> — run the software, watch for obviously wrong behaviour. As soon as this is repeated, testers naturally start keeping a "to-do" list of what's been tried — an informal <strong>checklist</strong>. Generalizing this idea gives systematic checklist-based testing:</p>
+    <ul>
+      <li><strong>Functional (black-box) checklists</strong> — from high-level product functions down to low-level unit functions.</li>
+      <li><strong>System-element (white-box) checklists</strong> — from sub-systems/modules down to individual statements/data items.</li>
+      <li><strong>Structural/cross-cutting checklists</strong> — e.g., call-pairs, producer–consumer relationships for shared resources.</li>
+      <li><strong>Property checklists</strong> — coding standards, individual specification items (can be black-box or white-box).</li>
+    </ul>
+    <p>A checklist-based test stops when every item is "checked off" — meaning the corresponding test case has been run <em>and</em> any discovered problem has been fixed and re-verified.</p>
+
+    <div class="callout case">
+      <span class="lbl">Example — high-level functional checklist</span>
+      A relational-database product's high-level checklist includes items such as: abnormal termination, backup and restore, communication, co-existence, file I/O, gateway, index management, installation, logging and recovery, locking, migration, stress. Each item can be refined into its own sub-checklist — forming a <strong>hierarchical checklist</strong>.
+    </div>
+
+    <h4 class="sub">From basic to combined checklists</h4>
+    <ul>
+      <li><strong>Hierarchical checklists</strong> — each item expands into a lower-level checklist (mirrors the hierarchical test-suite organization from Unit IV).</li>
+      <li><strong>Two-dimensional (combined) checklists</strong> — e.g., cross a coding-standards checklist with a component checklist to ensure every component follows every standard; higher-dimensional combinations are also possible but should be used carefully to avoid confusion.</li>
+    </ul>
+
+    <h4 class="sub">Problems and limitations of general checklists</h4>
+    <ul>
+      <li>High-level items are often too vague to translate directly into a specific test run — extensive tester expertise is still needed to bridge the gap, and repeatability information (setup, environment) must be tracked separately.</li>
+      <li>For large, complex systems, general checklists tend to have three structural problems:
+        <ol>
+          <li><strong>Coverage "holes"</strong> — hard to build a checklist that covers everything from every perspective/granularity.</li>
+          <li><strong>Overlaps/redundancy</strong> — trying to be exhaustive often introduces duplicate coverage, wasting testing effort.</li>
+          <li><strong>Cannot express complex interactions</strong> — checklists can't naturally capture interaction among components or functions (this motivates the finite-state-machine techniques in a later chapter, outside this unit's scope).</li>
+        </ol>
+      </li>
+    </ul>
+    <p>The first two problems are solved by moving from general checklists to a <strong>mathematically well-formed special case: partitions.</strong></p>
+
+    <h3 class="topic" id="u5-t2">2. Testing for Partition Coverage</h3>
+
+    <h4 class="sub">2.1 Motivating example</h4>
+    <p>Exhaustive testing of all input combinations is usually infeasible — e.g., a simple quadratic-equation solver <em>ax² + bx + c = 0</em> with three 32-bit floating point inputs (a, b, c) has an astronomically large input space. But algebraically we already know the discriminant <strong>d = b² − 4ac</strong> determines the qualitative behaviour: two distinct real roots (d &gt; 0), one repeated root (d = 0), or no real root (d &lt; 0). This groups the entire input space into three <strong>equivalence classes</strong> — a partition — from which we can pick just <em>one</em> representative test case per class.</p>
+
+    <table>
+      <tr><th>Test Case</th><th>Condition</th><th>a</th><th>b</th><th>c</th></tr>
+      <tr><td>1</td><td>d &gt; 0</td><td>1</td><td>2</td><td>−1</td></tr>
+      <tr><td>2</td><td>d = 0</td><td>1</td><td>2</td><td>1</td></tr>
+      <tr><td>3</td><td>d &lt; 0</td><td>1</td><td>2</td><td>3</td></tr>
+    </table>
+
+    <h4 class="sub">2.2 Partition: concepts and definitions</h4>
+    <div class="callout def">
+      <span class="lbl">Formal definition</span>
+      A <strong>partition</strong> of a set S is a division into subsets G₁, G₂, …, Gₙ that are:<br>
+      • <strong>Mutually exclusive</strong> — for i ≠ j, G<sub>i</sub> ∩ G<sub>j</sub> = ∅<br>
+      • <strong>Collectively exhaustive</strong> — the union of all G<sub>i</sub> equals S<br>
+      Each subset is called an <strong>equivalence class</strong>. The defining relation must be <strong>symmetric</strong> (R(a,b) ⇒ R(b,a)), <strong>transitive</strong> (R(a,b) ∧ R(b,c) ⇒ R(a,c)), and <strong>reflexive</strong> (R(a,a)).
+    </div>
+    <p>Compared to a general checklist, a partition guarantees both <strong>complete coverage</strong> (exhaustiveness) and <strong>no wasted redundancy</strong> (mutual exclusion) — directly resolving the two structural problems identified above.</p>
+
+    <h4 class="sub">2.3 Testing decisions and predicates for partition coverage</h4>
+    <p>Partitions used in testing typically fall into these types:</p>
+    <ul>
+      <li><strong>Entity-membership partitions</strong> — e.g., "does component X belong to sub-system Y" (simple set-membership).</li>
+      <li><strong>Property/relation/logical-condition partitions</strong>, further split into:
+        <ul>
+          <li>Direct logical predicates over Boolean variables, combined with AND (∧), OR (∨), NOT (¬).</li>
+          <li>Comparisons of numeric variables using <, =, ≤, ≥, &gt;, ≠ (e.g., x &lt; 0 vs. x ≥ 0).</li>
+        </ul>
+      </li>
+      <li><strong>Combinations</strong> of the above, e.g., (x ∈ Integers) ∧ (x ≥ 0) ∧ (x &lt; 21), i.e. the range [0, 21).</li>
+    </ul>
+    <p>Multiple sequential decisions can be represented as a <strong>decision tree</strong> (uniform, if the same question is asked at every stage regardless of history; non-uniform otherwise). Each unique root-to-leaf path is one sub-domain, for which we derive a test case. For a two-variable Boolean decision with variables P and Q, the four combinations to realize are <strong>TT, TF, FT, FF</strong> (i.e., P∧Q, P∧¬Q, ¬P∧Q, ¬P∧¬Q); for numeric conditions, values must be chosen to satisfy the required predicate (e.g., x = 10 satisfies both x ≥ 0 and x &lt; 21).</p>
+
+    <h3 class="topic" id="u5-t3">3. Usage-Based Statistical Testing with Musa's Operational Profiles</h3>
+
+    <h4 class="sub">3.1 The case for usage-based statistical testing</h4>
+    <p>Plain partition testing samples <strong>one</strong> representative from every sub-domain — treating every sub-domain as equally important. But in real systems, some sub-domains/operations are used far more often than others, so a defect in a heavily used sub-domain hurts far more customers than one in a rarely used sub-domain. This likelihood-of-encountering-a-problem is exactly what <strong>reliability</strong> measures (recall: reliability = probability of failure-free operation for a given period/input set). To assess and improve reliability meaningfully, testing should mirror actual customer usage:</p>
+    <div class="flow">
+      <div class="node">Collect usage/frequency data</div>
+      <div class="arrow">→</div>
+      <div class="node">Build an Operational Profile (OP)</div>
+      <div class="arrow">→</div>
+      <div class="node">Test according to the OP</div>
+      <div class="arrow">→</div>
+      <div class="node hi">Assess reliability / feed back</div>
+    </div>
+    <p>Unlike most other testing techniques, OP-based work happens at <em>both</em> extremes of the schedule: OP construction should ideally start as early as requirements/product planning (it needs customer/market input), while OP-guided <em>testing</em> can only happen once most components are implemented — pushing it into late sub-phases (integration/system/acceptance).</p>
+
+    <h4 class="sub">3.2 Musa OP: basic ideas</h4>
+    <div class="callout def">
+      <span class="lbl">Definition</span>
+      An <strong>Operational Profile (OP)</strong> is a list of disjoint operations together with their probabilities of occurrence — a quantitative characterization of how a software system is (or will be) used.
+    </div>
+
+    <div class="callout case">
+      <span class="lbl">Worked example — SMU/SEAS web site file-type OP</span>
+      Over a measurement period, requests were tallied by file type and converted to percentages: <strong>.gif ≈ 57.5%</strong>, <strong>.html ≈ 16.9%</strong>, <strong>directory ≈ 11.4%</strong>, <strong>.jpg ≈ 8.6%</strong>, with the remaining file types (.pdf, .class, .ico, .ps, .ppt, .css, .txt, .doc, .c) each under 1.5%. The <strong>top 13 file types already covered about 98.8%</strong> of all requests — illustrating a typically very uneven usage distribution, where a handful of operations dominate real usage.
+    </div>
+    <p>Key properties of OPs:</p>
+    <ul>
+      <li>Operations are conventionally listed in <strong>descending order of probability</strong>.</li>
+      <li>Usage is typically <strong>highly uneven</strong> — a small number of operations account for most of the usage.</li>
+      <li>A <strong>probability threshold</strong> can be used to omit very-low-probability operations, keeping the OP a manageable size.</li>
+      <li>OPs can be shown as a <strong>tabular list</strong> or visually as a <strong>histogram</strong> — an OP is essentially a checklist/partition with a frequency attached to every item.</li>
+      <li>Granularity matters — too fine (e.g., one operation per individual web page) makes the OP impractically large and causes repeated near-identical test runs; too coarse loses discriminating value. File-<em>type</em> granularity (not individual page) was the right level in the SMU/SEAS example.</li>
+    </ul>
+
+    <h4 class="sub">3.3 Using OPs for statistical testing and other purposes</h4>
+    <ul>
+      <li>Once built, an OP drives <strong>random sampling</strong> of test cases in proportion to each operation's probability — so the number of test runs per operation is proportional to how often real customers use that operation.</li>
+      <li>Test cases/procedures are usually pre-prepared rather than sampled dynamically at run time, to avoid execution overhead skewing performance measurements.</li>
+      <li><strong>Progressive testing</strong> — start with a high probability threshold (test only the most-used operations first), then progressively lower the threshold to widen coverage as testing proceeds.</li>
+      <li>Because OP-guided data resembles real customer experience, it can be fed into <strong>reliability models</strong> for release decisions, time/resource-to-goal prediction, and identification of problem areas.</li>
+      <li><strong>Other benefits reported (AT&amp;T data, Musa):</strong> ~56% reduction in system-testing cost / ~11.5% overall cost reduction by focusing effort on high-leverage parts; faster new-product introduction (ship the highly used features first, add lesser-used features later — pairs naturally with spiral/prototype development); better customer relations (OP construction requires direct customer involvement, sharpening requirements and training focus); very favorable ROI — roughly one staff-month of OP-development cost for an "average" 100-KLOC / 10-developer / 18-month product, cost-benefit ratio around 1:10.</li>
+    </ul>
+
+    <h3 class="topic" id="u5-t4">4. Constructing Operational Profiles</h3>
+    <p>The first decision: is <strong>one</strong> OP enough (homogeneous usage across all customers), or are <strong>multiple</strong> OPs needed (materially different usage per customer group)? A mixed strategy — separate OPs per group, then a combined overall OP — is also possible.</p>
+
+    <h4 class="sub">4.1 Generic methods and participants</h4>
+    <p>Three generic ways to gather the underlying usage information:</p>
+    <table>
+      <tr><th>Method</th><th>Strength</th><th>Limitation</th></tr>
+      <tr><td><strong>Actual measurement</strong> at customer installations</td><td>Most precise/accurate</td><td>Impossible for new products; customer usage data is often proprietary/sensitive; expensive; workarounds (adjusted data from similar products, beta programs, IBM's "ECI" early-customer-involvement program) are late or of doubtful representativeness.</td></tr>
+      <tr><td><strong>Customer surveys</strong></td><td>More objective than expert opinion; usable early (requirements phase); works even for brand-new products</td><td>Accuracy depends heavily on the respondent's product knowledge; survey design/cost scales with a large or diverse user population.</td></tr>
+      <tr><td><strong>Expert opinion</strong> (internal)</td><td>Cheap, readily available, works from existing docs (architecture, design, specs, customer agreements)</td><td>Indirect — should be cross-validated later against survey/measurement data when available.</td></tr>
+    </table>
+    <p>Musa recommends OP development be a collaboration of <strong>system engineers</strong> (comprehensive system view of requirements/functions), <strong>high-level designers</strong> (map external functions to internal components that get tested), and <strong>test planners</strong> (coordinate the OP effort and are its main consumer) — with strong participation from <strong>product planning and marketing</strong>, who are the primary customer contact and best positioned to reflect customer perspective.</p>
+
+    <h4 class="sub">4.2 OP development procedure: Musa-1 (top-down, multi-profile)</h4>
+    <p>Suited to large systems with diverse customers/users; five successive, progressively more detailed profiles, each a weighted refinement of the previous:</p>
+    <ol>
+      <li><strong>Customer profile</strong> — weight each customer category by a usage factor (e.g., corporation 0.5, government 0.4, education 0.05, other 0.05).</li>
+      <li><strong>User profile</strong> — weight user types (end user, DBA, programmer, third-party) relative to the customer groups and their relative usage rates; the overall weight for a user type is the customer-weighted sum across categories.</li>
+      <li><strong>System-mode profile</strong> — identify sets of operations commonly used together within a "mode" (e.g., normal operation vs. maintenance mode) and their weights.</li>
+      <li><strong>Functional profile</strong> — identify high-level (requirement-level) functions and weight them, informed by system modes and environmental variables.</li>
+      <li><strong>Operational profile</strong> — refine high-level functions into detailed, implementation-level operations with final usage probabilities.</li>
+    </ol>
+    <p>A key modeling choice for the last two steps: <strong>explicit OPs</strong> (disjoint end-to-end operation sequences whose probabilities sum to 1 — like a flat list) vs. <strong>implicit OPs</strong> (independent staged selections, e.g., stage A and stage B chosen independently, with the combined probability of a specific A-then-B path computed as the product p<sub>i</sub> × p<sub>j</sub>).</p>
+
+    <h4 class="sub">4.3 OP development procedure: Musa-2 (single profile, per operational mode)</h4>
+    <p>Suited to smaller products or more homogeneous user populations — one OP per operational mode, in five steps:</p>
+    <ol>
+      <li><strong>Identify initiators</strong> of operations — human users and non-human "users" (other software, hardware, network).</li>
+      <li><strong>Choose tabular or graphical (tree-structured) representation</strong> for the OP.</li>
+      <li><strong>Build operations lists</strong> — gather per-initiator lists, then consolidate (with granularity adjustments) into one comprehensive list.</li>
+      <li><strong>Determine occurrence rate</strong> (per hour), typically via measurement, tabulated per operation.</li>
+      <li><strong>Determine occurrence probability</strong> — normalize the rates so 0 ≤ p<sub>i</sub> ≤ 1 and Σp<sub>i</sub> = 1 (or estimate probabilities directly via survey/expert opinion, skipping step 4).</li>
+    </ol>
+    <p>The <strong>graphical/tree-structured OP</strong> in Musa-2 divides a complete usage sequence into fixed stages with a fixed set of choices per stage — much like a decision tree, but with occurrence probabilities attached to each branch; the probability of a complete path is the product of its branch probabilities. Unlike Musa-1's implicit OPs, later-stage probability distributions in a tree-structured OP <em>can differ</em> depending on the earlier choice made — making it strictly more expressive for representing context-dependent usage.</p>
+
+    <div class="callout case">
+      <span class="lbl">Worked example — 2-stage web-usage tree OP</span>
+      Stage 1 (start-up): default page (probability 0.8) vs. customized page (0.2). Stage 2 (subsequent browsing): link-following, bookmark-following, or a mixture — with <em>different</em> probability splits depending on whether Stage 1 was "default" or "customized." Multiplying branch probabilities along each path gives end-to-end sequence probabilities such as <strong>default→linked ≈ 0.16</strong> and <strong>customized→mixture ≈ 0.56</strong> — illustrating why context-dependent tree OPs generalize simple flat/explicit OPs.
+    </div>
+
+    <h3 class="topic" id="u5-t5">5. Case Study: Operational Profile for the Cartridge Support Software (CSS)</h3>
+    <p>A real industrial application of Musa-1 (adapted), reported for Lockheed Martin Tactical Aircraft Systems (LMTAS).</p>
+
+    <h4 class="sub">5.1 Background and participants</h4>
+    <p>CSS lets aircraft personnel load mission-planning data onto a read/writable medium (later uploaded to the aircraft's avionics) via a PC GUI, instead of manually keying complex settings through the cockpit interface. OP development aimed to understand CSS from the <em>user's</em> perspective and re-focus testing effort on high-use functions. Key participants:</p>
+    <ul>
+      <li><strong>Software Product Manager (SPM)</strong> — owns product planning/marketing; identified communication channels to solicit user input.</li>
+      <li><strong>Software Test Engineers</strong> — understood realistic, testable input states matching field operation.</li>
+      <li><strong>System Engineers</strong> — specified requirements, high-level design, and deliverable functions to be verified in testing.</li>
+    </ul>
+
+    <h4 class="sub">5.2 OP development in five steps (as actually adapted for CSS)</h4>
+    <ul>
+      <li><strong>Customer profile</strong> — skipped/simplified: all customer air forces used CSS similarly, so no differentiated weighting was needed (though the exercise still established useful communication channels).</li>
+      <li><strong>User profile</strong> — four user groups identified: <strong>Air Force Pilots</strong> (primary/contractual users, but infrequent), <strong>Flight Test Support</strong> (frequent users, work directly with test pilots), <strong>Avionic System Test</strong> (integrate the full avionics suite), and <strong>System Administrators</strong> (folded into the Pilot group, since pilots perform this role). Weighting combined both <em>marketing concerns</em> and <em>actual frequency of use</em> — e.g., pilots were weighted 0.45 overall despite low usage frequency, because of their primary contractual/marketing importance.</li>
+      <li><strong>System-mode profile</strong> — three candidate modes (Preflight Mission Planning, Avionic System Test, System Administration) were identified, but analysis showed no meaningful behavioural difference between them, so this step was <strong>not</strong> separately weighted.</li>
+      <li><strong>Functional / operational profile</strong> — because CSS has little distinction between high-level intended functions and low-level implemented operations, these two Musa-1 steps were <strong>collapsed into one</strong>. Since users could invoke CSS functions in any order (no fixed sequence), an <strong>implicit</strong> profile (probability per individual function, not per end-to-end sequence) was used.</li>
+    </ul>
+    <p>The resulting raw comprehensive OP was grouped into four usage-frequency bands for practical decision-making:</p>
+    <table>
+      <tr><th>Band</th><th>Range</th><th>Example functions</th></tr>
+      <tr><td><strong>High</strong></td><td>75%–100%</td><td>DTC Load, Inventory, Save, Route Planning, Print</td></tr>
+      <tr><td><strong>Medium-high</strong></td><td>50%–74.9%</td><td>DTC Read, Delete, Retrieve Route</td></tr>
+      <tr><td><strong>Medium-low</strong></td><td>25%–49.9%</td><td>Wpn Prof, Hot Keys, Comm, Retr/Save SCL, Help, Base Default, FCR, Mstr Mode</td></tr>
+      <tr><td><strong>Low</strong></td><td>0%–24.9%</td><td>Retr Canned, Save Canned, DTC Test</td></tr>
+    </table>
+
+    <h4 class="sub">5.3 Metrics collection, result validation, and lessons learned</h4>
+    <ul>
+      <li>Data-gathering method: e-mail/fax surveys distributed through SPM-identified channels, allowed to "chain-forward" to reach more users. Projected 30–50 responses; actual response was <strong>12 users</strong> — a low count, but participants were judged to be representative of their user groups.</li>
+      <li>Results were validated via <strong>individual interviews</strong> with each engineering-team member — a form of peer/cross-validation that both confirmed the data and surfaced concrete follow-up actions.</li>
+      <li><strong>Unexpected findings and their impact:</strong>
+        <ul>
+          <li><strong>Hot Keys</strong> turned out to be medium-usage, despite being assumed low-importance — prompting a change in testing strategy for that function.</li>
+          <li><strong>Help</strong> turned out to be medium-to-low usage, contradicting the developers' assumption that most users were already familiar with the software and would rarely need help.</li>
+        </ul>
+      </li>
+      <li>Overall lesson: this was the <strong>first ever comprehensive customer-perspective review</strong> of CSS; it improved communication with customers, reshaped the testing strategy toward genuinely high-use functions, and even influenced system/high-level design going forward. The case study demonstrates that Musa-1 can be pragmatically <em>adapted</em> — steps can be skipped/merged when the product's structure doesn't need them — while still delivering real, actionable insight from a modest amount of effort (a few weeks of interviews plus a short survey).</li>
+    </ul>
+
+    <div class="unit-summary">
+      <h4>Unit V — Fast Recap</h4>
+      <ul>
+        <li>Checklists → limitations (holes, overlap, can't express interactions) → <strong>partitions</strong> fix "holes" and "overlap" via mutual exclusion + collective exhaustiveness.</li>
+        <li>Partition testing = pick one representative test case per equivalence class; decisions/predicates (Boolean combinations, numeric comparisons, decision trees) define the sub-domains.</li>
+        <li><strong>Musa's Operational Profile (OP)</strong> = partition/checklist + usage probability per item; supports <strong>usage-based statistical testing</strong> aimed at reliability goals rather than coverage goals.</li>
+        <li>OP construction methods: measurement (accurate, expensive/late), survey (early, objective-ish), expert opinion (cheap, indirect). Development procedures: <strong>Musa-1</strong> (5-step top-down: customer → user → system-mode → functional → operational profile; explicit vs. implicit OPs) and <strong>Musa-2</strong> (5-step single/per-mode profile: initiators → representation → operations list → occurrence rate → occurrence probability; tabular vs. tree/graphical OPs).</li>
+        <li><strong>Case study — CSS (LMTAS):</strong> real adaptation of Musa-1 with steps skipped/merged where appropriate; four usage bands (High/Medium-high/Medium-low/Low); "Hot Keys" and "Help" were the key surprising findings that changed testing priorities.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- GLOSSARY -->
+  <!-- ================================================================= -->
+  <section class="unit" id="glossary">
+    <div class="unit-head">
+      <span class="unit-num">REF</span>
+      <h2>Master Glossary of Terms</h2>
+    </div>
+    <div class="unit-sub">Every term likely to appear in short-answer or definition-style questions, in one place.</div>
+
+    <dl class="glossary">
+      <dt>Failure</dt><dd>Inability of a system/component to perform its required function within specified performance requirements (external, observable deviation).</dd>
+      <dt>Fault</dt><dd>An incorrect step, process, or data definition in a program (internal defect in the artifact).</dd>
+      <dt>Error</dt><dd>A human action that produces an incorrect result; the root cause of a fault's injection.</dd>
+      <dt>Defect</dt><dd>Collective term covering errors, faults, and failures together.</dd>
+      <dt>Dormant / latent fault</dt><dd>A fault present in the code that has not (yet) caused an observed failure under the scenarios tested so far.</dd>
+      <dt>Reliability</dt><dd>The probability of failure-free operation for a specified period of time or a given input set.</dd>
+      <dt>Accident</dt><dd>A failure with severe consequences.</dd>
+      <dt>ISO-9126</dt><dd>Hierarchical quality framework with six top-level characteristics (Functionality, Reliability, Usability, Efficiency, Maintainability, Portability), each with its own exclusive sub-characteristics.</dd>
+      <dt>Correctness-centered quality</dt><dd>The book's adopted definition: high quality = few/no problems that reach customers, and minimal damage from any that remain.</dd>
+      <dt>Defect prevention</dt><dd>QA activities that stop fault injection by eliminating error sources or blocking faulty actions (training, formal methods, standards, tools).</dd>
+      <dt>Defect reduction</dt><dd>QA activities that detect and remove faults already injected (inspection, testing, other static/dynamic analyses).</dd>
+      <dt>Defect containment</dt><dd>QA activities that stop faults from becoming failures, or limit damage once a failure occurs (fault tolerance, safety assurance/failure containment).</dd>
+      <dt>Inspection</dt><dd>Static, human-led critical examination of an artifact to find and remove faults without executing the software (e.g., Fagan inspection).</dd>
+      <dt>Testing</dt><dd>Dynamic execution of software with observation of behaviour; failures observed are traced back to faults for removal.</dd>
+      <dt>Black-box (functional) testing</dt><dd>Tests external behaviour/functions against specification, without regard to internal implementation.</dd>
+      <dt>White-box (structural) testing</dt><dd>Tests internal implementation details (statements, structures, data) using visibility into the code.</dd>
+      <dt>Coverage-based testing (CBT)</dt><dd>Stops based on achieving a defined coverage level (checklist items, partitions, paths, states) as a surrogate for quality.</dd>
+      <dt>Usage-based statistical testing (UBST)</dt><dd>Stops based on achieving a reliability goal; testing sequence mirrors real customer usage patterns/frequencies.</dd>
+      <dt>Recovery blocks</dt><dd>Fault-tolerance technique using redundancy over time — re-attempt a failed portion of execution.</dd>
+      <dt>N-Version Programming (NVP)</dt><dd>Fault-tolerance technique using parallel redundancy — N independently built versions vote/combine on an output.</dd>
+      <dt>Hazard analysis</dt><dd>Identification of logical pre-conditions for accidents in safety-critical systems (via fault-tree / event-tree analysis).</dd>
+      <dt>Quality Engineering (QE) process</dt><dd>Pre-QA (planning) → In-QA (execution) → Post-QA (measurement, assessment, improvement), with short- and long-term feedback loops.</dd>
+      <dt>QIP</dt><dd>Quality Improvement Paradigm — understand → assess → package, from the TAME project.</dd>
+      <dt>Direct vs. indirect quality measures</dt><dd>Direct measures observe quality outcomes themselves (e.g., post-release failure count); indirect measures/indicators predict or correlate with quality earlier in the process.</dd>
+      <dt>Test case</dt><dd>Static collection of information enabling a test to be executed.</dd>
+      <dt>Test run (attempt)</dt><dd>One dynamic execution instance of a test case.</dd>
+      <dt>Test sensitization</dt><dd>Assigning concrete input values to a test case, derived from the underlying testing model.</dd>
+      <dt>Test suite</dt><dd>The full, organized collection of test cases used until a stopping criterion is met.</dd>
+      <dt>Test oracle</dt><dd>Any means used to determine whether an observed test result is correct (result-checking is undecidable in general).</dd>
+      <dt>Regression testing</dt><dd>Re-running (a selection of) existing test cases against a new version to confirm old functionality still works.</dd>
+      <dt>Checklist-based testing</dt><dd>Testing driven by an informal or semi-formal list of items to be individually verified/"checked off."</dd>
+      <dt>Partition</dt><dd>A division of a set into subsets that are mutually exclusive and collectively exhaustive; each subset is an equivalence class.</dd>
+      <dt>Equivalence class</dt><dd>A subset of a partition whose members are treated identically under the relevant defining relation (symmetric, transitive, reflexive).</dd>
+      <dt>Operational Profile (OP)</dt><dd>A list of disjoint operations with associated probabilities of occurrence — a quantitative model of real/expected usage (Musa).</dd>
+      <dt>Explicit OP</dt><dd>OP representing end-to-end operation sequences whose probabilities sum to 1.</dd>
+      <dt>Implicit OP</dt><dd>OP representing independent staged selections; combined-path probability is the product of stage probabilities.</dd>
+      <dt>Musa-1</dt><dd>Top-down, 5-step, multi-profile OP development procedure (customer → user → system-mode → functional → operational profile).</dd>
+      <dt>Musa-2</dt><dd>Single-profile-per-mode, 5-step OP development procedure (initiators → representation → operations list → occurrence rate → occurrence probability).</dd>
+      <dt>IV&amp;V</dt><dd>Independent Verification and Validation — testing/verification performed by a third party, common in defense/high-assurance software.</dd>
+      <dt>Experience factory</dt><dd>Centralized organizational unit that packages process/technology/tool support and captures lessons learned for reuse across projects.</dd>
+    </dl>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- REVISION GRID -->
+  <!-- ================================================================= -->
+  <section class="unit" id="revision">
+    <div class="unit-head">
+      <span class="unit-num">REF</span>
+      <h2>One-Page Revision Grid</h2>
+    </div>
+    <table>
+      <tr><th>Unit</th><th>Core Question It Answers</th><th>Central Model / Idea</th><th>Must-Remember Detail</th></tr>
+      <tr><td><strong>I</strong> — Software Quality</td><td>What <em>is</em> quality?</td><td>ISO-9126 (6 characteristics); Error→Fault→Failure chain</td><td>Correctness-centered view adopted for the whole course</td></tr>
+      <tr><td><strong>II</strong> — Quality Assurance</td><td>How do we deal with defects?</td><td>3-way classification: Prevention / Reduction / Containment</td><td>Recovery blocks vs. NVP; Fagan inspection; 80:20 rule</td></tr>
+      <tr><td><strong>III</strong> — Quality Engineering</td><td>How do we manage/plan QA?</td><td>Pre-QA → In-QA → Post-QA loop</td><td>C<sub>f</sub> = c<sub>f</sub> × p<sub>f</sub>; QIP mapping; effort profile shape</td></tr>
+      <tr><td><strong>IV</strong> — Test Activities/Mgmt/Automation</td><td>How is testing actually run?</td><td>Plan &amp; Prepare → Execute → Analyze &amp; Follow-up</td><td>Oracle problem is undecidable; McCabe Test / S-TCAT / ATAC</td></tr>
+      <tr><td><strong>V</strong> — Coverage &amp; Usage Testing</td><td>What are the simplest formal testing techniques?</td><td>Checklist → Partition → Operational Profile</td><td>Musa-1 (5 steps) vs. Musa-2 (5 steps); CSS case study bands</td></tr>
+    </table>
+
+    <h4 class="sub">Numbers worth memorizing</h4>
+    <ul>
+      <li>ISO-9126: <strong>6</strong> quality characteristics.</li>
+      <li>3 generic ways to deal with defects: Prevention, Reduction, Containment.</li>
+      <li>3 QE activity groups: Pre-QA, In-QA, Post-QA.</li>
+      <li>3 major test activity groups: Planning &amp; Preparation, Execution, Analysis &amp; Follow-up.</li>
+      <li>SMU/SEAS OP: top 13 file types ≈ <strong>98.8%</strong> of all requests.</li>
+      <li>AT&amp;T OP data: ≈ <strong>56%</strong> system-test cost reduction, ≈ <strong>11.5%</strong> overall cost reduction, cost-benefit ratio ≈ <strong>1:10</strong>.</li>
+      <li>CSS case study: 4 usage-frequency bands (High 75–100%, Medium-high 50–74.9%, Medium-low 25–49.9%, Low 0–24.9%); <strong>12</strong> actual survey respondents.</li>
+    </ul>
+
+    <div class="qa-block">
+      <span class="lbl">Practice — Likely Exam-Style Questions</span>
+      <ol>
+        <li>Differentiate error, fault, and failure with an example chain for each.</li>
+        <li>List the six ISO-9126 quality characteristics and one sub-characteristic under each.</li>
+        <li>Explain the three generic ways of dealing with defects, with one technique under each.</li>
+        <li>Compare recovery blocks and N-version programming as fault-tolerance strategies.</li>
+        <li>What is the difference between coverage-based testing and usage-based statistical testing?</li>
+        <li>Describe the three major activity groups of the generic testing process and the sub-activities under test planning.</li>
+        <li>Why is the test oracle problem theoretically undecidable, and how is it approximated in practice?</li>
+        <li>Define partition formally and explain why a partition solves the "holes" and "overlap" problems of general checklists.</li>
+        <li>Outline the five steps of Musa-1 and contrast it with Musa-2.</li>
+        <li>Summarize the CSS case study: participants, the five (adapted) OP steps, and the two unexpected findings.</li>
+        <li>Explain the quality engineering effort profile across product development and how it differs between waterfall and iterative processes.</li>
+        <li>What is the significance of the 80:20 rule in risk identification?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- BOOKS -->
+  <!-- ================================================================= -->
+  <section class="unit" id="books">
+    <div class="unit-head">
+      <span class="unit-num">REF</span>
+      <h2>Text &amp; Reference Books</h2>
+    </div>
+    <ol>
+      <li>Jeff Tian, <em>Software Quality Engineering: Testing, Quality Assurance, and Quantifiable Improvement</em>, Wiley–IEEE Computer Society Press, 2005. <em>(Primary source for this guide — Units I–V correspond to Chapters 1, 2, 3, 5, 6, 7, and 8 of the book.)</em></li>
+      <li>Richard N. Taylor, Nenad Medvidović, Eric M. Dashofy, <em>Software Architecture: Foundations, Theory, and Practice</em>, Wiley, 2009.</li>
+    </ol>
+  </section>
+
+  <footer>
+    Study guide compiled from the prescribed textbook for revision purposes. All explanations are paraphrased summaries intended to aid understanding and exam preparation — refer to the original chapters (Ch. 1–3, 5–8 of Jeff Tian's <em>Software Quality Engineering</em>) for the full original text, figures, and end-of-chapter problems.
+  </footer>
+
+</div>
+
+<a class="backlink" href="#toc">↑ Contents</a>
+
+</body>
+</html>

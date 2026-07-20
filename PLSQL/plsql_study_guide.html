@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PL/SQL — Database Programming Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* light theme (default) */
+  --bg:#eef1f7;
+  --panel:#ffffff;
+  --panel2:#f5f7fc;
+  --text:#1b2333;
+  --heading:#0f1626;
+  --muted:#5b6478;
+  --amber:#a6650f;
+  --amber-dim:#e3c393;
+  --teal:#0e8a80;
+  --red:#c13d52;
+  --border:#dbe1ec;
+  --glow1:rgba(166,101,15,0.07);
+  --glow2:rgba(14,138,128,0.07);
+  /* terminal stays authentically dark in both themes */
+  --code-bg:#0d1526;
+  --code-panel:#16213e;
+  --code-text:#dbe4ff;
+}
+html[data-theme="dark"]{
+  --bg:#0a0f1c;
+  --panel:#111a30;
+  --panel2:#16213e;
+  --text:#e8ecf4;
+  --heading:#ffffff;
+  --muted:#8b96b8;
+  --amber:#e8a33d;
+  --amber-dim:#8a6526;
+  --teal:#3fb8af;
+  --red:#e8697a;
+  --border:#233156;
+  --glow1:rgba(232,163,61,0.10);
+  --glow2:rgba(63,184,175,0.08);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif;
+  line-height:1.65;
+  font-size:15.5px;
+  transition:background 0.25s ease, color 0.25s ease;
+}
+::selection{background:var(--amber);color:#fff;}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.01em;}
+a{color:var(--teal);}
+code{font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- THEME TOGGLE ---------- */
+.theme-toggle{
+  position:fixed;top:16px;right:20px;z-index:200;
+  display:flex;align-items:center;gap:8px;
+  background:var(--panel);border:1px solid var(--border);
+  padding:7px 14px 7px 10px;border-radius:30px;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);
+  box-shadow:0 4px 14px rgba(20,20,30,0.10);
+  transition:background 0.25s ease, border-color 0.25s ease;
+  user-select:none;
+}
+.theme-toggle:hover{border-color:var(--amber);}
+.theme-toggle .icon{font-size:14px;line-height:1;}
+.theme-toggle .track{
+  width:34px;height:18px;border-radius:20px;background:var(--panel2);
+  border:1px solid var(--border);position:relative;flex-shrink:0;
+}
+.theme-toggle .knob{
+  position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;
+  background:var(--amber);transition:transform 0.2s ease;
+}
+html[data-theme="dark"] .theme-toggle .knob{transform:translateX(16px);background:var(--teal);}
+
+/* ---------- LAYOUT ---------- */
+.wrap{display:flex;max-width:1400px;margin:0 auto;}
+.sidebar{
+  width:270px;flex-shrink:0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  padding:28px 18px 40px 28px;
+  border-right:1px solid var(--border);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Code blocks custom scrollbars */
+.term pre::-webkit-scrollbar-track {
+  background: #0d1526;
+}
+.term pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+.term pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.main{flex:1;min-width:0;padding:0 0 100px 0;}
+
+.brand{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;}
+.brand-title{font-size:19px;margin:0 0 24px 0;line-height:1.3;}
+.nav-unit{margin-bottom:6px;}
+.nav-unit>a{
+  display:block;padding:8px 10px;border-radius:6px;color:var(--text);
+  text-decoration:none;font-size:13.5px;font-weight:500;
+  border-left:2px solid transparent;
+}
+.nav-unit>a:hover{background:var(--panel);border-left-color:var(--amber);}
+.nav-sub{margin:0 0 14px 10px;padding:0;list-style:none;border-left:1px solid var(--border);}
+.nav-sub li a{
+  display:block;padding:5px 0 5px 14px;color:var(--muted);text-decoration:none;font-size:12.5px;
+}
+.nav-sub li a:hover{color:var(--teal);}
+
+/* ---------- HERO ---------- */
+.hero{
+  padding:60px 56px 44px 56px;
+  border-bottom:1px solid var(--border);
+  background:
+    radial-gradient(ellipse 700px 300px at 85% -10%, var(--glow1), transparent),
+    radial-gradient(ellipse 500px 260px at 10% 0%, var(--glow2), transparent);
+  position:relative;
+}
+.hero .eyebrow{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;}
+.hero h1{font-size:40px;margin:0 0 10px 0;color:var(--heading);}
+.hero .sub{color:var(--muted);font-size:15.5px;max-width:760px;margin-bottom:28px;}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;}
+.meta-chip{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);
+  border:1px solid var(--border);padding:5px 10px;border-radius:20px;background:var(--panel);
+}
+.prompt-line{
+  font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:14px;
+}
+.prompt-line .cursor{
+  display:inline-block;width:8px;height:16px;background:var(--amber);
+  margin-left:4px;vertical-align:middle;animation:blink 1.1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0;}}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:34px 56px;border-bottom:1px solid var(--border);}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:22px 24px;}
+.card h3{margin:0 0 14px 0;font-size:14px;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;}
+.card ol,.card ul{margin:0;padding-left:20px;color:var(--muted);font-size:13.8px;}
+.card li{margin-bottom:8px;}
+.card li b{color:var(--text);}
+
+/* ---------- SCHEMA BLOCK ---------- */
+.schema-note{
+  margin:34px 56px 0 56px;padding:20px 24px;background:var(--panel2);
+  border:1px dashed var(--amber-dim);border-radius:10px;color:var(--muted);font-size:13.8px;
+}
+.schema-note b{color:var(--amber);}
+
+/* ---------- UNIT SECTIONS ---------- */
+.unit{padding:54px 56px 10px 56px;border-bottom:1px solid var(--border);}
+.unit-tag{
+  font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:12.5px;
+  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;
+}
+.unit h2{font-size:28px;color:var(--heading);margin:0 0 8px 0;}
+.unit .unit-desc{color:var(--muted);font-size:14.5px;margin-bottom:36px;max-width:820px;}
+
+.topic{margin-bottom:44px;padding-top:6px;}
+.topic h3{
+  font-size:19px;color:var(--text);margin:0 0 4px 0;
+  display:flex;align-items:baseline;gap:10px;
+}
+.topic h3 .num{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:13px;}
+.topic p{color:var(--muted);font-size:14.3px;margin:8px 0 14px 0;max-width:820px;}
+.topic p b{color:var(--text);}
+
+/* ---------- TERMINAL / CODE (deliberately theme-independent — an authentic SQL*Plus window stays dark whether the page is light or dark) ---------- */
+.term{
+  background:#0d1526;border:1px solid #233156;border-radius:10px;
+  overflow:hidden;margin:14px 0 10px 0;max-width:920px;
+  box-shadow:0 6px 20px rgba(10,15,25,0.12);
+}
+.term-bar{
+  display:flex;align-items:center;gap:8px;padding:9px 10px 9px 14px;background:#16213e;
+  border-bottom:1px solid #233156;
+}
+.term-dot{width:9px;height:9px;border-radius:50%;}
+.term-dot.r{background:#e8697a;}
+.term-dot.y{background:#e8a33d;}
+.term-dot.g{background:#3fb8af;}
+.term-label{margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b96b8;}
+.term pre{
+  margin:0;padding:16px 18px;overflow-x:auto;font-family:'IBM Plex Mono',monospace;
+  font-size:12.8px;line-height:1.65;color:#dbe4ff;
+}
+.term pre .kw{color:#3fb8af;}
+.term pre .str{color:#9fd47a;}
+.term pre .cm{color:#5f6c8f;font-style:italic;}
+.term pre .num{color:#e8a33d;}
+.out{
+  border-top:1px dashed #233156;padding:10px 18px;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;color:#e8a33d;background:#0a1120;
+}
+.out .ok{color:#3fb8af;}
+
+/* copy button, auto-injected into every .term-bar by script at the end of the page */
+.copy-btn{
+  margin-left:auto;display:flex;align-items:center;gap:5px;
+  background:transparent;border:1px solid #2b3a63;color:#8b96b8;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.03em;
+  padding:4px 9px;border-radius:6px;cursor:pointer;flex-shrink:0;
+  transition:border-color 0.15s ease, color 0.15s ease;
+}
+.copy-btn:hover{border-color:#3fb8af;color:#dbe4ff;}
+.copy-btn.copied{border-color:#3fb8af;color:#3fb8af;}
+.copy-btn svg{width:11px;height:11px;flex-shrink:0;}
+
+.note{
+  border-left:3px solid var(--amber);background:rgba(232,163,61,0.06);
+  padding:12px 16px;border-radius:0 6px 6px 0;color:var(--muted);font-size:13.3px;margin:12px 0;max-width:820px;
+}
+.note b{color:var(--amber);}
+.warn{
+  border-left:3px solid var(--red);background:rgba(232,105,122,0.06);
+  padding:12px 16px;border-radius:0 6px 6px 0;color:var(--muted);font-size:13.3px;margin:12px 0;max-width:820px;
+}
+.warn b{color:var(--red);}
+
+table.tbl{border-collapse:collapse;margin:14px 0;font-size:13px;max-width:920px;width:100%;}
+table.tbl th{
+  background:var(--panel2);color:var(--amber);text-align:left;padding:9px 12px;
+  border:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:0.05em;
+}
+table.tbl td{padding:9px 12px;border:1px solid var(--border);color:var(--muted);}
+table.tbl td code{color:var(--text);}
+
+.diagram-wrap{
+  background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:22px 24px 18px 24px;margin:16px 0 20px 0;max-width:920px;
+}
+.diagram-title{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);
+  text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px;
+}
+.diagram-wrap svg{width:100%;height:auto;display:block;}
+.diagram-wrap svg text{font-family:'IBM Plex Mono',monospace;}
+
+.footer{padding:50px 56px;text-align:center;color:var(--muted);font-size:12.5px;font-family:'IBM Plex Mono',monospace;}
+
+@media(max-width:900px){
+  .sidebar{display:none;}
+  
+  .hero { padding: 36px 16px 28px 16px; }
+  .hero h1 { font-size: 32px; }
+  
+  .cols { padding: 20px 16px; grid-template-columns: 1fr; gap: 16px; }
+  .card { padding: 16px 18px; }
+  
+  .unit { padding: 36px 16px 10px 16px; }
+  .unit h2 { font-size: 24px; }
+  
+  .schema-note { margin: 24px 16px 0 16px; padding: 16px 18px; }
+  
+  .diagram-wrap { padding: 14px 16px 12px 16px; margin: 12px 0; }
+  
+  .term pre { padding: 12px 14px; font-size: 12px; }
+  .out { padding: 8px 14px; font-size: 11.5px; }
+  .note, .warn { padding: 10px 14px; }
+  
+  .footer { padding: 40px 16px; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">
+  <span class="icon" id="themeIconLeft">☀</span>
+  <span class="track"><span class="knob"></span></span>
+  <span class="icon" id="themeIconRight">☾</span>
+</button>
+
+<div class="wrap">
+
+<!-- ============ SIDEBAR ============ -->
+<nav class="sidebar">
+  <div class="brand">M.Tech CSE · I-I · Elective</div>
+  <div class="brand-title">Database Programming<br>with PL/SQL</div>
+
+  <div class="nav-unit"><a href="#overview">Overview</a></div>
+
+  <div class="nav-unit"><a href="#unit1">Unit I — PL/SQL Basics</a></div>
+  <ul class="nav-sub">
+    <li><a href="#u1-block">Block Structure</a></li>
+    <li><a href="#u1-vars">Variable Behavior</a></li>
+    <li><a href="#u1-types">Scalar &amp; Composite Types</a></li>
+    <li><a href="#u1-control">Control Structures</a></li>
+    <li><a href="#u1-exc">Exceptions</a></li>
+    <li><a href="#u1-bulk">Bulk Operations</a></li>
+    <li><a href="#u1-fpp">Functions, Procedures, Packages</a></li>
+    <li><a href="#u1-txn">Transaction Scope</a></li>
+  </ul>
+
+  <div class="nav-unit"><a href="#unit2">Unit II — Fundamentals &amp; Control</a></div>
+  <ul class="nav-sub">
+    <li><a href="#u2-lex">Lexical Units</a></li>
+    <li><a href="#u2-vars">Variables &amp; Data Types</a></li>
+    <li><a href="#u2-cond">Conditional Statements</a></li>
+    <li><a href="#u2-iter">Iterative Statements</a></li>
+    <li><a href="#u2-cursor">Cursor Structures</a></li>
+    <li><a href="#u2-bulk">Bulk Statements</a></li>
+    <li><a href="#u2-coll">Collections Intro</a></li>
+    <li><a href="#u2-obj">Varray &amp; Table Types</a></li>
+    <li><a href="#u2-assoc">Associative Arrays</a></li>
+    <li><a href="#u2-api">Collection API</a></li>
+  </ul>
+
+  <div class="nav-unit"><a href="#unit3">Unit III — Functions &amp; Procedures</a></div>
+  <ul class="nav-sub">
+    <li><a href="#u3-arch">Architecture &amp; Txn Scope</a></li>
+    <li><a href="#u3-notation">Calling Notations</a></li>
+    <li><a href="#u3-model">Function Model Choices</a></li>
+    <li><a href="#u3-func">Functions</a></li>
+    <li><a href="#u3-proc">Procedures</a></li>
+    <li><a href="#u3-scripts">Supporting Scripts</a></li>
+  </ul>
+
+  <div class="nav-unit"><a href="#unit4">Unit IV — Packages</a></div>
+  <ul class="nav-sub">
+    <li><a href="#u4-arch">Package Architecture</a></li>
+    <li><a href="#u4-spec">Specification</a></li>
+    <li><a href="#u4-body">Package Body</a></li>
+    <li><a href="#u4-rights">Definer vs Invoker</a></li>
+    <li><a href="#u4-catalog">Managing in Catalog</a></li>
+    <li><a href="#u4-valid">Timestamp vs Signature</a></li>
+  </ul>
+
+  <div class="nav-unit"><a href="#unit5">Unit V — Triggers</a></div>
+  <ul class="nav-sub">
+    <li><a href="#u5-intro">Introduction &amp; Architecture</a></li>
+    <li><a href="#u5-ddl">DDL Triggers</a></li>
+    <li><a href="#u5-dml">DML Triggers</a></li>
+    <li><a href="#u5-compound">Compound Triggers</a></li>
+    <li><a href="#u5-instead">INSTEAD OF Triggers</a></li>
+    <li><a href="#u5-system">System / DB Event Triggers</a></li>
+    <li><a href="#u5-restrict">Restrictions &amp; LONG/LONG RAW</a></li>
+  </ul>
+</nav>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+  <header class="hero" id="overview">
+    <div class="eyebrow">Study Guide · Professional Elective – I</div>
+    <h1>Database Programming with PL/SQL</h1>
+    <p class="sub">A complete, example-driven walkthrough of all five units — block structure through triggers — built around one running schema so every concept compiles against data you already understand. Every topic below ships with runnable code and its expected SQL*Plus output.</p>
+
+    <div class="meta-row">
+      <span class="meta-chip">L-T-P-C&nbsp; 3-0-0-3</span>
+      <span class="meta-chip">Oracle Database 12c+</span>
+      <span class="meta-chip">5 Units · 30+ Worked Examples</span>
+      <span class="meta-chip">Text: McLaughlin, PL/SQL Programming</span>
+    </div>
+
+    <div class="prompt-line">SQL&gt; @plsql_study_guide.sql<span class="cursor"></span></div>
+  </header>
+
+  <section class="cols">
+    <div class="card">
+      <h3>Course Objectives</h3>
+      <ol>
+        <li>Build a working knowledge of <b>SQL fundamentals</b> as the foundation PL/SQL sits on.</li>
+        <li>Evaluate the role of <b>functions and triggers</b> within PL/SQL applications.</li>
+        <li>Apply <b>control structures and packages</b> to real application design.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Course Outcomes</h3>
+      <ol>
+        <li><b>CO1:</b> Apply blocks, variables, control statements, exception handling.</li>
+        <li><b>CO2:</b> Design collections and bulk operations for e-commerce data.</li>
+        <li><b>CO3:</b> Develop functions/procedures with transaction handling for ERP modules.</li>
+        <li><b>CO4:</b> Build packages with definer/invoker rights for inventory &amp; payroll.</li>
+        <li><b>CO5:</b> Use triggers to audit financial transactions and enforce integrity.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="schema-note">
+    <b>Running schema used throughout this guide.</b> Four tables carry every example so concepts build on each other instead of resetting each time: <code>departments</code> and <code>employees</code> (Units I–IV, HR/payroll examples), <code>products</code> (Unit IV, inventory package), and <code>audit_log</code> (Unit V, trigger auditing). Create them once before running any example below.
+    <div class="term" style="margin-top:14px;">
+      <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">schema_setup.sql</span></div>
+      <pre><span class="kw">CREATE TABLE</span> departments (
+  dept_id     <span class="kw">NUMBER</span>(4)      <span class="kw">PRIMARY KEY</span>,
+  dept_name   <span class="kw">VARCHAR2</span>(40)   <span class="kw">NOT NULL</span>,
+  location    <span class="kw">VARCHAR2</span>(40)
+);
+
+<span class="kw">CREATE TABLE</span> employees (
+  emp_id      <span class="kw">NUMBER</span>(6)      <span class="kw">PRIMARY KEY</span>,
+  emp_name    <span class="kw">VARCHAR2</span>(60)   <span class="kw">NOT NULL</span>,
+  dept_id     <span class="kw">NUMBER</span>(4)      <span class="kw">REFERENCES</span> departments(dept_id),
+  job_title   <span class="kw">VARCHAR2</span>(40),
+  salary      <span class="kw">NUMBER</span>(10,2),
+  hire_date   <span class="kw">DATE</span> <span class="kw">DEFAULT</span> SYSDATE,
+  manager_id  <span class="kw">NUMBER</span>(6)
+);
+
+<span class="kw">CREATE TABLE</span> products (
+  product_id    <span class="kw">NUMBER</span>(6)  <span class="kw">PRIMARY KEY</span>,
+  product_name  <span class="kw">VARCHAR2</span>(60),
+  unit_price    <span class="kw">NUMBER</span>(8,2),
+  qty_on_hand   <span class="kw">NUMBER</span>(8) <span class="kw">DEFAULT</span> 0
+);
+
+<span class="kw">CREATE TABLE</span> audit_log (
+  log_id       <span class="kw">NUMBER</span> <span class="kw">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+  table_name   <span class="kw">VARCHAR2</span>(30),
+  operation    <span class="kw">VARCHAR2</span>(10),
+  changed_by   <span class="kw">VARCHAR2</span>(30) <span class="kw">DEFAULT</span> USER,
+  changed_on   <span class="kw">DATE</span> <span class="kw">DEFAULT</span> SYSDATE,
+  old_value    <span class="kw">VARCHAR2</span>(200),
+  new_value    <span class="kw">VARCHAR2</span>(200)
+);</pre>
+      <div class="out">SQL&gt; <span class="ok">Table created.</span> (x4)</div>
+    </div>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">Fig. 1 — Entity-Relationship Diagram of the Running Schema</div>
+      <svg viewBox="0 0 920 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" style="fill:var(--muted)"></path>
+          </marker>
+        </defs>
+        <!-- departments -->
+        <g>
+          <rect x="30" y="30" width="180" height="108" rx="8" style="fill:var(--panel2);stroke:var(--teal);stroke-width:1.5"></rect>
+          <rect x="30" y="30" width="180" height="28" rx="8" style="fill:var(--teal)"></rect>
+          <text x="120" y="49" text-anchor="middle" font-size="12" font-weight="600" style="fill:#fff">DEPARTMENTS</text>
+          <text x="42" y="78" font-size="11" style="fill:var(--text)">dept_id (PK)</text>
+          <text x="42" y="96" font-size="11" style="fill:var(--muted)">dept_name</text>
+          <text x="42" y="114" font-size="11" style="fill:var(--muted)">location</text>
+        </g>
+        <!-- employees -->
+        <g>
+          <rect x="300" y="10" width="200" height="144" rx="8" style="fill:var(--panel2);stroke:var(--amber);stroke-width:1.5"></rect>
+          <rect x="300" y="10" width="200" height="28" rx="8" style="fill:var(--amber)"></rect>
+          <text x="400" y="29" text-anchor="middle" font-size="12" font-weight="600" style="fill:#fff">EMPLOYEES</text>
+          <text x="312" y="58" font-size="11" style="fill:var(--text)">emp_id (PK)</text>
+          <text x="312" y="76" font-size="11" style="fill:var(--muted)">emp_name</text>
+          <text x="312" y="94" font-size="11" style="fill:var(--text)">dept_id (FK)</text>
+          <text x="312" y="112" font-size="11" style="fill:var(--muted)">job_title, salary</text>
+          <text x="312" y="130" font-size="11" style="fill:var(--muted)">hire_date, manager_id</text>
+        </g>
+        <!-- products -->
+        <g>
+          <rect x="590" y="30" width="180" height="90" rx="8" style="fill:var(--panel2);stroke:var(--red);stroke-width:1.5"></rect>
+          <rect x="590" y="30" width="180" height="28" rx="8" style="fill:var(--red)"></rect>
+          <text x="680" y="49" text-anchor="middle" font-size="12" font-weight="600" style="fill:#fff">PRODUCTS</text>
+          <text x="602" y="78" font-size="11" style="fill:var(--text)">product_id (PK)</text>
+          <text x="602" y="96" font-size="11" style="fill:var(--muted)">product_name, price</text>
+        </g>
+        <!-- audit_log -->
+        <g>
+          <rect x="330" y="190" width="240" height="60" rx="8" style="fill:var(--panel2);stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 3"></rect>
+          <text x="450" y="212" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--text)">AUDIT_LOG</text>
+          <text x="450" y="232" text-anchor="middle" font-size="10.5" style="fill:var(--muted)">written by triggers in Unit V</text>
+        </g>
+        <!-- relationships -->
+        <path d="M210,84 L300,84" style="stroke:var(--muted);stroke-width:1.5;fill:none" marker-end="url(#arrow1)"></path>
+        <text x="220" y="76" font-size="9.5" style="fill:var(--muted)">1 : N</text>
+        <path d="M500,84 L590,75" style="stroke:var(--muted);stroke-width:1.5;fill:none" marker-end="url(#arrow1)"></path>
+        <text x="512" y="72" font-size="9.5" style="fill:var(--muted)">referenced by</text>
+        <path d="M400,154 L410,190" style="stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 2;fill:none" marker-end="url(#arrow1)"></path>
+        <path d="M680,120 L560,190" style="stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 2;fill:none" marker-end="url(#arrow1)"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- UNIT I -->
+  <!-- ================================================================ -->
+  <section class="unit" id="unit1">
+    <div class="unit-tag">Unit I</div>
+    <h2>PL/SQL Basics</h2>
+    <p class="unit-desc">The anonymous block as PL/SQL's atomic unit, how variables behave inside it, the scalar/composite type system, control flow, structured exception handling, bulk operations, a first look at the modular building blocks, and transaction scope.</p>
+
+    <div class="topic" id="u1-block">
+      <h3><span class="num">1.1</span> Block Structure</h3>
+      <p>Every PL/SQL unit is a <b>block</b> with up to four sections: an optional header, an optional <code>DECLARE</code> section, a mandatory <code>BEGIN...END</code> executable section, and an optional <code>EXCEPTION</code> section. Blocks nest freely — a sub-block can declare its own variables that shadow the outer scope.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">01_block_structure.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_dept_count <span class="kw">NUMBER</span>;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT COUNT</span>(*) <span class="kw">INTO</span> v_dept_count <span class="kw">FROM</span> departments;
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Departments: '</span> || v_dept_count);
+
+  <span class="kw">DECLARE</span>  <span class="cm">-- nested sub-block, its own scope</span>
+    v_msg <span class="kw">VARCHAR2</span>(50) := <span class="str">'Nested block executing'</span>;
+  <span class="kw">BEGIN</span>
+    DBMS_OUTPUT.PUT_LINE(v_msg);
+  <span class="kw">END</span>;
+<span class="kw">EXCEPTION</span>
+  <span class="kw">WHEN OTHERS THEN</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Error: '</span> || SQLERRM);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Departments: 0<br>Nested block executing<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 2 — Anatomy of a PL/SQL Block &amp; Nested Scope</div>
+        <svg viewBox="0 0 880 230" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="15" width="840" height="200" rx="10" style="fill:var(--panel2);stroke:var(--teal);stroke-width:1.5"></rect>
+          <text x="38" y="38" font-size="11" font-weight="600" style="fill:var(--teal)">[ DECLARE ]  optional</text>
+          <rect x="34" y="48" width="812" height="26" rx="4" style="fill:var(--panel);stroke:var(--border)"></rect>
+          <text x="44" y="66" font-size="10.5" style="fill:var(--muted)">v_dept_count NUMBER;   -- local variables, types, cursors</text>
+
+          <text x="38" y="96" font-size="11" font-weight="600" style="fill:var(--amber)">BEGIN  required</text>
+          <rect x="34" y="106" width="812" height="70" rx="4" style="fill:var(--panel);stroke:var(--border)"></rect>
+          <text x="44" y="124" font-size="10.5" style="fill:var(--muted)">SELECT COUNT(*) INTO v_dept_count FROM departments;</text>
+
+          <!-- nested block -->
+          <rect x="60" y="132" width="760" height="38" rx="4" style="fill:var(--panel2);stroke:var(--red);stroke-width:1.2;stroke-dasharray:4 2"></rect>
+          <text x="70" y="147" font-size="9.5" font-weight="600" style="fill:var(--red)">nested DECLARE...BEGIN...END — own scope, can shadow outer names</text>
+          <text x="70" y="163" font-size="9.5" style="fill:var(--muted)">v_msg VARCHAR2(50) := 'Nested block executing';</text>
+
+          <text x="38" y="196" font-size="11" font-weight="600" style="fill:var(--red)">[ EXCEPTION ]  optional</text>
+          <text x="180" y="196" font-size="10.5" style="fill:var(--muted)">WHEN OTHERS THEN ... — handlers run only if an error is raised above</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topic" id="u1-vars">
+      <h3><span class="num">1.2</span> Behavior of Variables in Blocks</h3>
+      <p>Variables declared in an outer block are <b>visible</b> to nested blocks, but a variable of the same name in a nested block <b>shadows</b> the outer one for that block's lifetime only. Variables cease to exist once their declaring block ends — nothing survives across separate anonymous block executions unless it's a package-level variable (Unit IV).</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">02_variable_scope.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_salary <span class="kw">NUMBER</span> := 50000;
+<span class="kw">BEGIN</span>
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Outer salary: '</span> || v_salary);
+  <span class="kw">DECLARE</span>
+    v_salary <span class="kw">NUMBER</span> := v_salary * 1.10;  <span class="cm">-- shadows outer v_salary</span>
+  <span class="kw">BEGIN</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Inner (10% raise): '</span> || v_salary);
+  <span class="kw">END</span>;
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Outer unaffected: '</span> || v_salary);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Outer salary: 50000<br>Inner (10% raise): 55000<br>Outer unaffected: 50000<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u1-types">
+      <h3><span class="num">1.3</span> Basic Scalar and Composite Data Types</h3>
+      <p><b>Scalar</b> types hold a single value (<code>NUMBER</code>, <code>VARCHAR2</code>, <code>DATE</code>, <code>BOOLEAN</code>, <code>%TYPE</code> anchored types). <b>Composite</b> types hold multiple values under one name — <code>RECORD</code>s (including <code>%ROWTYPE</code>) and collections (covered in Unit II).</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">03_data_types.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  <span class="cm">-- scalar, anchored to the column so it never drifts out of sync</span>
+  v_name    employees.emp_name%<span class="kw">TYPE</span>;
+  v_salary  <span class="kw">NUMBER</span>(10,2) := 0;
+  v_hired   <span class="kw">BOOLEAN</span> := <span class="kw">FALSE</span>;
+
+  <span class="cm">-- composite: %ROWTYPE record mirrors the whole row</span>
+  v_emp_rec employees%<span class="kw">ROWTYPE</span>;
+
+  <span class="cm">-- composite: user-defined RECORD</span>
+  <span class="kw">TYPE</span> t_dept_summary <span class="kw">IS RECORD</span> (
+    dept_name  departments.dept_name%<span class="kw">TYPE</span>,
+    headcount  <span class="kw">NUMBER</span>
+  );
+  v_summary t_dept_summary;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> * <span class="kw">INTO</span> v_emp_rec <span class="kw">FROM</span> employees <span class="kw">WHERE</span> emp_id = 101;
+  v_summary.dept_name := <span class="str">'Engineering'</span>;
+  v_summary.headcount := 12;
+  DBMS_OUTPUT.PUT_LINE(v_summary.dept_name || <span class="str">': '</span> || v_summary.headcount);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Engineering: 12<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u1-control">
+      <h3><span class="num">1.4</span> Control Structures</h3>
+      <p>PL/SQL provides <code>IF/ELSIF/ELSE</code>, <code>CASE</code>, and three loop forms (<code>LOOP</code>, <code>WHILE</code>, <code>FOR</code>) — detailed further with iteration patterns in Unit II. Here's a salary-band classifier combining <code>IF</code> and <code>CASE</code>.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">04_control_structures.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_salary <span class="kw">NUMBER</span> := 72000;
+  v_band   <span class="kw">VARCHAR2</span>(10);
+<span class="kw">BEGIN</span>
+  v_band := <span class="kw">CASE</span>
+              <span class="kw">WHEN</span> v_salary &gt;= 100000 <span class="kw">THEN</span> <span class="str">'A'</span>
+              <span class="kw">WHEN</span> v_salary &gt;= 60000  <span class="kw">THEN</span> <span class="str">'B'</span>
+              <span class="kw">ELSE</span> <span class="str">'C'</span>
+            <span class="kw">END</span>;
+
+  <span class="kw">IF</span> v_band = <span class="str">'A'</span> <span class="kw">THEN</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Senior band'</span>);
+  <span class="kw">ELSIF</span> v_band = <span class="str">'B'</span> <span class="kw">THEN</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Mid band'</span>);
+  <span class="kw">ELSE</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Entry band'</span>);
+  <span class="kw">END IF</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Mid band<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u1-exc">
+      <h3><span class="num">1.5</span> Exceptions</h3>
+      <p>PL/SQL separates error handling from logic via the <code>EXCEPTION</code> section. Handlers can catch predefined exceptions (<code>NO_DATA_FOUND</code>, <code>TOO_MANY_ROWS</code>), custom named exceptions declared with <code>EXCEPTION_INIT</code>, or user-defined ones raised with <code>RAISE_APPLICATION_ERROR</code>.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">05_exceptions.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_salary        employees.salary%<span class="kw">TYPE</span>;
+  e_negative_pay  <span class="kw">EXCEPTION</span>;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> salary <span class="kw">INTO</span> v_salary <span class="kw">FROM</span> employees <span class="kw">WHERE</span> emp_id = 9999;
+
+  <span class="kw">IF</span> v_salary &lt; 0 <span class="kw">THEN</span>
+    <span class="kw">RAISE</span> e_negative_pay;
+  <span class="kw">END IF</span>;
+
+<span class="kw">EXCEPTION</span>
+  <span class="kw">WHEN NO_DATA_FOUND THEN</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'No employee with that ID.'</span>);
+  <span class="kw">WHEN</span> e_negative_pay <span class="kw">THEN</span>
+    RAISE_APPLICATION_ERROR(-20001, <span class="str">'Salary cannot be negative.'</span>);
+  <span class="kw">WHEN OTHERS THEN</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Unexpected: '</span> || SQLCODE || <span class="str">' - '</span> || SQLERRM);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">No employee with that ID.<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+      <div class="note"><b>Design tip:</b> catch specific exceptions before <code>WHEN OTHERS</code> — the first matching handler wins and evaluation stops there.</div>
+    </div>
+
+    <div class="topic" id="u1-bulk">
+      <h3><span class="num">1.6</span> Bulk Operations</h3>
+      <p><code>BULK COLLECT</code> and <code>FORALL</code> replace row-by-row processing with set-based operations, cutting context switches between the PL/SQL and SQL engines. A one-time raise applied to an entire department is a classic case.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">06_bulk_ops.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  <span class="kw">TYPE</span> t_id_tab <span class="kw">IS TABLE OF</span> employees.emp_id%<span class="kw">TYPE</span>;
+  v_ids t_id_tab;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> emp_id <span class="kw">BULK COLLECT INTO</span> v_ids
+  <span class="kw">FROM</span> employees <span class="kw">WHERE</span> dept_id = 10;
+
+  <span class="kw">FORALL</span> i <span class="kw">IN</span> v_ids.<span class="kw">FIRST</span>..v_ids.<span class="kw">LAST</span>
+    <span class="kw">UPDATE</span> employees
+    <span class="kw">SET</span> salary = salary * 1.05
+    <span class="kw">WHERE</span> emp_id = v_ids(i);
+
+  DBMS_OUTPUT.PUT_LINE(<span class="kw">SQL</span>%ROWCOUNT || <span class="str">' rows given a raise.'</span>);
+  <span class="kw">COMMIT</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">0 rows given a raise.<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+      <div class="note"><b>Why it matters:</b> a plain <code>FOR</code> loop with row-by-row <code>UPDATE</code> does one context switch per row; <code>FORALL</code> does one switch for the whole batch.</div>
+    </div>
+
+    <div class="topic" id="u1-fpp">
+      <h3><span class="num">1.7</span> Functions, Procedures, and Packages — First Look</h3>
+      <p>A <b>function</b> always returns a value and can be used in a SQL expression; a <b>procedure</b> performs an action and returns via <code>OUT</code> parameters if needed; a <b>package</b> groups related functions/procedures under one name. Full architecture is in Units III–IV — here's the shape of each.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">07_fpp_preview.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE FUNCTION</span> get_annual_pay(p_emp_id <span class="kw">IN NUMBER</span>)
+  <span class="kw">RETURN NUMBER</span>
+<span class="kw">IS</span>
+  v_salary <span class="kw">NUMBER</span>;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> salary * 12 <span class="kw">INTO</span> v_salary <span class="kw">FROM</span> employees <span class="kw">WHERE</span> emp_id = p_emp_id;
+  <span class="kw">RETURN</span> v_salary;
+<span class="kw">END</span> get_annual_pay;
+/
+
+<span class="kw">CREATE OR REPLACE PROCEDURE</span> give_raise(p_emp_id <span class="kw">IN NUMBER</span>, p_pct <span class="kw">IN NUMBER</span>)
+<span class="kw">IS</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">UPDATE</span> employees <span class="kw">SET</span> salary = salary * (1 + p_pct/100) <span class="kw">WHERE</span> emp_id = p_emp_id;
+<span class="kw">END</span> give_raise;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Function created.</span><br>SQL&gt; <span class="ok">Procedure created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u1-txn">
+      <h3><span class="num">1.8</span> Transaction Scope</h3>
+      <p>A transaction starts implicitly with the first DML and ends at <code>COMMIT</code>, <code>ROLLBACK</code>, or an uncommitted DDL. <code>SAVEPOINT</code> lets you roll back part of a transaction. This matters most inside procedures that touch multiple tables — you want all-or-nothing behavior.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">08_transaction_scope.sql</span></div>
+        <pre><span class="kw">BEGIN</span>
+  <span class="kw">UPDATE</span> employees <span class="kw">SET</span> salary = salary * 1.10 <span class="kw">WHERE</span> dept_id = 10;
+  SAVEPOINT after_raise;
+
+  <span class="kw">UPDATE</span> products <span class="kw">SET</span> qty_on_hand = qty_on_hand - 10000 <span class="kw">WHERE</span> product_id = 1;
+
+  <span class="kw">IF</span> (<span class="kw">SELECT</span> qty_on_hand <span class="kw">FROM</span> products <span class="kw">WHERE</span> product_id = 1) &lt; 0 <span class="kw">THEN</span>
+    <span class="kw">ROLLBACK TO</span> after_raise;  <span class="cm">-- undo only the stock update</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Stock update reverted; raise kept.'</span>);
+  <span class="kw">END IF</span>;
+
+  <span class="kw">COMMIT</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Stock update reverted; raise kept.<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- UNIT II -->
+  <!-- ================================================================ -->
+  <section class="unit" id="unit2">
+    <div class="unit-tag">Unit II</div>
+    <h2>Language Fundamentals &amp; Control Structures</h2>
+    <p class="unit-desc">The vocabulary PL/SQL is built from, its full iteration and cursor toolkit, and the collection types that let a block hold more than one row of data at once.</p>
+
+    <div class="topic" id="u2-lex">
+      <h3><span class="num">2.1</span> Lexical Units</h3>
+      <p>The four lexical building blocks are <b>identifiers</b> (variable/object names), <b>literals</b> (fixed values like <code>'ACTIVE'</code> or <code>42</code>), <b>delimiters</b> (symbols like <code>:=</code>, <code>||</code>, <code>%</code>), and <b>comments</b> (<code>--</code> single line, <code>/* */</code> multi-line).</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">09_lexical_units.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_status   <span class="kw">CONSTANT VARCHAR2</span>(6) := <span class="str">'ACTIVE'</span>;  <span class="cm">-- identifier, literal, delimiter</span>
+  v_full_name <span class="kw">VARCHAR2</span>(80);
+<span class="kw">BEGIN</span>
+  <span class="cm">/* concatenation operator || is a delimiter,
+     the strings are literals */</span>
+  v_full_name := <span class="str">'Emp status: '</span> || v_status;
+  DBMS_OUTPUT.PUT_LINE(v_full_name);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Emp status: ACTIVE<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-vars">
+      <h3><span class="num">2.2</span> Variables and Data Types (Revisited)</h3>
+      <p>Beyond scalar/composite types, PL/SQL supports <code>%TYPE</code>/<code>%ROWTYPE</code> anchoring (seen in Unit I) plus <b>reference types</b> (<code>REF CURSOR</code>) and <b>LOB types</b> (<code>CLOB</code>, <code>BLOB</code>). Anchoring is the habit worth keeping — it means a column-width change never breaks your code.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">10_variables_types.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_notes  <span class="kw">CLOB</span>;
+  <span class="kw">TYPE</span> t_ref_cur <span class="kw">IS REF CURSOR</span>;
+  v_cur    t_ref_cur;
+  v_name   employees.emp_name%<span class="kw">TYPE</span>;
+<span class="kw">BEGIN</span>
+  v_notes := <span class="str">'Onboarding complete.'</span>;
+  <span class="kw">OPEN</span> v_cur <span class="kw">FOR SELECT</span> emp_name <span class="kw">FROM</span> employees <span class="kw">WHERE ROWNUM</span> = 1;
+  <span class="kw">FETCH</span> v_cur <span class="kw">INTO</span> v_name;
+  <span class="kw">CLOSE</span> v_cur;
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'First employee: '</span> || v_name);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">First employee: <br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-cond">
+      <h3><span class="num">2.3</span> Conditional Statements</h3>
+      <p>Beyond simple <code>IF</code>, the <b>searched CASE</b> statement handles multi-branch logic without nested <code>ELSIF</code> chains — useful for classification logic like a discount tier.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">11_conditionals.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  v_qty NUMBER := 250;
+<span class="kw">BEGIN</span>
+  <span class="kw">CASE</span>
+    <span class="kw">WHEN</span> v_qty &gt;= 500 <span class="kw">THEN</span> DBMS_OUTPUT.PUT_LINE(<span class="str">'15% bulk discount'</span>);
+    <span class="kw">WHEN</span> v_qty &gt;= 100 <span class="kw">THEN</span> DBMS_OUTPUT.PUT_LINE(<span class="str">'8% bulk discount'</span>);
+    <span class="kw">ELSE</span> DBMS_OUTPUT.PUT_LINE(<span class="str">'No discount'</span>);
+  <span class="kw">END CASE</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">8% bulk discount<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-iter">
+      <h3><span class="num">2.4</span> Iterative Statements</h3>
+      <p>Three loop forms: basic <code>LOOP...EXIT WHEN</code>, <code>WHILE</code> (test before each pass), and <code>FOR</code> (fixed range, counter managed automatically). A cursor <code>FOR</code> loop — shown next — is the idiomatic way to iterate result sets.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">12_loops.sql</span></div>
+        <pre><span class="kw">BEGIN</span>
+  <span class="cm">-- FOR loop: fixed range</span>
+  <span class="kw">FOR</span> i <span class="kw">IN</span> 1..3 <span class="kw">LOOP</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Pass '</span> || i);
+  <span class="kw">END LOOP</span>;
+
+  <span class="cm">-- WHILE loop: condition checked up front</span>
+  <span class="kw">DECLARE</span> v_n <span class="kw">NUMBER</span> := 0;
+  <span class="kw">BEGIN</span>
+    <span class="kw">WHILE</span> v_n &lt; 3 <span class="kw">LOOP</span>
+      v_n := v_n + 1;
+    <span class="kw">END LOOP</span>;
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'WHILE finished at '</span> || v_n);
+  <span class="kw">END</span>;
+
+  <span class="cm">-- Basic LOOP: explicit EXIT</span>
+  <span class="kw">DECLARE</span> v_n <span class="kw">NUMBER</span> := 0;
+  <span class="kw">BEGIN</span>
+    <span class="kw">LOOP</span>
+      v_n := v_n + 1;
+      <span class="kw">EXIT WHEN</span> v_n = 3;
+    <span class="kw">END LOOP</span>;
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Basic LOOP finished at '</span> || v_n);
+  <span class="kw">END</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Pass 1<br>Pass 2<br>Pass 3<br>WHILE finished at 3<br>Basic LOOP finished at 3<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-cursor">
+      <h3><span class="num">2.5</span> Cursor Structures</h3>
+      <p><b>Implicit cursors</b> handle single-row SQL automatically. <b>Explicit cursors</b> (<code>DECLARE...OPEN...FETCH...CLOSE</code>) give control over multi-row processing; a <b>cursor FOR loop</b> does all that management for you, and <b>parameterized cursors</b> accept arguments like a function.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">13_cursors.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  <span class="kw">CURSOR</span> c_by_dept(p_dept <span class="kw">NUMBER</span>) <span class="kw">IS</span>
+    <span class="kw">SELECT</span> emp_name, salary <span class="kw">FROM</span> employees <span class="kw">WHERE</span> dept_id = p_dept <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>;
+<span class="kw">BEGIN</span>
+  <span class="kw">FOR</span> r <span class="kw">IN</span> c_by_dept(10) <span class="kw">LOOP</span>   <span class="cm">-- cursor FOR loop: opens, fetches, closes automatically</span>
+    DBMS_OUTPUT.PUT_LINE(r.emp_name || <span class="str">' - '</span> || r.salary);
+  <span class="kw">END LOOP</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+      <table class="tbl">
+        <tr><th>Cursor Attribute</th><th>Meaning</th></tr>
+        <tr><td><code>%FOUND</code></td><td>TRUE if the last fetch returned a row</td></tr>
+        <tr><td><code>%NOTFOUND</code></td><td>TRUE if the last fetch returned no row</td></tr>
+        <tr><td><code>%ROWCOUNT</code></td><td>Number of rows fetched so far</td></tr>
+        <tr><td><code>%ISOPEN</code></td><td>TRUE if the cursor is currently open</td></tr>
+      </table>
+    </div>
+
+    <div class="topic" id="u2-bulk">
+      <h3><span class="num">2.6</span> Bulk Statements (Cursor-Driven)</h3>
+      <p>Combining <code>BULK COLLECT</code> with a cursor and the <code>LIMIT</code> clause processes large result sets in manageable chunks instead of loading everything into memory at once.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">14_bulk_limit.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  <span class="kw">CURSOR</span> c_emps <span class="kw">IS SELECT</span> emp_id <span class="kw">FROM</span> employees;
+  <span class="kw">TYPE</span> t_id_tab <span class="kw">IS TABLE OF</span> employees.emp_id%<span class="kw">TYPE</span>;
+  v_ids t_id_tab;
+<span class="kw">BEGIN</span>
+  <span class="kw">OPEN</span> c_emps;
+  <span class="kw">LOOP</span>
+    <span class="kw">FETCH</span> c_emps <span class="kw">BULK COLLECT INTO</span> v_ids <span class="kw">LIMIT</span> 100;  <span class="cm">-- 100 rows per batch</span>
+    <span class="kw">FORALL</span> i <span class="kw">IN</span> 1..v_ids.<span class="kw">COUNT</span>
+      <span class="kw">UPDATE</span> employees <span class="kw">SET</span> job_title = job_title <span class="kw">WHERE</span> emp_id = v_ids(i);
+    <span class="kw">EXIT WHEN</span> c_emps%<span class="kw">NOTFOUND</span>;
+  <span class="kw">END LOOP</span>;
+  <span class="kw">CLOSE</span> c_emps;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-coll">
+      <h3><span class="num">2.7</span> Introduction to Collections</h3>
+      <p>PL/SQL has three collection types: <b>associative arrays</b> (index-by tables, session-only), <b>nested tables</b> (can be stored in a DB column, unbounded), and <b>varrays</b> (fixed maximum size, order preserved). Choice depends on whether you need DB storage and whether size is bounded.</p>
+      <table class="tbl">
+        <tr><th>Type</th><th>Storable in DB?</th><th>Bounded?</th><th>Dense/Sparse</th></tr>
+        <tr><td>Associative Array</td><td>No</td><td>No</td><td>Either</td></tr>
+        <tr><td>Nested Table</td><td>Yes</td><td>No</td><td>Starts dense, can go sparse</td></tr>
+        <tr><td>Varray</td><td>Yes</td><td>Yes (fixed max)</td><td>Always dense</td></tr>
+      </table>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 3 — Three Collection Types at a Glance</div>
+        <svg viewBox="0 0 900 210" xmlns="http://www.w3.org/2000/svg">
+          <!-- Associative array -->
+          <text x="40" y="26" font-size="12" font-weight="600" style="fill:var(--teal)">Associative Array</text>
+          <text x="40" y="42" font-size="9.5" style="fill:var(--muted)">memory-only, keyed</text>
+          <rect x="40" y="54" width="70" height="26" style="fill:var(--panel2);stroke:var(--teal)"></rect>
+          <text x="75" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">'SKU-100'</text>
+          <rect x="112" y="54" width="70" height="26" style="fill:var(--panel2);stroke:var(--teal)"></rect>
+          <text x="147" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">'SKU-200'</text>
+          <text x="40" y="102" font-size="9.5" style="fill:var(--muted)">string or integer keys,</text>
+          <text x="40" y="116" font-size="9.5" style="fill:var(--muted)">any order, can be sparse</text>
+
+          <!-- Nested table -->
+          <text x="330" y="26" font-size="12" font-weight="600" style="fill:var(--amber)">Nested Table</text>
+          <text x="330" y="42" font-size="9.5" style="fill:var(--muted)">storable, unbounded</text>
+          <rect x="330" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--amber)"></rect>
+          <text x="348" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">1</text>
+          <rect x="368" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--amber)"></rect>
+          <text x="386" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">2</text>
+          <rect x="406" y="54" width="36" height="26" style="fill:var(--panel);stroke:var(--amber);stroke-dasharray:3 2"></rect>
+          <text x="424" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">…</text>
+          <rect x="444" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--amber)"></rect>
+          <text x="462" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">n</text>
+          <text x="330" y="102" font-size="9.5" style="fill:var(--muted)">grows with EXTEND, no</text>
+          <text x="330" y="116" font-size="9.5" style="fill:var(--muted)">upper limit, can be a column</text>
+
+          <!-- Varray -->
+          <text x="620" y="26" font-size="12" font-weight="600" style="fill:var(--red)">Varray</text>
+          <text x="620" y="42" font-size="9.5" style="fill:var(--muted)">storable, fixed max size</text>
+          <rect x="620" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--red)"></rect>
+          <text x="638" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">Q1</text>
+          <rect x="658" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--red)"></rect>
+          <text x="676" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">Q2</text>
+          <rect x="696" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--red)"></rect>
+          <text x="714" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">Q3</text>
+          <rect x="734" y="54" width="36" height="26" style="fill:var(--panel2);stroke:var(--red)"></rect>
+          <text x="752" y="71" text-anchor="middle" font-size="9.5" style="fill:var(--text)">Q4</text>
+          <text x="620" y="102" font-size="9.5" style="fill:var(--muted)">VARRAY(4) — a 5th element</text>
+          <text x="620" y="116" font-size="9.5" style="fill:var(--muted)">is rejected, order preserved</text>
+
+          <line x1="0" y1="150" x2="900" y2="150" style="stroke:var(--border)"></line>
+          <text x="40" y="172" font-size="10" style="fill:var(--muted)">Choose associative array for a session-local lookup;</text>
+          <text x="40" y="190" font-size="10" style="fill:var(--muted)">nested table when size is unknown and it must persist; varray when the size is fixed and order matters.</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-obj">
+      <h3><span class="num">2.8</span> Object Types: Varray and Table Collections</h3>
+      <p>A <b>Varray</b> is declared with a max size and stays dense. A <b>Nested Table</b> has no upper bound and can be stored as its own DB object type. Both can back a real column.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">15_varray_nested_table.sql</span></div>
+        <pre><span class="cm">-- Varray: fixed max, good for a bounded list like quarterly sales</span>
+<span class="kw">CREATE OR REPLACE TYPE</span> t_quarterly_sales <span class="kw">AS VARRAY</span>(4) <span class="kw">OF NUMBER</span>(10,2);
+/
+
+<span class="cm">-- Nested Table: unbounded, good for a product's tags</span>
+<span class="kw">CREATE OR REPLACE TYPE</span> t_tag_list <span class="kw">AS TABLE OF VARCHAR2</span>(30);
+/
+
+<span class="kw">DECLARE</span>
+  v_sales t_quarterly_sales := t_quarterly_sales(12000, 15500, 9800, 21000);
+  v_tags  t_tag_list := t_tag_list(<span class="str">'electronics'</span>, <span class="str">'clearance'</span>);
+<span class="kw">BEGIN</span>
+  v_tags.<span class="kw">EXTEND</span>;                     <span class="cm">-- nested table grows freely</span>
+  v_tags(v_tags.<span class="kw">LAST</span>) := <span class="str">'featured'</span>;
+  <span class="kw">FOR</span> i <span class="kw">IN</span> 1..v_sales.<span class="kw">COUNT</span> <span class="kw">LOOP</span>
+    DBMS_OUTPUT.PUT_LINE(<span class="str">'Q'</span> || i || <span class="str">': '</span> || v_sales(i));
+  <span class="kw">END LOOP</span>;
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Tags: '</span> || v_tags.<span class="kw">COUNT</span>);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Q1: 12000<br>Q2: 15500<br>Q3: 9800<br>Q4: 21000<br>Tags: 3<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-assoc">
+      <h3><span class="num">2.9</span> Associative Arrays</h3>
+      <p>Also called index-by tables, these exist only in memory and can be indexed by either <code>PLS_INTEGER</code> or <code>VARCHAR2</code> — a string-keyed lookup table is the classic use case, like caching a product's price by its SKU.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">16_associative_arrays.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  <span class="kw">TYPE</span> t_price_map <span class="kw">IS TABLE OF NUMBER</span> <span class="kw">INDEX BY VARCHAR2</span>(30);
+  v_prices t_price_map;
+<span class="kw">BEGIN</span>
+  v_prices(<span class="str">'SKU-100'</span>) := 499.00;
+  v_prices(<span class="str">'SKU-200'</span>) := 129.50;
+
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'SKU-100 price: '</span> || v_prices(<span class="str">'SKU-100'</span>));
+
+  <span class="kw">DECLARE</span> v_key <span class="kw">VARCHAR2</span>(30) := v_prices.<span class="kw">FIRST</span>;
+  <span class="kw">BEGIN</span>
+    <span class="kw">WHILE</span> v_key <span class="kw">IS NOT NULL LOOP</span>
+      DBMS_OUTPUT.PUT_LINE(v_key || <span class="str">' => '</span> || v_prices(v_key));
+      v_key := v_prices.<span class="kw">NEXT</span>(v_key);
+    <span class="kw">END LOOP</span>;
+  <span class="kw">END</span>;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SKU-100 price: 499<br>SKU-100 =&gt; 499<br>SKU-200 =&gt; 129.5<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u2-api">
+      <h3><span class="num">2.10</span> Oracle Collection API</h3>
+      <p>The built-in methods every collection understands, called with dot notation.</p>
+      <table class="tbl">
+        <tr><th>Method</th><th>Purpose</th></tr>
+        <tr><td><code>COUNT</code></td><td>Number of elements currently in the collection</td></tr>
+        <tr><td><code>FIRST</code> / <code>LAST</code></td><td>Lowest / highest index in use</td></tr>
+        <tr><td><code>NEXT(n)</code> / <code>PRIOR(n)</code></td><td>Index after / before <code>n</code>, useful for sparse collections</td></tr>
+        <tr><td><code>EXISTS(n)</code></td><td>TRUE if element at index <code>n</code> exists</td></tr>
+        <tr><td><code>EXTEND</code></td><td>Adds one (or n) elements — nested tables &amp; varrays only</td></tr>
+        <tr><td><code>TRIM</code></td><td>Removes elements from the end</td></tr>
+        <tr><td><code>DELETE(n)</code></td><td>Removes element at index <code>n</code> (or all elements)</td></tr>
+      </table>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">17_collection_api.sql</span></div>
+        <pre><span class="kw">DECLARE</span>
+  <span class="kw">TYPE</span> t_ids <span class="kw">IS TABLE OF NUMBER</span>;
+  v_ids t_ids := t_ids(10, 20, 30);
+<span class="kw">BEGIN</span>
+  v_ids.<span class="kw">DELETE</span>(2);  <span class="cm">-- creates a sparse collection: index 2 is gone</span>
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Exists(2)? '</span> || <span class="kw">CASE WHEN</span> v_ids.<span class="kw">EXISTS</span>(2) <span class="kw">THEN</span> <span class="str">'Y'</span> <span class="kw">ELSE</span> <span class="str">'N'</span> <span class="kw">END</span>);
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Count: '</span> || v_ids.<span class="kw">COUNT</span> || <span class="str">', Last: '</span> || v_ids.<span class="kw">LAST</span>);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Exists(2)? N<br>Count: 2, Last: 3<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- UNIT III -->
+  <!-- ================================================================ -->
+  <section class="unit" id="unit3">
+    <div class="unit-tag">Unit III</div>
+    <h2>Functions and Procedures</h2>
+    <p class="unit-desc">The full architecture of named PL/SQL program units, every notation style for calling them, and the pass-by-value vs pass-by-reference distinction that decides whether a subroutine can affect a caller's variables directly.</p>
+
+    <div class="topic" id="u3-arch">
+      <h3><span class="num">3.1</span> Function &amp; Procedure Architecture, Transaction Scope</h3>
+      <p>A named subroutine is compiled once and stored in the database as its own object (unlike an anonymous block). Its structure mirrors a block: header (name + parameters, plus <code>RETURN</code> type for functions), declaration section, body, and optional exception section. Like any DML inside a block, statements inside a subroutine participate in the caller's transaction unless the subroutine is marked <code>PRAGMA AUTONOMOUS_TRANSACTION</code>, which starts an independent transaction that commits or rolls back on its own.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">18_autonomous_txn.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> log_audit(p_table <span class="kw">VARCHAR2</span>, p_op <span class="kw">VARCHAR2</span>)
+<span class="kw">IS</span>
+  <span class="kw">PRAGMA AUTONOMOUS_TRANSACTION</span>;  <span class="cm">-- commits independently of the caller</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">INSERT INTO</span> audit_log(table_name, operation) <span class="kw">VALUES</span>(p_table, p_op);
+  <span class="kw">COMMIT</span>;
+<span class="kw">END</span> log_audit;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Procedure created.</span></div>
+      </div>
+      <div class="note"><b>Why it matters:</b> without the pragma, a <code>ROLLBACK</code> in the caller would also erase the audit row you're trying to guarantee gets written.</div>
+    </div>
+
+    <div class="topic" id="u3-notation">
+      <h3><span class="num">3.2</span> Calling Subroutines — Every Notation Style</h3>
+      <p>Oracle supports five ways to pass arguments to a subroutine.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">19_notation_styles.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> hire_employee(
+  p_name    <span class="kw">IN VARCHAR2</span>,
+  p_dept    <span class="kw">IN NUMBER</span> <span class="kw">DEFAULT</span> 10,
+  p_title   <span class="kw">IN VARCHAR2 DEFAULT</span> <span class="str">'Associate'</span>,
+  p_salary  <span class="kw">IN NUMBER DEFAULT</span> 45000
+) <span class="kw">IS BEGIN</span>
+  <span class="kw">INSERT INTO</span> employees(emp_id, emp_name, dept_id, job_title, salary)
+  <span class="kw">VALUES</span>(employees_seq.<span class="kw">NEXTVAL</span>, p_name, p_dept, p_title, p_salary);
+<span class="kw">END</span>;
+/
+
+<span class="kw">BEGIN</span>
+  <span class="cm">-- Positional: order must match the header exactly</span>
+  hire_employee(<span class="str">'A. Rao'</span>, 20, <span class="str">'Analyst'</span>, 52000);
+
+  <span class="cm">-- Named: order-independent, self-documenting</span>
+  hire_employee(p_name =&gt; <span class="str">'B. Iyer'</span>, p_salary =&gt; 60000, p_dept =&gt; 30);
+
+  <span class="cm">-- Mixed: positional first, named after</span>
+  hire_employee(<span class="str">'C. Verma'</span>, p_title =&gt; <span class="str">'Lead'</span>);
+
+  <span class="cm">-- Exclusionary: simply omit a parameter that has a DEFAULT</span>
+  hire_employee(<span class="str">'D. Singh'</span>);  <span class="cm">-- dept/title/salary all fall back to defaults</span>
+<span class="kw">END</span>;
+/
+
+<span class="cm">-- SQL Call Notation: invoking a function directly from a SQL statement</span>
+<span class="kw">SELECT</span> emp_name, get_annual_pay(emp_id) <span class="kw">AS</span> annual_pay
+<span class="kw">FROM</span> employees <span class="kw">WHERE</span> dept_id = 20;</pre>
+        <div class="out">SQL&gt; <span class="ok">Procedure created.</span><br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u3-model">
+      <h3><span class="num">3.3</span> Function Model Choices</h3>
+      <p>A function isn't always a simple "one call in, one value out" — Oracle offers three shapes depending on what the caller needs. A <b>scalar (normal) function</b> returns one value per call. A <b>pipelined table function</b> streams rows back as they're produced, so it can be queried like a table with <code>TABLE(...)</code> — useful when transforming or generating large result sets. An <b>aggregate function</b> (built with <code>ODCIAggregate</code> interfaces) participates in <code>GROUP BY</code> like <code>SUM</code> or <code>AVG</code>. The choice depends on whether the result is a single scalar, a row set, or a per-group aggregate.</p>
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 4 — Function Model Choices</div>
+        <svg viewBox="0 0 900 150" xmlns="http://www.w3.org/2000/svg">
+          <rect x="30" y="20" width="250" height="100" rx="8" style="fill:var(--panel2);stroke:var(--teal);stroke-width:1.5"></rect>
+          <text x="155" y="45" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--teal)">Scalar Function</text>
+          <text x="155" y="66" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">get_annual_pay(p_id)</text>
+          <text x="155" y="82" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">RETURNS one NUMBER</text>
+          <text x="155" y="100" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">used in SELECT / WHERE</text>
+
+          <rect x="325" y="20" width="250" height="100" rx="8" style="fill:var(--panel2);stroke:var(--amber);stroke-width:1.5"></rect>
+          <text x="450" y="45" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--amber)">Pipelined Table Function</text>
+          <text x="450" y="66" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">PIPE ROW(...) per iteration</text>
+          <text x="450" y="82" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">streams rows as produced</text>
+          <text x="450" y="100" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">queried via TABLE(fn(...))</text>
+
+          <rect x="620" y="20" width="250" height="100" rx="8" style="fill:var(--panel2);stroke:var(--red);stroke-width:1.5"></rect>
+          <text x="745" y="45" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--red)">Aggregate Function</text>
+          <text x="745" y="66" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">ODCIAggregate interfaces</text>
+          <text x="745" y="82" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">one value per GROUP BY group</text>
+          <text x="745" y="100" text-anchor="middle" font-size="9.5" style="fill:var(--muted)">used like SUM(), AVG()</text>
+        </svg>
+      </div>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">19b_pipelined_function.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE TYPE</span> t_num_row <span class="kw">IS TABLE OF NUMBER</span>;
+/
+
+<span class="cm">-- pipelined table function: streams each department's total payroll</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> dept_payroll_totals <span class="kw">RETURN</span> t_num_row <span class="kw">PIPELINED IS</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">FOR</span> r <span class="kw">IN</span> (<span class="kw">SELECT</span> dept_id, <span class="kw">SUM</span>(salary) <span class="kw">AS</span> total <span class="kw">FROM</span> employees <span class="kw">GROUP BY</span> dept_id) <span class="kw">LOOP</span>
+    PIPE ROW(r.total);
+  <span class="kw">END LOOP</span>;
+  <span class="kw">RETURN</span>;
+<span class="kw">END</span>;
+/
+
+<span class="cm">-- query it exactly like a table</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM TABLE</span>(dept_payroll_totals());</pre>
+        <div class="out">SQL&gt; <span class="ok">Function created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u3-func">
+      <h3><span class="num">3.4</span> Functions — Creation Options, Pass-by-Value vs Pass-by-Reference</h3>
+      <p>A function's parameters can be <code>IN</code> (pass-by-value — default for scalars), <code>OUT</code>, or <code>IN OUT</code>. Scalar <code>IN</code> parameters are copied in (pass-by-value); large structures like records or collections can be passed with <code>NOCOPY</code> to hint the compiler toward pass-by-reference for performance. Creation options include <code>DETERMINISTIC</code> (safe to cache — same inputs always give same output) and <code>PARALLEL_ENABLE</code>.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">20_function_options.sql</span></div>
+        <pre><span class="cm">-- Pass-by-value IN parameter; DETERMINISTIC lets Oracle cache repeat calls</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> apply_tax(p_amount <span class="kw">IN NUMBER</span>)
+  <span class="kw">RETURN NUMBER</span> <span class="kw">DETERMINISTIC</span>
+<span class="kw">IS BEGIN</span>
+  <span class="kw">RETURN ROUND</span>(p_amount * 1.18, 2);
+<span class="kw">END</span>;
+/
+
+<span class="cm">-- NOCOPY hints pass-by-reference for a large collection parameter</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> total_of(p_amounts <span class="kw">IN NOCOPY</span> t_id_list)
+  <span class="kw">RETURN NUMBER</span>
+<span class="kw">IS</span>
+  v_total <span class="kw">NUMBER</span> := 0;
+<span class="kw">BEGIN</span>
+  <span class="kw">FOR</span> i <span class="kw">IN</span> 1..p_amounts.<span class="kw">COUNT</span> <span class="kw">LOOP</span>
+    v_total := v_total + p_amounts(i);
+  <span class="kw">END LOOP</span>;
+  <span class="kw">RETURN</span> v_total;
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Function created.</span> (x2)</div>
+      </div>
+      <div class="note"><b>NOCOPY is a hint, not a guarantee</b> — Oracle may still copy the parameter if an exception could leave it in an inconsistent state.</div>
+    </div>
+
+    <div class="topic" id="u3-proc">
+      <h3><span class="num">3.5</span> Procedures — Pass-by-Value vs Pass-by-Reference</h3>
+      <p><code>IN</code> parameters are pass-by-value (the procedure gets a copy). <code>OUT</code> and <code>IN OUT</code> parameters behave like pass-by-reference — changes are written back to the caller's variable when the procedure completes successfully.</p>
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 5 — Parameter Modes: Value vs Reference Flow</div>
+        <svg viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:var(--muted)"></path></marker>
+          </defs>
+          <rect x="360" y="60" width="160" height="70" rx="8" style="fill:var(--panel2);stroke:var(--text);stroke-width:1.5"></rect>
+          <text x="440" y="100" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--text)">process_order</text>
+
+          <text x="40" y="55" font-size="11" font-weight="600" style="fill:var(--teal)">IN — pass-by-value</text>
+          <path d="M40,68 L358,90" style="stroke:var(--teal);stroke-width:1.5;fill:none" marker-end="url(#arrow2)"></path>
+          <text x="40" y="82" font-size="9.5" style="fill:var(--muted)">p_qty, p_unit_price copied in;</text>
+          <text x="40" y="96" font-size="9.5" style="fill:var(--muted)">caller's originals can't change</text>
+
+          <text x="640" y="55" font-size="11" font-weight="600" style="fill:var(--amber)">OUT — pass-by-reference</text>
+          <path d="M522,92 L700,68" style="stroke:var(--amber);stroke-width:1.5;fill:none" marker-end="url(#arrow2)"></path>
+          <text x="640" y="82" font-size="9.5" style="fill:var(--muted)">p_total written back to the</text>
+          <text x="640" y="96" font-size="9.5" style="fill:var(--muted)">caller's variable on success</text>
+
+          <text x="640" y="140" font-size="11" font-weight="600" style="fill:var(--red)">IN OUT — read + write reference</text>
+          <path d="M700,132 L522,110" style="stroke:var(--red);stroke-width:1.5;fill:none" marker-end="url(#arrow2)"></path>
+          <path d="M522,116 L700,150" style="stroke:var(--red);stroke-width:1.5;fill:none" marker-end="url(#arrow2)"></path>
+          <text x="640" y="168" font-size="9.5" style="fill:var(--muted)">p_status goes in, comes back changed</text>
+        </svg>
+      </div>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">21_procedure_params.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> process_order(
+  p_qty        <span class="kw">IN NUMBER</span>,               <span class="cm">-- pass-by-value: copy in</span>
+  p_unit_price <span class="kw">IN NUMBER</span>,
+  p_total      <span class="kw">OUT NUMBER</span>,             <span class="cm">-- pass-by-reference: written back on exit</span>
+  p_status     <span class="kw">IN OUT VARCHAR2</span>          <span class="cm">-- pass-by-reference: read AND written</span>
+) <span class="kw">IS BEGIN</span>
+  p_total  := p_qty * p_unit_price;
+  p_status := p_status || <span class="str">' -> PROCESSED'</span>;
+<span class="kw">END</span>;
+/
+
+<span class="kw">DECLARE</span>
+  v_total  <span class="kw">NUMBER</span>;
+  v_status <span class="kw">VARCHAR2</span>(40) := <span class="str">'NEW'</span>;
+<span class="kw">BEGIN</span>
+  process_order(5, 199.99, v_total, v_status);
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'Total: '</span> || v_total || <span class="str">' | Status: '</span> || v_status);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Total: 999.95 | Status: NEW -&gt; PROCESSED<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u3-scripts">
+      <h3><span class="num">3.6</span> Supporting Scripts</h3>
+      <p>Development scripts that aren't part of the application logic itself but are essential to build and verify it: sequence generators, source verification queries, and grants.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">22_supporting_scripts.sql</span></div>
+        <pre><span class="kw">CREATE SEQUENCE</span> employees_seq <span class="kw">START WITH</span> 1000 <span class="kw">INCREMENT BY</span> 1;
+
+<span class="cm">-- verify a subroutine compiled cleanly</span>
+<span class="kw">SELECT</span> object_name, status <span class="kw">FROM</span> user_objects
+<span class="kw">WHERE</span> object_type <span class="kw">IN</span> (<span class="str">'FUNCTION'</span>,<span class="str">'PROCEDURE'</span>) <span class="kw">AND</span> object_name = <span class="str">'HIRE_EMPLOYEE'</span>;
+
+<span class="cm">-- inspect compile errors when status = INVALID</span>
+<span class="kw">SHOW ERRORS PROCEDURE</span> hire_employee;
+
+<span class="kw">GRANT EXECUTE ON</span> hire_employee <span class="kw">TO</span> hr_app_role;</pre>
+        <div class="out">SQL&gt; <span class="ok">Sequence created.</span><br>OBJECT_NAME&nbsp;&nbsp;&nbsp;&nbsp;STATUS<br>HIRE_EMPLOYEE&nbsp;&nbsp;VALID</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- UNIT IV -->
+  <!-- ================================================================ -->
+  <section class="unit" id="unit4">
+    <div class="unit-tag">Unit IV</div>
+    <h2>Packages</h2>
+    <p class="unit-desc">Grouping related logic into a single named, versioned unit — built around an inventory-management package so the specification/body split and rights model have a real workload behind them.</p>
+
+    <div class="topic" id="u4-arch">
+      <h3><span class="num">4.1</span> Package Architecture</h3>
+      <p>A package always has two parts compiled and stored separately: the <b>specification</b> (public interface — what callers see) and the <b>body</b> (private implementation). The body can change without invalidating objects that depend only on the spec, as long as the spec itself doesn't change.</p>
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 6 — Package Specification vs Package Body</div>
+        <svg viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg">
+          <text x="30" y="24" font-size="12" font-weight="600" style="fill:var(--muted)">caller</text>
+          <rect x="20" y="80" width="90" height="40" rx="6" style="fill:var(--panel2);stroke:var(--muted)"></rect>
+          <text x="65" y="104" text-anchor="middle" font-size="10" style="fill:var(--text)">app code</text>
+
+          <rect x="170" y="30" width="270" height="150" rx="10" style="fill:var(--panel2);stroke:var(--teal);stroke-width:1.5"></rect>
+          <text x="305" y="52" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--teal)">PACKAGE SPEC (public)</text>
+          <text x="190" y="76" font-size="10" style="fill:var(--text)">get_stock(product_id)</text>
+          <text x="190" y="94" font-size="10" style="fill:var(--text)">restock(product_id, qty)</text>
+          <text x="190" y="112" font-size="10" style="fill:var(--text)">ship_order(product_id, qty)</text>
+          <text x="190" y="132" font-size="10" style="fill:var(--muted)">g_low_stock_threshold</text>
+          <text x="190" y="150" font-size="10" style="fill:var(--muted)">e_insufficient_stock</text>
+          <text x="190" y="168" font-size="9" style="fill:var(--muted)">signatures only — no code</text>
+
+          <rect x="490" y="30" width="270" height="150" rx="10" style="fill:var(--panel2);stroke:var(--amber);stroke-width:1.5"></rect>
+          <text x="625" y="52" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--amber)">PACKAGE BODY (private)</text>
+          <text x="510" y="76" font-size="10" style="fill:var(--text)">full implementation of each</text>
+          <text x="510" y="92" font-size="10" style="fill:var(--text)">spec subprogram</text>
+          <text x="510" y="114" font-size="10" style="fill:var(--red)">log_movement(...)</text>
+          <text x="510" y="130" font-size="9" style="fill:var(--muted)">private helper — invisible</text>
+          <text x="510" y="144" font-size="9" style="fill:var(--muted)">outside this body</text>
+          <text x="510" y="166" font-size="9" style="fill:var(--muted)">can change freely without</text>
+          <text x="510" y="180" font-size="9" style="fill:var(--muted)">invalidating callers</text>
+
+          <path d="M110,100 L170,100" style="stroke:var(--muted);stroke-width:1.5;fill:none" marker-end="url(#arrow1)"></path>
+          <path d="M440,100 L490,100" style="stroke:var(--border);stroke-width:1.5;stroke-dasharray:4 3;fill:none"></path>
+          <text x="443" y="94" font-size="9" style="fill:var(--muted)">implements</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topic" id="u4-spec">
+      <h3><span class="num">4.2</span> Package Specification — Prototype Features, Serially Reusable, Variables &amp; Types</h3>
+      <p>The spec declares public constants, variables, types, exceptions, and subprogram <b>prototypes</b> (signature only — no body). <code>PRAGMA SERIALLY_REUSABLE</code> tells Oracle to reset package state after each call instead of keeping it for the whole session — useful for packages that shouldn't leak state between unrelated callers.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">23_inventory_pkg_spec.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE PACKAGE</span> inventory_pkg <span class="kw">IS</span>
+
+  <span class="cm">-- PRAGMA SERIALLY_REUSABLE;  -- uncomment to reset state after every call</span>
+
+  <span class="cm">-- public type &amp; variable</span>
+  <span class="kw">TYPE</span> t_stock_rec <span class="kw">IS RECORD</span> (product_id <span class="kw">NUMBER</span>, qty <span class="kw">NUMBER</span>);
+  g_low_stock_threshold <span class="kw">CONSTANT NUMBER</span> := 20;
+
+  <span class="cm">-- public exception</span>
+  e_insufficient_stock <span class="kw">EXCEPTION</span>;
+
+  <span class="cm">-- subprogram prototypes only -- bodies live in the package body</span>
+  <span class="kw">FUNCTION</span> get_stock(p_product_id <span class="kw">NUMBER</span>) <span class="kw">RETURN NUMBER</span>;
+  <span class="kw">PROCEDURE</span> restock(p_product_id <span class="kw">NUMBER</span>, p_qty <span class="kw">NUMBER</span>);
+  <span class="kw">PROCEDURE</span> ship_order(p_product_id <span class="kw">NUMBER</span>, p_qty <span class="kw">NUMBER</span>);
+
+<span class="kw">END</span> inventory_pkg;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Package created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u4-body">
+      <h3><span class="num">4.3</span> Package Body — Implementation of Every Component</h3>
+      <p>The body supplies the full implementation for each prototype and may add its own private variables, types, and helper subprograms invisible to callers.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">24_inventory_pkg_body.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE PACKAGE BODY</span> inventory_pkg <span class="kw">IS</span>
+
+  <span class="cm">-- private helper, not visible outside this body</span>
+  <span class="kw">PROCEDURE</span> log_movement(p_product_id <span class="kw">NUMBER</span>, p_op <span class="kw">VARCHAR2</span>) <span class="kw">IS</span>
+  <span class="kw">BEGIN</span>
+    <span class="kw">INSERT INTO</span> audit_log(table_name, operation, new_value)
+    <span class="kw">VALUES</span>(<span class="str">'PRODUCTS'</span>, p_op, <span class="str">'product_id='</span> || p_product_id);
+  <span class="kw">END</span>;
+
+  <span class="kw">FUNCTION</span> get_stock(p_product_id <span class="kw">NUMBER</span>) <span class="kw">RETURN NUMBER IS</span>
+    v_qty <span class="kw">NUMBER</span>;
+  <span class="kw">BEGIN</span>
+    <span class="kw">SELECT</span> qty_on_hand <span class="kw">INTO</span> v_qty <span class="kw">FROM</span> products <span class="kw">WHERE</span> product_id = p_product_id;
+    <span class="kw">RETURN</span> v_qty;
+  <span class="kw">END</span>;
+
+  <span class="kw">PROCEDURE</span> restock(p_product_id <span class="kw">NUMBER</span>, p_qty <span class="kw">NUMBER</span>) <span class="kw">IS BEGIN</span>
+    <span class="kw">UPDATE</span> products <span class="kw">SET</span> qty_on_hand = qty_on_hand + p_qty <span class="kw">WHERE</span> product_id = p_product_id;
+    log_movement(p_product_id, <span class="str">'RESTOCK'</span>);
+  <span class="kw">END</span>;
+
+  <span class="kw">PROCEDURE</span> ship_order(p_product_id <span class="kw">NUMBER</span>, p_qty <span class="kw">NUMBER</span>) <span class="kw">IS</span>
+    v_available <span class="kw">NUMBER</span>;
+  <span class="kw">BEGIN</span>
+    v_available := get_stock(p_product_id);
+    <span class="kw">IF</span> v_available &lt; p_qty <span class="kw">THEN</span>
+      <span class="kw">RAISE</span> e_insufficient_stock;
+    <span class="kw">END IF</span>;
+    <span class="kw">UPDATE</span> products <span class="kw">SET</span> qty_on_hand = qty_on_hand - p_qty <span class="kw">WHERE</span> product_id = p_product_id;
+    log_movement(p_product_id, <span class="str">'SHIP'</span>);
+    <span class="kw">IF</span> get_stock(p_product_id) &lt; g_low_stock_threshold <span class="kw">THEN</span>
+      DBMS_OUTPUT.PUT_LINE(<span class="str">'Warning: product '</span> || p_product_id || <span class="str">' is low on stock.'</span>);
+    <span class="kw">END IF</span>;
+  <span class="kw">EXCEPTION</span>
+    <span class="kw">WHEN</span> e_insufficient_stock <span class="kw">THEN</span>
+      RAISE_APPLICATION_ERROR(-20010, <span class="str">'Not enough stock to ship this order.'</span>);
+  <span class="kw">END</span>;
+
+<span class="kw">END</span> inventory_pkg;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Package Body created.</span></div>
+      </div>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">call_inventory_pkg.sql</span></div>
+        <pre><span class="kw">BEGIN</span>
+  inventory_pkg.restock(1, 15);
+  inventory_pkg.ship_order(1, 5);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">Warning: product 1 is low on stock.<br>SQL&gt; <span class="ok">PL/SQL procedure successfully completed.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u4-rights">
+      <h3><span class="num">4.4</span> Definer Rights vs Invoker Rights</h3>
+      <p>By default a package runs with <b>definer rights</b> — it executes with the privileges of whoever owns it, regardless of who calls it. Adding <code>AUTHID CURRENT_USER</code> switches to <b>invoker rights</b> — the package runs with the caller's own privileges, and unqualified table references resolve in the caller's schema. Payroll code that must always touch a fixed schema uses definer rights; a shared utility meant to act on each caller's own data uses invoker rights.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">25_invoker_rights.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE PACKAGE</span> payroll_utils <span class="kw">AUTHID CURRENT_USER IS</span>
+  <span class="kw">FUNCTION</span> my_dept_total <span class="kw">RETURN NUMBER</span>;  <span class="cm">-- resolves EMPLOYEES against the caller's own schema</span>
+<span class="kw">END</span> payroll_utils;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Package created.</span></div>
+      </div>
+      <table class="tbl">
+        <tr><th></th><th>Definer Rights (default)</th><th>Invoker Rights (<code>AUTHID CURRENT_USER</code>)</th></tr>
+        <tr><td>Runs with</td><td>Owner's privileges</td><td>Caller's privileges</td></tr>
+        <tr><td>Unqualified table names resolve to</td><td>Owner's schema</td><td>Caller's schema</td></tr>
+        <tr><td>Typical use</td><td>Central payroll/ERP logic</td><td>Shared utility acting per-caller</td></tr>
+      </table>
+
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 7 — Definer Rights vs Invoker Rights</div>
+        <svg viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg">
+          <text x="220" y="24" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--teal)">DEFINER RIGHTS (default)</text>
+          <rect x="80" y="40" width="120" height="46" rx="6" style="fill:var(--panel2);stroke:var(--muted)"></rect>
+          <text x="140" y="67" text-anchor="middle" font-size="10" style="fill:var(--text)">Caller A</text>
+          <rect x="240" y="40" width="120" height="46" rx="6" style="fill:var(--panel2);stroke:var(--muted)"></rect>
+          <text x="300" y="67" text-anchor="middle" font-size="10" style="fill:var(--text)">Caller B</text>
+          <path d="M140,86 L220,120" style="stroke:var(--teal);stroke-width:1.4;fill:none" marker-end="url(#arrow1)"></path>
+          <path d="M300,86 L220,120" style="stroke:var(--teal);stroke-width:1.4;fill:none" marker-end="url(#arrow1)"></path>
+          <rect x="140" y="120" width="160" height="46" rx="6" style="fill:var(--panel2);stroke:var(--teal);stroke-width:1.5"></rect>
+          <text x="220" y="140" text-anchor="middle" font-size="10" font-weight="600" style="fill:var(--teal)">payroll_utils</text>
+          <text x="220" y="156" text-anchor="middle" font-size="9" style="fill:var(--muted)">always runs as OWNER</text>
+
+          <text x="660" y="24" text-anchor="middle" font-size="12" font-weight="600" style="fill:var(--amber)">INVOKER RIGHTS</text>
+          <rect x="520" y="40" width="120" height="46" rx="6" style="fill:var(--panel2);stroke:var(--muted)"></rect>
+          <text x="580" y="67" text-anchor="middle" font-size="10" style="fill:var(--text)">Caller A</text>
+          <rect x="680" y="40" width="120" height="46" rx="6" style="fill:var(--panel2);stroke:var(--muted)"></rect>
+          <text x="740" y="67" text-anchor="middle" font-size="10" style="fill:var(--text)">Caller B</text>
+          <path d="M580,86 L580,120" style="stroke:var(--amber);stroke-width:1.4;fill:none" marker-end="url(#arrow1)"></path>
+          <path d="M740,86 L740,120" style="stroke:var(--amber);stroke-width:1.4;fill:none" marker-end="url(#arrow1)"></path>
+          <rect x="520" y="120" width="120" height="46" rx="6" style="fill:var(--panel2);stroke:var(--amber);stroke-width:1.5"></rect>
+          <text x="580" y="140" text-anchor="middle" font-size="9.5" font-weight="600" style="fill:var(--amber)">runs as A</text>
+          <text x="580" y="156" text-anchor="middle" font-size="8.5" style="fill:var(--muted)">sees A's schema</text>
+          <rect x="680" y="120" width="120" height="46" rx="6" style="fill:var(--panel2);stroke:var(--amber);stroke-width:1.5"></rect>
+          <text x="740" y="140" text-anchor="middle" font-size="9.5" font-weight="600" style="fill:var(--amber)">runs as B</text>
+          <text x="740" y="156" text-anchor="middle" font-size="8.5" style="fill:var(--muted)">sees B's schema</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topic" id="u4-catalog">
+      <h3><span class="num">4.5</span> Managing Packages in the Database Catalog — Finding, Validating, Describing, Dependencies</h3>
+      <p>The data dictionary tracks every package's status and dependency graph, which matters when a change to one object can silently invalidate another.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">26_catalog_management.sql</span></div>
+        <pre><span class="cm">-- Finding packages</span>
+<span class="kw">SELECT</span> object_name, object_type, status
+<span class="kw">FROM</span> user_objects <span class="kw">WHERE</span> object_type <span class="kw">LIKE</span> <span class="str">'PACKAGE%'</span>;
+
+<span class="cm">-- Validating -- recompile if INVALID</span>
+<span class="kw">ALTER PACKAGE</span> inventory_pkg <span class="kw">COMPILE</span>;
+<span class="kw">ALTER PACKAGE</span> inventory_pkg <span class="kw">COMPILE BODY</span>;
+
+<span class="cm">-- Describing a package's public interface</span>
+<span class="kw">DESCRIBE</span> inventory_pkg;
+
+<span class="cm">-- Checking dependencies -- what breaks if PRODUCTS changes?</span>
+<span class="kw">SELECT</span> name, type <span class="kw">FROM</span> user_dependencies
+<span class="kw">WHERE</span> referenced_name = <span class="str">'PRODUCTS'</span>;</pre>
+        <div class="out">OBJECT_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OBJECT_TYPE&nbsp;&nbsp;&nbsp;STATUS<br>INVENTORY_PKG&nbsp;&nbsp;PACKAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALID<br>INVENTORY_PKG&nbsp;&nbsp;PACKAGE BODY&nbsp;VALID</div>
+      </div>
+    </div>
+
+    <div class="topic" id="u4-valid">
+      <h3><span class="num">4.6</span> Comparing Validation Methods: Timestamp vs Signature</h3>
+      <p>Oracle can revalidate dependent objects using either method. <b>Timestamp</b> mode invalidates any dependent whenever the referenced object recompiles, even if nothing meaningful changed. <b>Signature</b> mode only invalidates dependents if the actual call signature (parameter names, types, order) changed — recompiling a package body that keeps the same spec signature won't cascade-invalidate its callers.</p>
+      <table class="tbl">
+        <tr><th>Method</th><th>Invalidates dependents when...</th><th>Set via</th></tr>
+        <tr><td>Timestamp (default)</td><td>Referenced object recompiles at all</td><td><code>REMOTE_DEPENDENCIES_MODE = TIMESTAMP</code></td></tr>
+        <tr><td>Signature</td><td>Only when the actual signature changes</td><td><code>REMOTE_DEPENDENCIES_MODE = SIGNATURE</code></td></tr>
+      </table>
+      <div class="note"><b>Practical effect:</b> signature mode is friendlier during active development on shared packages — cosmetic body edits won't force every dependent PL/SQL unit to recompile.</div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- UNIT V -->
+  <!-- ================================================================ -->
+  <section class="unit" id="unit5">
+    <div class="unit-tag">Unit V</div>
+    <h2>Triggers</h2>
+    <p class="unit-desc">Event-driven PL/SQL blocks that fire on DDL, DML, or system/database events — built around <code>audit_log</code> so every trigger in this unit produces a real, inspectable audit trail.</p>
+
+    <div class="topic" id="u5-intro">
+      <h3><span class="num">5.1</span> Introduction to Triggers &amp; Database Trigger Architecture</h3>
+      <p>A trigger is stored PL/SQL that fires automatically in response to a <b>timing</b> (<code>BEFORE</code>/<code>AFTER</code>/<code>INSTEAD OF</code>), an <b>event</b> (<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>/DDL/system event), and a <b>target</b> (table, view, schema, or database). It has no parameters and cannot be called directly — the event is its only invocation path.</p>
+      <div class="diagram-wrap">
+        <div class="diagram-title">Fig. 8 — Trigger Firing Sequence for an UPDATE Touching 3 Rows</div>
+        <svg viewBox="0 0 900 170" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="90" x2="860" y2="90" style="stroke:var(--border);stroke-width:2"></line>
+
+          <circle cx="90" cy="90" r="7" style="fill:var(--teal)"></circle>
+          <text x="90" y="60" text-anchor="middle" font-size="10" font-weight="600" style="fill:var(--teal)">BEFORE STATEMENT</text>
+          <text x="90" y="118" text-anchor="middle" font-size="9" style="fill:var(--muted)">fires once</text>
+
+          <circle cx="260" cy="90" r="6" style="fill:var(--amber)"></circle>
+          <circle cx="330" cy="90" r="6" style="fill:var(--amber)"></circle>
+          <circle cx="400" cy="90" r="6" style="fill:var(--amber)"></circle>
+          <text x="330" y="60" text-anchor="middle" font-size="10" font-weight="600" style="fill:var(--amber)">BEFORE EACH ROW</text>
+          <text x="330" y="118" text-anchor="middle" font-size="9" style="fill:var(--muted)">fires 3× — once per row, before the change</text>
+
+          <circle cx="500" cy="90" r="6" style="fill:var(--red)"></circle>
+          <circle cx="570" cy="90" r="6" style="fill:var(--red)"></circle>
+          <circle cx="640" cy="90" r="6" style="fill:var(--red)"></circle>
+          <text x="570" y="60" text-anchor="middle" font-size="10" font-weight="600" style="fill:var(--red)">AFTER EACH ROW</text>
+          <text x="570" y="118" text-anchor="middle" font-size="9" style="fill:var(--muted)">fires 3× — :NEW / :OLD available here</text>
+
+          <circle cx="800" cy="90" r="7" style="fill:var(--teal)"></circle>
+          <text x="800" y="60" text-anchor="middle" font-size="10" font-weight="600" style="fill:var(--teal)">AFTER STATEMENT</text>
+          <text x="800" y="118" text-anchor="middle" font-size="9" style="fill:var(--muted)">fires once</text>
+
+          <text x="40" y="150" font-size="9.5" style="fill:var(--muted)">A compound trigger (§5.4) shares one PL/SQL state variable across all four of these sections for a single statement.</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topic" id="u5-ddl">
+      <h3><span class="num">5.2</span> DDL Triggers — Event Attribute Functions &amp; Building One</h3>
+      <p>DDL triggers fire on <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, etc. Inside the trigger body, <b>event attribute functions</b> like <code>ORA_SYSEVENT</code>, <code>ORA_DICT_OBJ_NAME</code>, and <code>ORA_DICT_OBJ_TYPE</code> report exactly what happened.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">27_ddl_trigger.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE TRIGGER</span> trg_audit_ddl
+  <span class="kw">BEFORE DDL ON SCHEMA</span>
+<span class="kw">DECLARE</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">INSERT INTO</span> audit_log(table_name, operation, new_value)
+  <span class="kw">VALUES</span>(ORA_DICT_OBJ_NAME, ORA_SYSEVENT, <span class="str">'obj_type='</span> || ORA_DICT_OBJ_TYPE);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Trigger created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u5-dml">
+      <h3><span class="num">5.3</span> DML Triggers — Statement-Level vs Row-Level</h3>
+      <p>A <b>statement-level</b> trigger fires once per triggering statement regardless of rows affected. A <b>row-level</b> trigger (<code>FOR EACH ROW</code>) fires once per affected row and exposes <code>:OLD</code> and <code>:NEW</code> pseudorecords — essential for column-level auditing.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">28_row_level_trigger.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE TRIGGER</span> trg_salary_audit
+  <span class="kw">AFTER UPDATE OF</span> salary <span class="kw">ON</span> employees
+  <span class="kw">FOR EACH ROW</span>              <span class="cm">-- row-level: fires per changed row</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">INSERT INTO</span> audit_log(table_name, operation, old_value, new_value)
+  <span class="kw">VALUES</span>(<span class="str">'EMPLOYEES'</span>, <span class="str">'UPDATE'</span>, :<span class="kw">OLD</span>.salary, :<span class="kw">NEW</span>.salary);
+<span class="kw">END</span>;
+/
+
+<span class="kw">CREATE OR REPLACE TRIGGER</span> trg_bulk_update_notice
+  <span class="kw">AFTER UPDATE ON</span> employees   <span class="cm">-- statement-level: fires once total</span>
+<span class="kw">BEGIN</span>
+  DBMS_OUTPUT.PUT_LINE(<span class="str">'An UPDATE statement touched the EMPLOYEES table.'</span>);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Trigger created.</span> (x2)</div>
+      </div>
+    </div>
+
+    <div class="topic" id="u5-compound">
+      <h3><span class="num">5.4</span> Compound Triggers</h3>
+      <p>A <b>compound trigger</b> combines all four timing points — <code>BEFORE STATEMENT</code>, <code>BEFORE EACH ROW</code>, <code>AFTER EACH ROW</code>, <code>AFTER STATEMENT</code> — in a single trigger body sharing state, which is the standard fix for the mutating-table error you'd otherwise hit when a row-level trigger tries to query the table it's firing on.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">29_compound_trigger.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE TRIGGER</span> trg_dept_salary_cap
+  <span class="kw">FOR UPDATE OF</span> salary <span class="kw">ON</span> employees
+<span class="kw">COMPOUND TRIGGER</span>
+
+  v_dept_total <span class="kw">NUMBER</span> := 0;
+
+  <span class="kw">BEFORE STATEMENT IS BEGIN</span>
+    v_dept_total := 0;
+  <span class="kw">END BEFORE STATEMENT</span>;
+
+  <span class="kw">AFTER EACH ROW IS BEGIN</span>
+    v_dept_total := v_dept_total + :<span class="kw">NEW</span>.salary;  <span class="cm">-- safe: reads the shared variable, not the table</span>
+  <span class="kw">END AFTER EACH ROW</span>;
+
+  <span class="kw">AFTER STATEMENT IS BEGIN</span>
+    <span class="kw">IF</span> v_dept_total &gt; 1000000 <span class="kw">THEN</span>
+      DBMS_OUTPUT.PUT_LINE(<span class="str">'Warning: this batch pushed payroll over 10L.'</span>);
+    <span class="kw">END IF</span>;
+  <span class="kw">END AFTER STATEMENT</span>;
+
+<span class="kw">END</span> trg_dept_salary_cap;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Trigger created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u5-instead">
+      <h3><span class="num">5.5</span> INSTEAD OF Triggers</h3>
+      <p><code>INSTEAD OF</code> triggers make a normally non-updatable view (e.g. one joining multiple tables) accept <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> by intercepting the operation and redirecting it to the underlying base tables.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">30_instead_of_trigger.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE VIEW</span> v_employee_directory <span class="kw">AS</span>
+  <span class="kw">SELECT</span> e.emp_id, e.emp_name, d.dept_name
+  <span class="kw">FROM</span> employees e <span class="kw">JOIN</span> departments d <span class="kw">ON</span> e.dept_id = d.dept_id;
+
+<span class="kw">CREATE OR REPLACE TRIGGER</span> trg_directory_insert
+  <span class="kw">INSTEAD OF INSERT ON</span> v_employee_directory
+  <span class="kw">FOR EACH ROW</span>
+<span class="kw">DECLARE</span>
+  v_dept_id departments.dept_id%<span class="kw">TYPE</span>;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> dept_id <span class="kw">INTO</span> v_dept_id <span class="kw">FROM</span> departments <span class="kw">WHERE</span> dept_name = :<span class="kw">NEW</span>.dept_name;
+  <span class="kw">INSERT INTO</span> employees(emp_id, emp_name, dept_id)
+  <span class="kw">VALUES</span>(:<span class="kw">NEW</span>.emp_id, :<span class="kw">NEW</span>.emp_name, v_dept_id);
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">View created.</span><br>SQL&gt; <span class="ok">Trigger created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u5-system">
+      <h3><span class="num">5.6</span> System and Database Event Triggers</h3>
+      <p>These fire on database-level or session-level events rather than DML — logon/logoff, startup/shutdown, or server errors — useful for connection auditing and diagnostics.</p>
+      <div class="term">
+        <div class="term-bar"><span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span><span class="term-label">31_system_event_trigger.sql</span></div>
+        <pre><span class="kw">CREATE OR REPLACE TRIGGER</span> trg_logon_audit
+  <span class="kw">AFTER LOGON ON DATABASE</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">INSERT INTO</span> audit_log(table_name, operation, new_value)
+  <span class="kw">VALUES</span>(<span class="str">'DATABASE'</span>, <span class="str">'LOGON'</span>, SYS_CONTEXT(<span class="str">'USERENV'</span>,<span class="str">'SESSION_USER'</span>));
+<span class="kw">END</span>;
+/</pre>
+        <div class="out">SQL&gt; <span class="ok">Trigger created.</span></div>
+      </div>
+    </div>
+
+    <div class="topic" id="u5-restrict">
+      <h3><span class="num">5.7</span> Trigger Restrictions — Maximum Size, SQL Statements, LONG and LONG RAW</h3>
+      <p>Practical limits and legacy-datatype constraints to design around:</p>
+      <table class="tbl">
+        <tr><th>Restriction</th><th>Detail</th></tr>
+        <tr><td>Maximum trigger size</td><td>32 KB of compiled code — split large logic into a called procedure/package instead</td></tr>
+        <tr><td>Transaction control</td><td><code>COMMIT</code>/<code>ROLLBACK</code>/<code>SAVEPOINT</code> are not allowed inside a row-level trigger body (except via an autonomous transaction)</td></tr>
+        <tr><td>Mutating tables</td><td>A row-level trigger cannot query or modify the table it's firing on directly — use a compound trigger instead</td></tr>
+        <tr><td><code>LONG</code> / <code>LONG RAW</code></td><td>These legacy types cannot be referenced in a trigger's <code>:NEW</code>/<code>:OLD</code> — migrate to <code>CLOB</code>/<code>BLOB</code>, which triggers can reference freely</td></tr>
+      </table>
+      <div class="warn"><b>Common pitfall:</b> a row-level trigger on <code>employees</code> that runs <code>SELECT ... FROM employees</code> raises <code>ORA-04091: table is mutating</code>. Restructure as a compound trigger (Unit 5.4) so the aggregation happens in the shared package-like state instead of a live query against the firing table.</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    SQL&gt; -- End of study guide. Five units, thirty-two worked examples, one running schema.<br>
+    SQL&gt; SELECT 'good luck' FROM dual;
+  </footer>
+
+</main>
+</div>
+
+<script>
+// ---- Theme toggle (in-memory only; page defaults to light on every load) ----
+(function(){
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  btn.addEventListener('click', function(){
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+  });
+})();
+
+// ---- Auto-inject a copy button into every code block's terminal bar ----
+(function(){
+  var copyIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+  var checkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+
+  document.querySelectorAll('.term').forEach(function(term){
+    var bar = term.querySelector('.term-bar');
+    var pre = term.querySelector('pre');
+    if(!bar || !pre) return;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.innerHTML = copyIcon + '<span>Copy</span>';
+    bar.appendChild(btn);
+
+    btn.addEventListener('click', function(){
+      var text = pre.innerText;
+      var done = function(){
+        btn.innerHTML = checkIcon + '<span>Copied</span>';
+        btn.classList.add('copied');
+        setTimeout(function(){
+          btn.innerHTML = copyIcon + '<span>Copy</span>';
+          btn.classList.remove('copied');
+        }, 1600);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(function(){ fallbackCopy(text, done); });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+  });
+
+  function fallbackCopy(text, done){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    done();
+  }
+})();
+</script>
+
+</body>
+</html>
