@@ -1,1163 +1,2234 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Research Methodology & IPR — Complete Study Guide</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Methodology & IPR — Complete Study Guide</title>
 
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
 
-<!-- KaTeX CSS & JS for Math -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- KaTeX CSS & JS for Math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
-<!-- Mermaid.js for Diagrams -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>
-  function renderMath() {
-    if (window.renderMathInElement) {
-      renderMathInElement(document.body, {
-        delimiters: [
-          {left: '$$', right: '$$', display: true},
-          {left: '$', right: '$', display: false},
-          {left: '\\(', right: '\\)', display: false},
-          {left: '\\[', right: '\\]', display: true}
-        ],
-        throwOnError: false
+  <!-- Mermaid.js for Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    function renderMath() {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function initMermaidSources() {
+      document.querySelectorAll('.mermaid').forEach((el, index) => {
+        if (!el.getAttribute('data-raw')) {
+          el.setAttribute('data-raw', el.textContent.trim());
+        }
       });
     }
-  }
 
-  function initMermaidSources() {
-    document.querySelectorAll('.mermaid').forEach((el, index) => {
-      if (!el.getAttribute('data-raw')) {
-        el.setAttribute('data-raw', el.textContent.trim());
-      }
-    });
-  }
+    async function renderMermaidTheme(theme) {
+      initMermaidSources();
+      const isDark = (theme === 'dark');
+      const mTheme = isDark ? 'dark' : 'neutral';
 
-  async function renderMermaidTheme(theme) {
-    initMermaidSources();
-    const isDark = (theme === 'dark');
-    const mTheme = isDark ? 'dark' : 'neutral';
-    
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: mTheme,
-      securityLevel: 'loose',
-      fontFamily: 'IBM Plex Mono, monospace'
-    });
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: mTheme,
+        securityLevel: 'loose',
+        fontFamily: 'IBM Plex Mono, monospace'
+      });
 
-    const nodes = document.querySelectorAll('.mermaid');
-    for (let i = 0; i < nodes.length; i++) {
-      const el = nodes[i];
-      const rawCode = el.getAttribute('data-raw');
-      if (!rawCode) continue;
-      const id = 'svg-mermaid-' + i + '-' + (isDark ? 'dark' : 'light');
-      try {
-        const { svg } = await mermaid.render(id, rawCode);
-        el.innerHTML = svg;
-      } catch (e) {
-        console.warn("Mermaid re-render notice:", e);
+      const nodes = document.querySelectorAll('.mermaid');
+      for (let i = 0; i < nodes.length; i++) {
+        const el = nodes[i];
+        const rawCode = el.getAttribute('data-raw');
+        if (!rawCode) continue;
+        const id = 'svg-mermaid-' + i + '-' + (isDark ? 'dark' : 'light');
+        try {
+          const { svg } = await mermaid.render(id, rawCode);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.warn("Mermaid re-render notice:", e);
+        }
       }
     }
-  }
 
-  document.addEventListener("DOMContentLoaded", function() {
-    initMermaidSources();
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    renderMermaidTheme(savedTheme);
-    renderMath();
-  });
-  window.addEventListener("load", renderMath);
-</script>
+    document.addEventListener("DOMContentLoaded", function () {
+      initMermaidSources();
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      renderMermaidTheme(savedTheme);
+      renderMath();
+    });
+    window.addEventListener("load", renderMath);
+  </script>
 
-<style>
-:root{
-  /* PL/SQL Theme Tokens */
-  --bg:#eef1f7;
-  --panel:#ffffff;
-  --panel2:#f5f7fc;
-  --text:#1b2333;
-  --heading:#0f1626;
-  --muted:#5b6478;
-  --amber:#a6650f;
-  --amber-dim:#e3c393;
-  --teal:#0e8a80;
-  --red:#c13d52;
-  --border:#dbe1ec;
-  --glow1:rgba(166,101,15,0.07);
-  --glow2:rgba(14,138,128,0.07);
-  --code-bg:#0d1526;
-  --code-panel:#16213e;
-  --code-text:#dbe4ff;
-}
-html[data-theme="dark"]{
-  --bg:#0a0f1c;
-  --panel:#111a30;
-  --panel2:#16213e;
-  --text:#e8ecf4;
-  --heading:#ffffff;
-  --muted:#8b96b8;
-  --amber:#e8a33d;
-  --amber-dim:#8a6526;
-  --teal:#3fb8af;
-  --red:#e8697a;
-  --border:#233156;
-  --glow1:rgba(232,163,61,0.10);
-  --glow2:rgba(63,184,175,0.08);
-}
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:'IBM Plex Sans',sans-serif;
-  line-height:1.65;
-  font-size:15.5px;
-  transition:background 0.25s ease, color 0.25s ease;
-}
-::selection{background:var(--amber);color:#fff;}
-h1,h2,h3,h4,h5{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.01em;}
-a{color:var(--teal);}
-code{font-family:'IBM Plex Mono',monospace;}
+  <style>
+    :root {
+      /* PL/SQL Theme Tokens */
+      --bg: #eef1f7;
+      --panel: #ffffff;
+      --panel2: #f5f7fc;
+      --text: #1b2333;
+      --heading: #0f1626;
+      --muted: #5b6478;
+      --amber: #a6650f;
+      --amber-dim: #e3c393;
+      --teal: #0e8a80;
+      --red: #c13d52;
+      --border: #dbe1ec;
+      --glow1: rgba(166, 101, 15, 0.07);
+      --glow2: rgba(14, 138, 128, 0.07);
+      --code-bg: #0d1526;
+      --code-panel: #16213e;
+      --code-text: #dbe4ff;
+    }
 
-/* Theme Toggle Button */
-.theme-toggle{
-  position:fixed;top:16px;right:20px;z-index:200;
-  display:flex;align-items:center;gap:8px;
-  background:var(--panel);border:1px solid var(--border);
-  padding:7px 14px 7px 10px;border-radius:30px;cursor:pointer;
-  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);
-  box-shadow:0 4px 14px rgba(20,20,30,0.10);
-  transition:background 0.25s ease, border-color 0.25s ease;
-  user-select:none;
-}
-.theme-toggle:hover{border-color:var(--amber);}
-.theme-toggle .icon{font-size:14px;line-height:1;}
-.theme-toggle .track{
-  width:34px;height:18px;border-radius:20px;background:var(--panel2);
-  border:1px solid var(--border);position:relative;flex-shrink:0;
-}
-.theme-toggle .knob{
-  position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;
-  background:var(--amber);transition:transform 0.2s ease;
-}
-html[data-theme="dark"] .theme-toggle .knob{transform:translateX(16px);background:var(--teal);}
+    html[data-theme="dark"] {
+      --bg: #0a0f1c;
+      --panel: #111a30;
+      --panel2: #16213e;
+      --text: #e8ecf4;
+      --heading: #ffffff;
+      --muted: #8b96b8;
+      --amber: #e8a33d;
+      --amber-dim: #8a6526;
+      --teal: #3fb8af;
+      --red: #e8697a;
+      --border: #233156;
+      --glow1: rgba(232, 163, 61, 0.10);
+      --glow2: rgba(63, 184, 175, 0.08);
+    }
 
-/* Layout */
-.wrap{display:flex;max-width:1420px;margin:0 auto;}
-.sidebar{
-  width:280px;flex-shrink:0;
-  position:sticky;top:0;height:100vh;overflow-y:auto;
-  padding:24px 16px 40px 24px;
-  border-right:1px solid var(--border);
-}
+    * {
+      box-sizing: border-box;
+    }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    html {
+      scroll-behavior: smooth;
+    }
 
-.main{flex:1;min-width:0;padding:0 0 100px 0;}
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      line-height: 1.65;
+      font-size: 15.5px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
 
-.brand{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--amber);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;}
-.brand-title{font-size:18px;margin:0 0 20px 0;line-height:1.3;color:var(--heading);}
-.nav-unit{margin-bottom:6px;}
-.nav-unit>a{
-  display:block;padding:7px 9px;border-radius:6px;color:var(--text);
-  text-decoration:none;font-size:13px;font-weight:600;
-  border-left:2px solid transparent;
-}
-.nav-unit>a:hover{background:var(--panel);border-left-color:var(--amber);}
-.nav-sub{margin:0 0 12px 8px;padding:0;list-style:none;border-left:1px solid var(--border);}
-.nav-sub li a{
-  display:block;padding:4px 0 4px 12px;color:var(--muted);text-decoration:none;font-size:12px;
-}
-.nav-sub li a:hover{color:var(--teal);}
+    ::selection {
+      background: var(--amber);
+      color: #fff;
+    }
 
-.back-hub {
-  display: inline-block;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11.5px;
-  color: var(--teal);
-  text-decoration: none;
-  margin-bottom: 14px;
-}
-.back-hub:hover { text-decoration: underline; }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
 
-/* Hero */
-.hero{
-  padding:44px 52px 36px 52px;
-  border-bottom:1px solid var(--border);
-  background:
-    radial-gradient(ellipse 700px 300px at 85% -10%, var(--glow1), transparent),
-    radial-gradient(ellipse 500px 260px at 10% 0%, var(--glow2), transparent);
-}
-.hero .eyebrow{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:12px;}
-.hero h1{font-size:34px;margin:0 0 10px 0;color:var(--heading);}
-.hero .sub{color:var(--muted);font-size:15px;max-width:820px;margin-bottom:22px;}
-.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
-.meta-chip{
-  font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);
-  border:1px solid var(--border);padding:4px 10px;border-radius:20px;background:var(--panel);
-}
-.prompt-line{
-  font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:13px;
-}
-.prompt-line .cursor{
-  display:inline-block;width:8px;height:16px;background:var(--amber);
-  margin-left:4px;vertical-align:middle;animation:blink 1.1s steps(1) infinite;
-}
-@keyframes blink{50%{opacity:0;}}
+    a {
+      color: var(--teal);
+    }
 
-/* Objectives & Outcomes Cards */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:28px 52px;border-bottom:1px solid var(--border);}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px 22px;}
-.card h3{margin:0 0 12px 0;font-size:13.5px;color:var(--amber);text-transform:uppercase;letter-spacing:0.08em;}
-.card ul,.card ol{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px;}
-.card li{margin-bottom:6px;}
-.card li b{color:var(--text);}
+    code {
+      font-family: 'IBM Plex Mono', monospace;
+    }
 
-/* Unit Section */
-.unit{padding:44px 52px 10px 52px;border-bottom:1px solid var(--border);}
-.unit-tag{
-  font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:12px;
-  letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;display:block;
-}
-.unit h2{font-size:25px;color:var(--heading);margin:0 0 6px 0;}
-.unit .unit-desc{color:var(--muted);font-size:14.5px;margin-bottom:28px;max-width:850px;}
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 7px 14px 7px 10px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text);
+      box-shadow: 0 4px 14px rgba(20, 20, 30, 0.10);
+      transition: background 0.25s ease, border-color 0.25s ease;
+      user-select: none;
+    }
 
-.topic{margin-bottom:36px;padding-top:4px;}
-.topic h3{
-  font-size:18px;color:var(--heading);margin:0 0 8px 0;
-  display:flex;align-items:baseline;gap:8px;
-}
-.topic h3 .num{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:13px;flex-shrink:0;}
-.topic p{color:var(--muted);font-size:14.5px;margin:8px 0 14px 0;max-width:860px;}
-.topic p b{color:var(--text);}
-.topic ul, .topic ol{margin:8px 0 14px 0;padding-left:22px;color:var(--muted);font-size:14.5px;}
-.topic li{margin-bottom:6px;}
-.topic li b{color:var(--text);}
+    .theme-toggle:hover {
+      border-color: var(--amber);
+    }
 
-/* Callouts */
-.note{
-  border-left:3px solid var(--amber);background:rgba(232,163,61,0.06);
-  padding:12px 16px;border-radius:0 6px 6px 0;color:var(--muted);font-size:13.8px;margin:14px 0;max-width:860px;
-}
-.note b{color:var(--amber);}
-.warn{
-  border-left:3px solid var(--red);background:rgba(232,105,122,0.06);
-  padding:12px 16px;border-radius:0 6px 6px 0;color:var(--muted);font-size:13.8px;margin:14px 0;max-width:860px;
-}
-.warn b{color:var(--red);}
-.eq-box{
-  border-left:3px solid var(--teal);background:rgba(63,184,175,0.06);
-  padding:14px 18px;border-radius:0 6px 6px 0;color:var(--text);font-size:14px;margin:14px 0;max-width:860px;
-}
-.eq-box b{color:var(--teal);}
+    .theme-toggle .icon {
+      font-size: 14px;
+      line-height: 1;
+    }
 
-/* Tables */
-table.tbl{border-collapse:collapse;margin:16px 0;font-size:13.5px;max-width:920px;width:100%;background:var(--panel);}
-table.tbl th{
-  background:var(--panel2);color:var(--amber);text-align:left;padding:9px 12px;
-  border:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:0.05em;
-}
-table.tbl td{padding:9px 12px;border:1px solid var(--border);color:var(--muted);}
-table.tbl td b, table.tbl td code{color:var(--text);}
+    .theme-toggle .track {
+      width: 34px;
+      height: 18px;
+      border-radius: 20px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      position: relative;
+      flex-shrink: 0;
+    }
 
-/* Diagrams */
-.diagram-wrap{
-  background:var(--panel);border:1px solid var(--border);border-radius:10px;
-  padding:20px 22px 16px 22px;margin:18px 0;max-width:920px;text-align:center;overflow-x:auto;
-  transition:background 0.25s ease, border-color 0.25s ease;
-}
-.diagram-wrap .mermaid svg{
-  background:transparent !important;
-  max-width:100%;
-  height:auto;
-}
-.diagram-title{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);
-  text-transform:uppercase;letter-spacing:0.09em;margin-bottom:12px;display:block;text-align:left;
-}
-.diagram-caption{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:10px;}
+    .theme-toggle .knob {
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--amber);
+      transition: transform 0.2s ease;
+    }
 
-/* QA Block */
-.qa-block{
-  background:var(--panel);border:1px solid var(--border);border-radius:8px;
-  padding:16px 20px;margin:16px 0;max-width:860px;
-}
-.qa-q{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--amber);font-size:15px;margin-bottom:8px;}
-.qa-a{color:var(--muted);font-size:14px;}
-.qa-a b{color:var(--text);}
+    html[data-theme="dark"] .theme-toggle .knob {
+      transform: translateX(16px);
+      background: var(--teal);
+    }
 
-.footer{padding:40px 52px;text-align:center;color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace;}
+    /* Layout */
+    .wrap {
+      display: flex;
+      max-width: 1420px;
+      margin: 0 auto;
+    }
 
-@media(max-width:900px){
-  .sidebar{display:none;}
-  .hero { padding: 32px 18px 24px 18px; }
-  .cols { padding: 18px; grid-template-columns: 1fr; gap: 14px; }
-  .unit { padding: 32px 18px 10px 18px; }
-}
-</style>
+    .sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 16px 40px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 0 0 100px 0;
+    }
+
+    .brand {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      color: var(--amber);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      margin: 0 0 20px 0;
+      line-height: 1.3;
+      color: var(--heading);
+    }
+
+    .nav-unit {
+      margin-bottom: 6px;
+    }
+
+    .nav-unit>a {
+      display: block;
+      padding: 7px 9px;
+      border-radius: 6px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      border-left: 2px solid transparent;
+    }
+
+    .nav-unit>a:hover {
+      background: var(--panel);
+      border-left-color: var(--amber);
+    }
+
+    .nav-sub {
+      margin: 0 0 12px 8px;
+      padding: 0;
+      list-style: none;
+      border-left: 1px solid var(--border);
+    }
+
+    .nav-sub li a {
+      display: block;
+      padding: 4px 0 4px 12px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .nav-sub li a:hover {
+      color: var(--teal);
+    }
+
+    .back-hub {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      color: var(--teal);
+      text-decoration: none;
+      margin-bottom: 14px;
+    }
+
+    .back-hub:hover {
+      text-decoration: underline;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 44px 52px 36px 52px;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse 700px 300px at 85% -10%, var(--glow1), transparent),
+        radial-gradient(ellipse 500px 260px at 10% 0%, var(--glow2), transparent);
+    }
+
+    .hero .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--teal);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: 34px;
+      margin: 0 0 10px 0;
+      color: var(--heading);
+    }
+
+    .hero .sub {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 820px;
+      margin-bottom: 22px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .meta-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--panel);
+    }
+
+    .prompt-line {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--amber);
+      font-size: 13px;
+    }
+
+    .prompt-line .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--amber);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1.1s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* Objectives & Outcomes Cards */
+    .cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 28px 52px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+
+    .card h3 {
+      margin: 0 0 12px 0;
+      font-size: 13.5px;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card ul,
+    .card ol {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .card li {
+      margin-bottom: 6px;
+    }
+
+    .card li b {
+      color: var(--text);
+    }
+
+    /* Unit Section */
+    .unit {
+      padding: 44px 52px 10px 52px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .unit-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--teal);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .unit h2 {
+      font-size: 25px;
+      color: var(--heading);
+      margin: 0 0 6px 0;
+    }
+
+    .unit .unit-desc {
+      color: var(--muted);
+      font-size: 14.5px;
+      margin-bottom: 28px;
+      max-width: 850px;
+    }
+
+    .topic {
+      margin-bottom: 36px;
+      padding-top: 4px;
+    }
+
+    .topic h3 {
+      font-size: 18px;
+      color: var(--heading);
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .topic h3 .num {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--amber);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .topic p {
+      color: var(--muted);
+      font-size: 14.5px;
+      margin: 8px 0 14px 0;
+      max-width: 860px;
+    }
+
+    .topic p b {
+      color: var(--text);
+    }
+
+    .topic ul,
+    .topic ol {
+      margin: 8px 0 14px 0;
+      padding-left: 22px;
+      color: var(--muted);
+      font-size: 14.5px;
+    }
+
+    .topic li {
+      margin-bottom: 6px;
+    }
+
+    .topic li b {
+      color: var(--text);
+    }
+
+    /* Callouts */
+    .note {
+      border-left: 3px solid var(--amber);
+      background: rgba(232, 163, 61, 0.06);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      color: var(--muted);
+      font-size: 13.8px;
+      margin: 14px 0;
+      max-width: 860px;
+    }
+
+    .note b {
+      color: var(--amber);
+    }
+
+    .warn {
+      border-left: 3px solid var(--red);
+      background: rgba(232, 105, 122, 0.06);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      color: var(--muted);
+      font-size: 13.8px;
+      margin: 14px 0;
+      max-width: 860px;
+    }
+
+    .warn b {
+      color: var(--red);
+    }
+
+    .eq-box {
+      border-left: 3px solid var(--teal);
+      background: rgba(63, 184, 175, 0.06);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      color: var(--text);
+      font-size: 14px;
+      margin: 14px 0;
+      max-width: 860px;
+    }
+
+    .eq-box b {
+      color: var(--teal);
+    }
+
+    /* Tables */
+    table.tbl {
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13.5px;
+      max-width: 920px;
+      width: 100%;
+      background: var(--panel);
+    }
+
+    table.tbl th {
+      background: var(--panel2);
+      color: var(--amber);
+      text-align: left;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    table.tbl td {
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    table.tbl td b,
+    table.tbl td code {
+      color: var(--text);
+    }
+
+    /* Diagrams */
+    .diagram-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px 16px 22px;
+      margin: 18px 0;
+      max-width: 920px;
+      text-align: center;
+      overflow-x: auto;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .diagram-wrap .mermaid svg {
+      background: transparent !important;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .diagram-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 12px;
+      display: block;
+      text-align: left;
+    }
+
+    .diagram-caption {
+      font-size: 12.5px;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    /* QA Block */
+    .qa-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      max-width: 860px;
+    }
+
+    .qa-q {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--amber);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .qa-a {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .qa-a b {
+      color: var(--text);
+    }
+
+    .footer {
+      padding: 40px 52px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    @media(max-width:900px) {
+      .sidebar {
+        display: none;
+      }
+
+      .hero {
+        padding: 32px 18px 24px 18px;
+      }
+
+      .cols {
+        padding: 18px;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .unit {
+        padding: 32px 18px 10px 18px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">
-  <span class="icon" id="themeIconLeft">☀</span>
-  <span class="track"><span class="knob"></span></span>
-  <span class="icon" id="themeIconRight">☾</span>
-</button>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">
+    <span class="icon" id="themeIconLeft">☀</span>
+    <span class="track"><span class="knob"></span></span>
+    <span class="icon" id="themeIconRight">☾</span>
+  </button>
 
-<div class="wrap">
+  <div class="wrap">
 
-  <!-- Sticky Sidebar -->
-  <aside class="sidebar">
-    <a href="../index.html" class="back-hub">&larr; Return to Portal Hub</a>
-    <div class="brand">M.Tech CSE I-I</div>
-    <div class="brand-title">Research Methodology & IPR</div>
-    
-    <div class="nav-unit">
-      <a href="#unit1">UNIT I: Problem & Analysis</a>
-      <ul class="nav-sub">
-        <li><a href="#u1-1">1.1 Meaning of Research Problem</a></li>
-        <li><a href="#u1-2">1.2 Sources of Research Problem</a></li>
-        <li><a href="#u1-3">1.3 Criteria & Characteristics</a></li>
-        <li><a href="#u1-4">1.4 Errors in Selection</a></li>
-        <li><a href="#u1-5">1.5 Scope & Objectives</a></li>
-        <li><a href="#u1-6">1.6 Approaches of Investigation</a></li>
-        <li><a href="#u1-7">1.7 Data Collection & Analysis</a></li>
-        <li><a href="#u1-8">1.8 Necessary Instrumentations</a></li>
-      </ul>
-    </div>
-    
-    <div class="nav-unit">
-      <a href="#unit2">UNIT II: Literature & Ethics</a>
-      <ul class="nav-sub">
-        <li><a href="#u2-1">2.1 Effective Literature Studies</a></li>
-        <li><a href="#u2-2">2.2 Literature Analysis</a></li>
-        <li><a href="#u2-3">2.3 Plagiarism & UGC Rules</a></li>
-        <li><a href="#u2-4">2.4 Research Ethics & FFP</a></li>
-      </ul>
-    </div>
+    <!-- Sticky Sidebar -->
+    <aside class="sidebar">
+      <a href="../index.html" class="back-hub">&larr; Return to Portal Hub</a>
+      <div class="brand">M.Tech CSE I-I</div>
+      <div class="brand-title">Research Methodology & IPR</div>
 
-    <div class="nav-unit">
-      <a href="#unit3">UNIT III: Writing & Proposals</a>
-      <ul class="nav-sub">
-        <li><a href="#u3-1">3.1 Effective Technical Writing</a></li>
-        <li><a href="#u3-2">3.2 How to Write Report</a></li>
-        <li><a href="#u3-3">3.3 Paper & Peer Review</a></li>
-        <li><a href="#u3-4">3.4 Developing Proposal & Format</a></li>
-        <li><a href="#u3-5">3.5 Review Committee Assessment</a></li>
-      </ul>
-    </div>
-
-    <div class="nav-unit">
-      <a href="#unit4">UNIT IV: IP Nature & Patenting</a>
-      <ul class="nav-sub">
-        <li><a href="#u4-1">4.1 Nature of IP (Patents, Designs, Trade, Copyright)</a></li>
-        <li><a href="#u4-2">4.2 Process of Patenting & Dev</a></li>
-        <li><a href="#u4-3">4.3 International Scenario</a></li>
-        <li><a href="#u4-4">4.4 Procedure for Grants</a></li>
-        <li><a href="#u4-5">4.5 Patenting under PCT</a></li>
-      </ul>
-    </div>
-
-    <div class="nav-unit">
-      <a href="#unit5">UNIT V: Patent Rights & Emerging IPR</a>
-      <ul class="nav-sub">
-        <li><a href="#u5-1">5.1 Scope of Patent Rights</a></li>
-        <li><a href="#u5-2">5.2 Licensing & Tech Transfer</a></li>
-        <li><a href="#u5-3">5.3 Patent Info & Databases</a></li>
-        <li><a href="#u5-4">5.4 Geographical Indications</a></li>
-        <li><a href="#u5-5">5.5 Administration of Patent System</a></li>
-        <li><a href="#u5-6">5.6 Biotech & Software IPR</a></li>
-        <li><a href="#u5-7">5.7 Traditional Knowledge & Cases</a></li>
-        <li><a href="#u5-8">5.8 IPR and IITs</a></li>
-      </ul>
-    </div>
-
-    <div class="nav-unit">
-      <a href="#exam-qa">Exam Question Bank</a>
-    </div>
-  </aside>
-
-  <!-- Main Content Area -->
-  <main class="main">
-
-    <!-- Hero Header -->
-    <header class="hero">
-      <div class="eyebrow">Course Code: R25 — L T P C: 2 0 0 2</div>
-      <h1>Research Methodology & Intellectual Property Rights</h1>
-      <p class="sub">Comprehensive, 100% zero-omission master study guide explicitly covering every single topic from Units I through V in the official syllabus.</p>
-      
-      <div class="meta-row">
-        <span class="meta-chip">Prerequisites: None</span>
-        <span class="meta-chip">Degree: M.Tech CSE I-I</span>
-        <span class="meta-chip">Format: Accordion-Free</span>
-        <span class="meta-chip">Libraries: KaTeX & Mermaid.js</span>
-      </div>
-
-      <div class="prompt-line">
-        $ research --verify-syllabus --all-topics --generate-guide<span class="cursor"></span>
-      </div>
-    </header>
-
-    <!-- Course Objectives & Outcomes Grid -->
-    <div class="cols">
-      <div class="card">
-        <h3>Course Objectives</h3>
-        <ol>
-          <li>To understand the research problem.</li>
-          <li>To know the literature studies, plagiarism and ethics.</li>
-          <li>To get the knowledge about technical writing.</li>
-          <li>To analyze the nature of intellectual property rights and new developments.</li>
-          <li>To know the patent rights.</li>
-        </ol>
-      </div>
-      <div class="card">
-        <h3>Course Outcomes (COs)</h3>
-        <ol>
-          <li>Identify research problems using systematic data collection and instrumentation.</li>
-          <li>Analyze literature effectively while adhering to research ethics & plagiarism rules.</li>
-          <li>Develop structured research proposals and technical reports.</li>
-          <li>Examine IP systems (Patents, Copyrights, Designs, Trademarks) & PCT.</li>
-          <li>Evaluate emerging IPR (Biotech, Software, Traditional Knowledge, IIT IP policies).</li>
-        </ol>
-      </div>
-    </div>
-
-    <!-- =================================================================== -->
-    <!-- UNIT I -->
-    <!-- =================================================================== -->
-    <section id="unit1" class="unit">
-      <span class="unit-tag">UNIT I</span>
-      <h2>Research Problem Formulation & Data Analysis</h2>
-      <p class="unit-desc">Meaning of research problem, Sources of research problem, Criteria Characteristics of a good research problem, Errors in selecting a research problem, Scope and objectives of research problem. Approaches of investigation of solutions for research problem, data collection, analysis, interpretation, Necessary instrumentations.</p>
-
-      <!-- 1.1 -->
-      <div class="topic" id="u1-1">
-        <h3><span class="num">1.1</span> Meaning of Research Problem</h3>
-        <p>Research in its scientific sense is a systematic, controlled, empirical, and critical investigation of hypothetical propositions about presumed relations among natural or computational phenomena. According to <b>Redman and Mory</b>, research is a <i>"systematized effort to gain new knowledge."</i></p>
-
-        <div class="note">
-          <b>Definition: Meaning of Research Problem:</b> A <b>Research Problem</b> refers to an explicit statement regarding a gap in existing knowledge, an operational bottleneck in technology, or a theoretical contradiction that requires systematic investigation, empirical data collection, and analytical reasoning to resolve.
-        </div>
-      </div>
-
-      <!-- 1.2 -->
-      <div class="topic" id="u1-2">
-        <h3><span class="num">1.2</span> Sources of Research Problem</h3>
-        <p>Identifying a viable research problem is the fundamental first step in master's research. Primary sources of research problems include:</p>
-        <ul>
-          <li><b>Literature Review & Published Gaps:</b> Analyzing discussion sections and "Future Work" recommendations in top-tier peer-reviewed journals (IEEE Transactions, ACM Digital Library).</li>
-          <li><b>Technological Shifts & Paradigms:</b> Emerging computing trends such as Quantum Machine Learning, Edge AI, and Zero-Trust Security architectures.</li>
-          <li><b>Industrial & Practical Bottlenecks:</b> Practical challenges faced by industry (e.g. latency in autonomous perception or battery limits in IoT microcontrollers).</li>
-          <li><b>Interdisciplinary Intersections:</b> Applying computer science models to biological data (Bioinformatics), financial systems (FinTech), or medical diagnostics.</li>
+      <div class="nav-unit">
+        <a href="#unit1">UNIT I: Problem & Analysis</a>
+        <ul class="nav-sub">
+          <li><a href="#u1-1">1.1 Meaning of Research Problem</a></li>
+          <li><a href="#u1-2">1.2 Sources of Research Problem</a></li>
+          <li><a href="#u1-3">1.3 Criteria & Characteristics</a></li>
+          <li><a href="#u1-4">1.4 Errors in Selection</a></li>
+          <li><a href="#u1-5">1.5 Scope & Objectives</a></li>
+          <li><a href="#u1-6">1.6 Approaches of Investigation</a></li>
+          <li><a href="#u1-7">1.7 Data Collection & Analysis</a></li>
+          <li><a href="#u1-8">1.8 Necessary Instrumentations</a></li>
         </ul>
       </div>
 
-      <!-- 1.3 -->
-      <div class="topic" id="u1-3">
-        <h3><span class="num">1.3</span> Criteria & Characteristics of a Good Research Problem</h3>
-        <p>A sound research problem must satisfy the <b>S.M.A.R.T. Framework</b> and specific academic criteria:</p>
+      <div class="nav-unit">
+        <a href="#unit2">UNIT II: Literature & Ethics</a>
+        <ul class="nav-sub">
+          <li><a href="#u2-1">2.1 Effective Literature Studies</a></li>
+          <li><a href="#u2-2">2.2 Literature Analysis</a></li>
+          <li><a href="#u2-3">2.3 Plagiarism & UGC Rules</a></li>
+          <li><a href="#u2-4">2.4 Research Ethics & FFP</a></li>
+        </ul>
+      </div>
 
-        <table class="tbl">
+      <div class="nav-unit">
+        <a href="#unit3">UNIT III: Writing & Proposals</a>
+        <ul class="nav-sub">
+          <li><a href="#u3-1">3.1 Effective Technical Writing</a></li>
+          <li><a href="#u3-2">3.2 How to Write Report</a></li>
+          <li><a href="#u3-3">3.3 Paper & Peer Review</a></li>
+          <li><a href="#u3-4">3.4 Developing Proposal & Format</a></li>
+          <li><a href="#u3-5">3.5 Review Committee Assessment</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-unit">
+        <a href="#unit4">UNIT IV: IP Nature & Patenting</a>
+        <ul class="nav-sub">
+          <li><a href="#u4-1">4.1 Nature of IP (Patents, Designs, Trade, Copyright)</a></li>
+          <li><a href="#u4-2">4.2 Process of Patenting & Dev</a></li>
+          <li><a href="#u4-3">4.3 International Scenario</a></li>
+          <li><a href="#u4-4">4.4 Procedure for Grants</a></li>
+          <li><a href="#u4-5">4.5 Patenting under PCT</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-unit">
+        <a href="#unit5">UNIT V: Patent Rights & Emerging IPR</a>
+        <ul class="nav-sub">
+          <li><a href="#u5-1">5.1 Scope of Patent Rights</a></li>
+          <li><a href="#u5-2">5.2 Licensing & Tech Transfer</a></li>
+          <li><a href="#u5-3">5.3 Patent Info & Databases</a></li>
+          <li><a href="#u5-4">5.4 Geographical Indications</a></li>
+          <li><a href="#u5-5">5.5 Administration of Patent System</a></li>
+          <li><a href="#u5-6">5.6 Biotech & Software IPR</a></li>
+          <li><a href="#u5-7">5.7 Traditional Knowledge & Cases</a></li>
+          <li><a href="#u5-8">5.8 IPR and IITs</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-unit">
+        <a href="#exam-qa">Feb 2026 Solved Exam Paper</a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+
+      <!-- Hero Header -->
+      <header class="hero">
+        <div class="eyebrow">Course Code: R25 — L T P C: 2 0 0 2</div>
+        <h1>Research Methodology & Intellectual Property Rights</h1>
+        <p class="sub">Comprehensive, 100% zero-omission master study guide explicitly covering every single topic from
+          Units I through V in the official syllabus.</p>
+
+        <div class="meta-row">
+          <span class="meta-chip">Prerequisites: None</span>
+          <span class="meta-chip">Degree: M.Tech CSE I-I</span>
+          <span class="meta-chip">Format: Accordion-Free</span>
+          <span class="meta-chip">Libraries: KaTeX & Mermaid.js</span>
+        </div>
+
+        <div class="prompt-line">
+          $ research --verify-syllabus --all-topics --generate-guide<span class="cursor"></span>
+        </div>
+      </header>
+
+      <!-- =================================================================== -->
+      <!-- 🚀 START HERE: 5-MINUTE ZERO-TO-HERO ORIENTATION & STORY ROADMAP -->
+      <!-- =================================================================== -->
+      <div style="background:var(--panel);border:2px solid var(--teal);border-radius:10px;padding:24px 28px;margin:28px 52px 0 52px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;">
+          <h3 style="margin:0;font-size:17px;color:var(--teal);font-family:'Space Grotesk',sans-serif;text-transform:uppercase;letter-spacing:0.06em;">🚀 START HERE: Zero-to-Hero Orientation (The Big Picture Story)</h3>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;background:rgba(63,184,175,0.15);color:var(--teal);padding:3px 10px;border-radius:4px;font-weight:600;">NEW TO RM &amp; IPR? READ THIS FIRST!</span>
+        </div>
+
+        <p style="margin:0 0 16px 0;font-size:14.5px;color:var(--text);line-height:1.6;">
+          If you are starting from complete scratch and feel lost, <b>don't panic!</b> This entire course is simply the 5-step story of an inventor's journey:
+        </p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px;">
+          <div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+            <h4 style="margin:0 0 8px 0;color:var(--amber);font-size:14px;text-transform:uppercase;letter-spacing:0.05em;">PART 1: Research Methodology (Units I – III)</h4>
+            <p style="margin:0;font-size:13.5px;color:var(--muted);line-height:1.55;">
+              <b>Goal: How to scientifically discover a new technology.</b><br>
+              • <b>Unit I:</b> Find a real technical gap, collect data, and run math tests ($t$-test, $\chi^2$) to prove your fix works.<br>
+              • <b>Unit II:</b> Read existing papers to ensure no one solved it already, and <i>never copy/paste without citing</i> (Plagiarism &amp; Ethics).<br>
+              • <b>Unit III:</b> Write up your findings in standard <b>IMRaD format</b> and submit grant proposals for funding.
+            </p>
+          </div>
+          
+          <div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+            <h4 style="margin:0 0 8px 0;color:var(--teal);font-size:14px;text-transform:uppercase;letter-spacing:0.05em;">PART 2: Intellectual Property Rights (Units IV – V)</h4>
+            <p style="margin:0;font-size:13.5px;color:var(--muted);line-height:1.55;">
+              <b>Goal: How to legally protect your discovery and earn money.</b><br>
+              • <b>Unit IV:</b> Secure a <b>Patent</b> (a 20-year legal monopoly). Delay international filing fees using the 30-month <b>PCT</b> window.<br>
+              • <b>Unit V:</b> <b>License</b> your patent to big tech firms for royalties, and discover how India protects software, biotech, and ancient remedies (<b>Turmeric &amp; Neem</b> via TKDL)!
+            </p>
+          </div>
+        </div>
+
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;background:rgba(232,163,61,0.08);border-left:3px solid var(--amber);padding:10px 14px;color:var(--text);">
+          <b>💡 4-Step Exam Strategy:</b> Read this <b>Story Map</b> &rarr; Skim the <b>60-Second Cram Sheet</b> below &rarr; Review <b>Units I-V</b> &rarr; Memorize the <b>February 2026 Solved Booklet Answers</b>!
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- ⚡ 60-SECOND EXAM HALL CRAM SHEET -->
+      <!-- =================================================================== -->
+      <div
+        style="background:var(--panel);border:2px solid var(--amber);border-radius:10px;padding:20px 24px;margin:28px 52px 0 52px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h3
+            style="margin:0;font-size:16px;color:var(--amber);font-family:'Space Grotesk',sans-serif;text-transform:uppercase;letter-spacing:0.06em;">
+            ⚡ 60-Second Exam Hall Cram Sheet (Ultra-Fast Revision)</h3>
+          <span
+            style="font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--amber-dim);color:#fff;padding:2px 8px;border-radius:4px;font-weight:600;">MUST
+            READ BEFORE EXAM</span>
+        </div>
+        <table class="tbl" style="margin:8px 0 0 0;">
           <thead>
             <tr>
-              <th>Criterion</th>
-              <th>Description</th>
-              <th>Computer Science / Engineering Context</th>
+              <th style="width:22%;">Domain</th>
+              <th style="width:38%;">Key Formulas / Rules / Statutory Sections</th>
+              <th style="width:40%;">Critical Terms & Timeline Benchmarks</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><b>Novelty & Originality</b></td>
-              <td>Must contribute new insights, higher efficiency, or novel frameworks.</td>
-              <td>Developing a transformer pruning algorithm reducing parameter size by 40% without accuracy loss.</td>
+              <td><b>Patent Criteria</b></td>
+              <td>Section 2(1)(j): Novelty + Inventive Step (PHOSITA) + Industrial Applicability</td>
+              <td><b>20 Years Protection</b> (from filing date); Section 3 (Exclusions: 3k software per se, 3m
+                aesthetic)</td>
             </tr>
             <tr>
-              <td><b>Feasibility</b></td>
-              <td>Solvable within time, budget, computation, and hardware bounds.</td>
-              <td>Verifying GPU cluster availability (NVIDIA A100/H100) before attempting to train large language models.</td>
+              <td><b>Patent Timelines</b></td>
+              <td>Complete Spec: within <b>12 Months</b>; Publication: at <b>18 Months</b>; RFE: within <b>48 Months</b>
+              </td>
+              <td><b>PCT 30-Month Window:</b> $t_{\text{national}} = t_{\text{priority}} + 30 \text{ months}$ across
+                155+ states</td>
             </tr>
             <tr>
-              <td><b>Relevance & Impact</b></td>
-              <td>Addresses a problem of clear economic, technical, or societal value.</td>
-              <td>Improving real-time fraud detection accuracy in high-throughput payment transaction pipelines.</td>
+              <td><b>UGC Plagiarism</b></td>
+              <td>L0 (&le;10%: Ok) &bull; L1 (10-40%: 6 mos resubmit) &bull; L2 (40-60%: 1 yr debar) &bull; L3 (&gt;60%:
+                Registration cancelled)</td>
+              <td><b>FFP Triad:</b> Fabrication (Fake data), Falsification (Altering logs), Plagiarism (Theft)</td>
             </tr>
             <tr>
-              <td><b>Testability & Measurability</b></td>
-              <td>Variables must be quantifiable using standard benchmark metrics.</td>
-              <td>Latency (ms), Throughput (req/sec), F1-Score, Memory Footprint (MB).</td>
+              <td><b>Sampling & Stats</b></td>
+              <td>$n_0 = \frac{Z^2 p(1-p)}{e^2}$ (Cochran) &bull; $t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{s_1^2/n_1 +
+                s_2^2/n_2}}$ &bull; $\chi^2 = \sum \frac{(O_i-E_i)^2}{E_i}$</td>
+              <td><b>$p$-value threshold:</b> $p < 0.05$ indicates statistical significance</td>
             </tr>
             <tr>
-              <td><b>Ethical Acceptability</b></td>
-              <td>Complies with data privacy regulations (GDPR) and safety laws.</td>
-              <td>Ensuring medical imaging datasets are fully anonymized prior to model training.</td>
+              <td><b>Journal Metrics</b></td>
+              <td>$\text{IF}_{2024} = \frac{\text{Citations in 2024}}{\text{Items in 2022+2023}}$ &bull; PRISMA 4-Stage
+                SLR (ID $\rightarrow$ Screen $\rightarrow$ Eligible $\rightarrow$ Include)</td>
+              <td><b>IMRaD Framework:</b> Intro, Methods, Results, and Discussion</td>
+            </tr>
+            <tr>
+              <td><b>TKDL Cases</b></td>
+              <td>Turmeric (1997 USPTO Revocation) &bull; Neem (2000 EPO Revocation) &bull; Basmati (2001 Claims
+                Restriction)</td>
+              <td><b>TKDL:</b> 450,000+ formulations in 5 languages (Defensive database)</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- 1.4 -->
-      <div class="topic" id="u1-4">
-        <h3><span class="num">1.4</span> Errors in Selecting a Research Problem</h3>
-        <div class="warn">
-          <b>Critical Errors to Avoid in Problem Selection:</b>
+      <!-- Course Objectives & Outcomes Grid -->
+      <div class="cols">
+        <div class="card">
+          <h3>Course Objectives</h3>
+          <ol>
+            <li>To understand the research problem.</li>
+            <li>To know the literature studies, plagiarism and ethics.</li>
+            <li>To get the knowledge about technical writing.</li>
+            <li>To analyze the nature of intellectual property rights and new developments.</li>
+            <li>To know the patent rights.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Course Outcomes (COs)</h3>
+          <ol>
+            <li>Identify research problems using systematic data collection and instrumentation.</li>
+            <li>Analyze literature effectively while adhering to research ethics & plagiarism rules.</li>
+            <li>Develop structured research proposals and technical reports.</li>
+            <li>Examine IP systems (Patents, Copyrights, Designs, Trademarks) & PCT.</li>
+            <li>Evaluate emerging IPR (Biotech, Software, Traditional Knowledge, IIT IP policies).</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- UNIT I -->
+      <!-- =================================================================== -->
+      <section id="unit1" class="unit">
+        <span class="unit-tag">UNIT I</span>
+        <h2>Research Problem Formulation & Data Analysis</h2>
+        <p class="unit-desc">Meaning of research problem, Sources of research problem, Criteria Characteristics of a
+          good research problem, Errors in selecting a research problem, Scope and objectives of research problem.
+          Approaches of investigation of solutions for research problem, data collection, analysis, interpretation,
+          Necessary instrumentations.</p>
+
+        <!-- 1.1 -->
+        <div class="topic" id="u1-1">
+          <h3><span class="num">1.1</span> Meaning of Research Problem</h3>
+          <p>Research in its scientific sense is a systematic, controlled, empirical, and critical investigation of
+            hypothetical propositions about presumed relations among natural or computational phenomena. According to
+            <b>Redman and Mory</b>, research is a <i>"systematized effort to gain new knowledge."</i></p>
+
+          <div class="note">
+            <b>Definition: Meaning of Research Problem:</b> A <b>Research Problem</b> refers to an explicit statement
+            regarding a gap in existing knowledge, an operational bottleneck in technology, or a theoretical
+            contradiction that requires systematic investigation, empirical data collection, and analytical reasoning to
+            resolve.
+          </div>
+        </div>
+
+        <!-- 1.2 -->
+        <div class="topic" id="u1-2">
+          <h3><span class="num">1.2</span> Sources of Research Problem</h3>
+          <p>Identifying a viable research problem is the fundamental first step in master's research. Primary sources
+            of research problems include:</p>
           <ul>
-            <li><b>Over-broad Scope:</b> Selecting a topic so vast (e.g. <i>"Improving Cybersecurity using AI"</i>) that it cannot be investigated within time constraints.</li>
-            <li><b>Trivial / Over-researched Topics:</b> Re-implementing established algorithms without introducing novel variations.</li>
-            <li><b>Ignoring Resource & Compute Limits:</b> Formulating problems requiring unavailable hardware, proprietary datasets, or specialized labs.</li>
-            <li><b>Unscientific / Subjective Bias:</b> Designing a problem to prove a pre-conceived subjective preference rather than objective empirical truth.</li>
+            <li><b>Literature Review & Published Gaps:</b> Analyzing discussion sections and "Future Work"
+              recommendations in top-tier peer-reviewed journals (IEEE Transactions, ACM Digital Library).</li>
+            <li><b>Technological Shifts & Paradigms:</b> Emerging computing trends such as Quantum Machine Learning,
+              Edge AI, and Zero-Trust Security architectures.</li>
+            <li><b>Industrial & Practical Bottlenecks:</b> Practical challenges faced by industry (e.g. latency in
+              autonomous perception or battery limits in IoT microcontrollers).</li>
+            <li><b>Interdisciplinary Intersections:</b> Applying computer science models to biological data
+              (Bioinformatics), financial systems (FinTech), or medical diagnostics.</li>
           </ul>
         </div>
-      </div>
 
-      <!-- 1.5 -->
-      <div class="topic" id="u1-5">
-        <h3><span class="num">1.5</span> Scope and Objectives of Research Problem</h3>
-        <p>Defining the <b>Scope</b> establishes explicit boundaries (delimitations) of what the research will and will <i>not</i> cover. <b>Objectives</b> must be split into primary and secondary goals supported by statistical hypotheses:</p>
-        <ul>
-          <li><b>Null Hypothesis ($H_0$):</b> Assumes no statistical significance or difference exists between the proposed method and the baseline ($H_0: \mu_{\text{proposed}} = \mu_{\text{baseline}}$).</li>
-          <li><b>Alternative Hypothesis ($H_1$):</b> States that the proposed intervention yields statistically significant improvement ($H_1: \mu_{\text{proposed}} > \mu_{\text{baseline}}$).</li>
-        </ul>
-      </div>
+        <!-- 1.3 -->
+        <div class="topic" id="u1-3">
+          <h3><span class="num">1.3</span> Criteria & Characteristics of a Good Research Problem</h3>
+          <p>A sound research problem must satisfy the <b>S.M.A.R.T. Framework</b> and specific academic criteria:</p>
 
-      <!-- 1.6 -->
-      <div class="topic" id="u1-6">
-        <h3><span class="num">1.6</span> Approaches of Investigation of Solutions for Research Problem</h3>
-        <p>Research approaches dictate how data is gathered and logical conclusions drawn:</p>
-        <ul>
-          <li><b>Deductive Approach:</b> Top-down reasoning moving from general theory $\rightarrow$ hypothesis $\rightarrow$ empirical test $\rightarrow$ confirmation.</li>
-          <li><b>Inductive Approach:</b> Bottom-up reasoning moving from specific observations $\rightarrow$ pattern discovery $\rightarrow$ tentative hypothesis $\rightarrow$ theory building.</li>
-          <li><b>Exploratory & Diagnostic Approaches:</b> Investigating under-researched topics or diagnosing root causes of system failures.</li>
-          <li><b>Experimental & Quantitative Modeling:</b> Controlled benchmarking, mathematical simulations, and algorithmic modeling.</li>
-        </ul>
-
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 1.1: Deductive vs. Inductive Investigation Pathways</span>
-          <div class="mermaid">
-          graph TD
-            A[Approaches of Investigation] --> B[Deductive Reasoning]
-            A --> C[Inductive Reasoning]
-            
-            B --> B1[Theory / General Rule]
-            B1 --> B2[Hypothesis Formulation]
-            B2 --> B3[Empirical Testing]
-            B3 --> B4[Confirmation / Rejection]
-            
-            C --> C1[Specific Observations]
-            C1 --> C2[Pattern Discovery]
-            C2 --> C3[Tentative Hypothesis]
-            C3 --> C4[General Theory Building]
-          </div>
-        </div>
-      </div>
-
-      <!-- 1.7 -->
-      <div class="topic" id="u1-7">
-        <h3><span class="num">1.7</span> Data Collection, Analysis, and Interpretation</h3>
-        <p><b>Primary Data Collection</b> gathers original empirical data via experiments, sensor logs, user telemetry, or network packet traces. <b>Secondary Data Collection</b> extracts pre-existing data from repositories (Kaggle, UCI, IEEE DataPort).</p>
-
-        <div class="eq-box">
-          <b>KaTeX Data Analysis & Sample Size Formulas:</b>
-          <p><b>Cochran's Sample Size Formula</b> for large populations ($N > 10,000$):</p>
-          $$n_0 = \frac{Z^2 \cdot p \cdot (1 - p)}{e^2}$$
-          <p><b>Yamane's Formula</b> for finite population sample size calculation:</p>
-          $$n = \frac{N}{1 + N(e)^2}$$
-          <p><b>Student's t-test statistic</b> for comparing algorithm performance means:</p>
-          $$t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$$
-          <p><b>Chi-Square ($\chi^2$) Goodness-of-Fit Test Statistic:</b></p>
-          $$\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}$$
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Criterion</th>
+                <th>Description</th>
+                <th>Computer Science / Engineering Context</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Novelty & Originality</b></td>
+                <td>Must contribute new insights, higher efficiency, or novel frameworks.</td>
+                <td>Developing a transformer pruning algorithm reducing parameter size by 40% without accuracy loss.
+                </td>
+              </tr>
+              <tr>
+                <td><b>Feasibility</b></td>
+                <td>Solvable within time, budget, computation, and hardware bounds.</td>
+                <td>Verifying GPU cluster availability (NVIDIA A100/H100) before attempting to train large language
+                  models.</td>
+              </tr>
+              <tr>
+                <td><b>Relevance & Impact</b></td>
+                <td>Addresses a problem of clear economic, technical, or societal value.</td>
+                <td>Improving real-time fraud detection accuracy in high-throughput payment transaction pipelines.</td>
+              </tr>
+              <tr>
+                <td><b>Testability & Measurability</b></td>
+                <td>Variables must be quantifiable using standard benchmark metrics.</td>
+                <td>Latency (ms), Throughput (req/sec), F1-Score, Memory Footprint (MB).</td>
+              </tr>
+              <tr>
+                <td><b>Ethical Acceptability</b></td>
+                <td>Complies with data privacy regulations (GDPR) and safety laws.</td>
+                <td>Ensuring medical imaging datasets are fully anonymized prior to model training.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <p><b>Data Interpretation:</b> Analyzing statistical significance ($p$-value $< 0.05$), avoiding spurious correlations, and drawing objective conclusions.</p>
-      </div>
-
-      <!-- 1.8 -->
-      <div class="topic" id="u1-8">
-        <h3><span class="num">1.8</span> Necessary Instrumentations</h3>
-        <p>Instrumentation in Computer Science research comprises the full hardware, software, and benchmark stack required for empirical validation:</p>
-        <ul>
-          <li><b>Software Tools:</b> Profilers (Valgrind, TensorBoard, PySpy), statistical environments (R, Python - NumPy/SciPy/Pandas), R packages.</li>
-          <li><b>Hardware Infrastructure:</b> High-performance GPU nodes (NVIDIA A100/H100), Cloud Compute clusters (AWS EC2, Google Cloud TPU), Oscilloscopes/Logic Analyzers (for IoT/Embedded research).</li>
-          <li><b>Benchmark Datasets:</b> Standardized validation datasets accepted by the research community (ImageNet, MNIST, CIFAR-100, MS-COCO).</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- =================================================================== -->
-    <!-- UNIT II -->
-    <!-- =================================================================== -->
-    <section id="unit2" class="unit">
-      <span class="unit-tag">UNIT II</span>
-      <h2>Literature Studies, Plagiarism & Research Ethics</h2>
-      <p class="unit-desc">Effective literature studies approaches, analysis, Plagiarism, Research ethics.</p>
-
-      <!-- 2.1 -->
-      <div class="topic" id="u2-1">
-        <h3><span class="num">2.1</span> Effective Literature Studies Approaches</h3>
-        <p>A <b>Systematic Literature Review (SLR)</b> is an exhaustive mapping of existing evidence relevant to a research question, eliminating selection bias through reproducible Boolean search queries across indexed databases (IEEE Xplore, ACM Digital Library, Scopus, ScienceDirect, arXiv, Google Scholar).</p>
-
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 2.1: PRISMA Systematic Literature Review Workflow</span>
-          <div class="mermaid">
-          graph LR
-            A[Identification: Search Queries] --> B[Screening: Title & Abstract Filter]
-            B --> C[Eligibility: Full-Text Appraisal]
-            C --> D[Inclusion: Final Synthesis Matrix]
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.2 -->
-      <div class="topic" id="u2-2">
-        <h3><span class="num">2.2</span> Literature Analysis & Synthesis</h3>
-        <p><b>Literature Analysis</b> involves critical evaluation of paper methodologies, assumptions, control variables, and limitations. Researchers construct a <b>Synthesis Matrix</b> to compare studies and highlight unresolved gaps:</p>
-
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th>Author & Year</th>
-              <th>Proposed Method</th>
-              <th>Benchmark</th>
-              <th>Key Strengths</th>
-              <th>Identified Gap / Complexity</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Vaswani et al. (2017)</td>
-              <td>Self-Attention (Transformer)</td>
-              <td>WMT 2014 Eng-Ger</td>
-              <td>Parallel training; eliminates recurrence.</td>
-              <td>Quadratic time/memory complexity $\mathcal{O}(N^2 \cdot d)$.</td>
-            </tr>
-            <tr>
-              <td>Dao et al. (2022)</td>
-              <td>FlashAttention</td>
-              <td>Long Range Arena</td>
-              <td>IO-aware tiling; speeds up 2-4x.</td>
-              <td>SRAM memory complexity $\mathcal{O}(N^2 \cdot d / M)$.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 2.3 -->
-      <div class="topic" id="u2-3">
-        <h3><span class="num">2.3</span> Plagiarism: Nature, Types & UGC Regulations</h3>
-        <p><b>Plagiarism</b> is the unacknowledged appropriation of another person's ideas, processes, results, text, or source code without giving proper credit or citation.</p>
-
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 2.2: Comprehensive Taxonomy of Academic Plagiarism</span>
-          <div class="mermaid">
-          graph TD
-            P[Plagiarism Taxonomy] --> D[Direct / Verbatim]
-            P --> M[Mosaic / Patchwriting]
-            P --> PA[Paraphrase Plagiarism]
-            P --> S[Self-Plagiarism / Text Recycling]
-            P --> C[Cyber-Plagiarism / Code Theft]
+        <!-- 1.4 -->
+        <div class="topic" id="u1-4">
+          <h3><span class="num">1.4</span> Errors in Selecting a Research Problem</h3>
+          <div class="warn">
+            <b>Critical Errors to Avoid in Problem Selection:</b>
+            <ul>
+              <li><b>Over-broad Scope:</b> Selecting a topic so vast (e.g. <i>"Improving Cybersecurity using AI"</i>)
+                that it cannot be investigated within time constraints.</li>
+              <li><b>Trivial / Over-researched Topics:</b> Re-implementing established algorithms without introducing
+                novel variations.</li>
+              <li><b>Ignoring Resource & Compute Limits:</b> Formulating problems requiring unavailable hardware,
+                proprietary datasets, or specialized labs.</li>
+              <li><b>Unscientific / Subjective Bias:</b> Designing a problem to prove a pre-conceived subjective
+                preference rather than objective empirical truth.</li>
+            </ul>
           </div>
         </div>
 
-        <div class="warn">
-          <b>Similarity Index vs. Plagiarism:</b> Similarity Index is a raw automated text-match percentage produced by software (e.g. Turnitin), including properly cited quotes and equations. Plagiarism is an ethical breach of intellectual theft.
+        <!-- 1.5 -->
+        <div class="topic" id="u1-5">
+          <h3><span class="num">1.5</span> Scope and Objectives of Research Problem</h3>
+          <p>Defining the <b>Scope</b> establishes explicit boundaries (delimitations) of what the research will and
+            will <i>not</i> cover. <b>Objectives</b> must be split into primary and secondary goals supported by
+            statistical hypotheses:</p>
+          <ul>
+            <li><b>Null Hypothesis ($H_0$):</b> Assumes no statistical significance or difference exists between the
+              proposed method and the baseline ($H_0: \mu_{\text{proposed}} = \mu_{\text{baseline}}$).</li>
+            <li><b>Alternative Hypothesis ($H_1$):</b> States that the proposed intervention yields statistically
+              significant improvement ($H_1: \mu_{\text{proposed}} > \mu_{\text{baseline}}$).</li>
+          </ul>
         </div>
 
-        <h4 style="font-size:15px;color:var(--heading);margin:16px 0 8px 0;">UGC Academic Integrity Guidelines & Penalties</h4>
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th>Level</th>
-              <th>Similarity Threshold</th>
-              <th>UGC Prescribed Penalty</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Level 0</b></td>
-              <td>Up to 10%</td>
-              <td>Minor similarity — Acceptable threshold; no penalty.</td>
-            </tr>
-            <tr>
-              <td><b>Level 1</b></td>
-              <td>Above 10% to 40%</td>
-              <td>Student must submit a revised manuscript within 6 months.</td>
-            </tr>
-            <tr>
-              <td><b>Level 2</b></td>
-              <td>Above 40% to 60%</td>
-              <td>Student is debarred from submitting revised script for 1 year.</td>
-            </tr>
-            <tr>
-              <td><b>Level 3</b></td>
-              <td>Above 60%</td>
-              <td>Student's registration for the academic program is cancelled.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <!-- 1.6 -->
+        <div class="topic" id="u1-6">
+          <h3><span class="num">1.6</span> Approaches of Investigation of Solutions for Research Problem</h3>
+          <p>Research approaches dictate how data is gathered and logical conclusions drawn:</p>
+          <ul>
+            <li><b>Deductive Approach:</b> Top-down reasoning moving from general theory $\rightarrow$ hypothesis
+              $\rightarrow$ empirical test $\rightarrow$ confirmation.</li>
+            <li><b>Inductive Approach:</b> Bottom-up reasoning moving from specific observations $\rightarrow$ pattern
+              discovery $\rightarrow$ tentative hypothesis $\rightarrow$ theory building.</li>
+            <li><b>Exploratory & Diagnostic Approaches:</b> Investigating under-researched topics or diagnosing root
+              causes of system failures.</li>
+            <li><b>Experimental & Quantitative Modeling:</b> Controlled benchmarking, mathematical simulations, and
+              algorithmic modeling.</li>
+          </ul>
 
-      <!-- 2.4 -->
-      <div class="topic" id="u2-4">
-        <h3><span class="num">2.4</span> Research Ethics</h3>
-        <p>Research ethics governs the moral conduct of scientific enquiry. The <b>FFP Triad</b> represents the primary forms of research misconduct:</p>
-        <ul>
-          <li><b>Fabrication:</b> Making up synthetic data or experimental logs and reporting them as genuine empirical results.</li>
-          <li><b>Falsification:</b> Manipulating equipment, execution parameters, or figures to distort actual outcomes.</li>
-          <li><b>Plagiarism:</b> Stealing intellectual ideas, text, or code without proper attribution.</li>
-        </ul>
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 1.1: Deductive vs. Inductive Investigation Pathways</span>
+            <div class="mermaid">
+              graph TD
+              A[Approaches of Investigation] --> B[Deductive Reasoning]
+              A --> C[Inductive Reasoning]
 
-        <p><b>Authorship Ethics (ICMJE Criteria):</b> Co-authorship requires satisfying all 4 criteria: substantial research contribution, manuscript drafting/revision, final approval, and accountability. Unethical practices include <i>Ghost</i>, <i>Gift/Honorary</i>, and <i>Guest</i> authorship.</p>
-      </div>
-    </section>
+              B --> B1[Theory / General Rule]
+              B1 --> B2[Hypothesis Formulation]
+              B2 --> B3[Empirical Testing]
+              B3 --> B4[Confirmation / Rejection]
 
-    <!-- =================================================================== -->
-    <!-- UNIT III -->
-    <!-- =================================================================== -->
-    <section id="unit3" class="unit">
-      <span class="unit-tag">UNIT III</span>
-      <h2>Technical Writing, Research Proposals & Peer Review</h2>
-      <p class="unit-desc">Effective technical writing, how to write report, Paper Developing a Research Proposal, Format of research proposal, a presentation and assessment by a review committee.</p>
-
-      <!-- 3.1 -->
-      <div class="topic" id="u3-1">
-        <h3><span class="num">3.1</span> Effective Technical Writing</h3>
-        <p>Technical writing demands precision, objectivity, clarity, conciseness, and logical flow. Scientific papers follow the universal <b>IMRaD Structural Framework</b>:</p>
-
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 3.1: Standard IMRaD Manuscript Architecture</span>
-          <div class="mermaid">
-          graph TD
-            Title[Title, Abstract, Keywords] --> I[Introduction: Problem & Motivation]
-            I --> M[Methods: Proposed Architecture & Experiments]
-            M --> R[Results: Benchmark Tables & Charts]
-            R --> D[Discussion: Analysis & Limitations]
-            D --> C[Conclusion & Future Scope]
+              C --> C1[Specific Observations]
+              C1 --> C2[Pattern Discovery]
+              C2 --> C3[Tentative Hypothesis]
+              C3 --> C4[General Theory Building]
+            </div>
           </div>
         </div>
 
-        <p><b>Structured Abstract Components:</b> Context (1-2 sentences), Problem (1 sentence), Proposed Solution (2-3 sentences), Key Quantitative Results (2 sentences), and Conclusion (1 sentence).</p>
-      </div>
+        <!-- 1.7 -->
+        <div class="topic" id="u1-7">
+          <h3><span class="num">1.7</span> Data Collection, Analysis, and Interpretation</h3>
+          <p><b>Primary Data Collection</b> gathers original empirical data via experiments, sensor logs, user
+            telemetry, or network packet traces. <b>Secondary Data Collection</b> extracts pre-existing data from
+            repositories (Kaggle, UCI, IEEE DataPort).</p>
 
-      <!-- 3.2 -->
-      <div class="topic" id="u3-2">
-        <h3><span class="num">3.2</span> How to Write Report</h3>
-        <p>Writing a formal research report or master's thesis requires structured chapter organization:</p>
-        <ol>
-          <li><b>Front Matter:</b> Title Page, Certificate, Abstract, Table of Contents, List of Figures/Tables.</li>
-          <li><b>Chapter 1: Introduction:</b> Context, Problem Statement, Objectives, Delimitations, Thesis Outline.</li>
-          <li><b>Chapter 2: Literature Survey:</b> Critical appraisal of prior art and research gap identification.</li>
-          <li><b>Chapter 3: Proposed Methodology:</b> Algorithmic formulation, architecture diagrams, mathematical proofs.</li>
-          <li><b>Chapter 4: Implementation & Experimental Results:</b> Benchmark datasets, performance graphs, baseline comparisons.</li>
-          <li><b>Chapter 5: Conclusion & Future Scope:</b> Primary contributions and open directions.</li>
-          <li><b>Back Matter:</b> References (IEEE/APA format), Appendices, Published Papers.</li>
-        </ol>
-      </div>
+          <div class="eq-box">
+            <b>KaTeX Data Analysis & Sample Size Formulas:</b>
+            <p><b>Cochran's Sample Size Formula</b> for large populations ($N > 10,000$):</p>
+            $$n_0 = \frac{Z^2 \cdot p \cdot (1 - p)}{e^2}$$
+            <p><b>Yamane's Formula</b> for finite population sample size calculation:</p>
+            $$n = \frac{N}{1 + N(e)^2}$$
+            <p><b>Student's t-test statistic</b> for comparing algorithm performance means:</p>
+            $$t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$$
+            <p><b>Chi-Square ($\chi^2$) Goodness-of-Fit Test Statistic:</b></p>
+            $$\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}$$
+          </div>
 
-      <!-- 3.3 -->
-      <div class="topic" id="u3-3">
-        <h3><span class="num">3.3</span> Paper Writing, Journal Metrics & Peer Review</h3>
-        <div class="eq-box">
-          <b>Journal Metrics KaTeX Formulas:</b>
-          <p><b>Impact Factor (Clarivate Web of Science):</b></p>
-          $$\text{IF}_{2024} = \frac{\text{Citations in 2024 to items published in 2022 + 2023}}{\text{Total publishable items in 2022 + 2023}}$$
-          <p><b>CiteScore (Scopus / Elsevier):</b></p>
-          $$\text{CiteScore}_{2024} = \frac{\text{Citations in 2020--2023 to articles, reviews, papers published in 2020--2023}}{\text{Total documents published in 2020--2023}}$$
+          <p><b>Data Interpretation:</b> Analyzing statistical significance ($p$-value $< 0.05$), avoiding spurious
+              correlations, and drawing objective conclusions.</p>
         </div>
 
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 3.2: Complete Journal Peer Review & Decision Sequence</span>
-          <div class="mermaid">
-          sequenceDiagram
-            autonumber
-            Author->>Editor: Submits Manuscript
-            Editor->>Editor: Desk Check (Scope & Similarity)
-            alt Desk Reject
+        <!-- 1.8 -->
+        <div class="topic" id="u1-8">
+          <h3><span class="num">1.8</span> Necessary Instrumentations</h3>
+          <p>Instrumentation in Computer Science research comprises the full hardware, software, and benchmark stack
+            required for empirical validation:</p>
+          <ul>
+            <li><b>Software Tools:</b> Profilers (Valgrind, TensorBoard, PySpy), statistical environments (R, Python -
+              NumPy/SciPy/Pandas), R packages.</li>
+            <li><b>Hardware Infrastructure:</b> High-performance GPU nodes (NVIDIA A100/H100), Cloud Compute clusters
+              (AWS EC2, Google Cloud TPU), Oscilloscopes/Logic Analyzers (for IoT/Embedded research).</li>
+            <li><b>Benchmark Datasets:</b> Standardized validation datasets accepted by the research community
+              (ImageNet, MNIST, CIFAR-100, MS-COCO).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- UNIT II -->
+      <!-- =================================================================== -->
+      <section id="unit2" class="unit">
+        <span class="unit-tag">UNIT II</span>
+        <h2>Literature Studies, Plagiarism & Research Ethics</h2>
+        <p class="unit-desc">Effective literature studies approaches, analysis, Plagiarism, Research ethics.</p>
+
+        <!-- 2.1 -->
+        <div class="topic" id="u2-1">
+          <h3><span class="num">2.1</span> Effective Literature Studies Approaches</h3>
+          <p>A <b>Systematic Literature Review (SLR)</b> is an exhaustive mapping of existing evidence relevant to a
+            research question, eliminating selection bias through reproducible Boolean search queries across indexed
+            databases (IEEE Xplore, ACM Digital Library, Scopus, ScienceDirect, arXiv, Google Scholar).</p>
+
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 2.1: PRISMA Systematic Literature Review Workflow</span>
+            <div class="mermaid">
+              graph LR
+              A[Identification: Search Queries] --> B[Screening: Title & Abstract Filter]
+              B --> C[Eligibility: Full-Text Appraisal]
+              C --> D[Inclusion: Final Synthesis Matrix]
+            </div>
+          </div>
+        </div>
+
+        <!-- 2.2 -->
+        <div class="topic" id="u2-2">
+          <h3><span class="num">2.2</span> Literature Analysis & Synthesis</h3>
+          <p><b>Literature Analysis</b> involves critical evaluation of paper methodologies, assumptions, control
+            variables, and limitations. Researchers construct a <b>Synthesis Matrix</b> to compare studies and highlight
+            unresolved gaps:</p>
+
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Author & Year</th>
+                <th>Proposed Method</th>
+                <th>Benchmark</th>
+                <th>Key Strengths</th>
+                <th>Identified Gap / Complexity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vaswani et al. (2017)</td>
+                <td>Self-Attention (Transformer)</td>
+                <td>WMT 2014 Eng-Ger</td>
+                <td>Parallel training; eliminates recurrence.</td>
+                <td>Quadratic time/memory complexity $\mathcal{O}(N^2 \cdot d)$.</td>
+              </tr>
+              <tr>
+                <td>Dao et al. (2022)</td>
+                <td>FlashAttention</td>
+                <td>Long Range Arena</td>
+                <td>IO-aware tiling; speeds up 2-4x.</td>
+                <td>SRAM memory complexity $\mathcal{O}(N^2 \cdot d / M)$.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 2.3 -->
+        <div class="topic" id="u2-3">
+          <h3><span class="num">2.3</span> Plagiarism: Nature, Types & UGC Regulations</h3>
+          <p><b>Plagiarism</b> is the unacknowledged appropriation of another person's ideas, processes, results, text,
+            or source code without giving proper credit or citation.</p>
+
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 2.2: Comprehensive Taxonomy of Academic Plagiarism</span>
+            <div class="mermaid">
+              graph TD
+              P[Plagiarism Taxonomy] --> D[Direct / Verbatim]
+              P --> M[Mosaic / Patchwriting]
+              P --> PA[Paraphrase Plagiarism]
+              P --> S[Self-Plagiarism / Text Recycling]
+              P --> C[Cyber-Plagiarism / Code Theft]
+            </div>
+          </div>
+
+          <div class="warn">
+            <b>Similarity Index vs. Plagiarism:</b> Similarity Index is a raw automated text-match percentage produced
+            by software (e.g. Turnitin), including properly cited quotes and equations. Plagiarism is an ethical breach
+            of intellectual theft.
+          </div>
+
+          <h4 style="font-size:15px;color:var(--heading);margin:16px 0 8px 0;">UGC Academic Integrity Guidelines &
+            Penalties</h4>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Similarity Threshold</th>
+                <th>UGC Prescribed Penalty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Level 0</b></td>
+                <td>Up to 10%</td>
+                <td>Minor similarity — Acceptable threshold; no penalty.</td>
+              </tr>
+              <tr>
+                <td><b>Level 1</b></td>
+                <td>Above 10% to 40%</td>
+                <td>Student must submit a revised manuscript within 6 months.</td>
+              </tr>
+              <tr>
+                <td><b>Level 2</b></td>
+                <td>Above 40% to 60%</td>
+                <td>Student is debarred from submitting revised script for 1 year.</td>
+              </tr>
+              <tr>
+                <td><b>Level 3</b></td>
+                <td>Above 60%</td>
+                <td>Student's registration for the academic program is cancelled.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 2.4 -->
+        <div class="topic" id="u2-4">
+          <h3><span class="num">2.4</span> Research Ethics</h3>
+          <p>Research ethics governs the moral conduct of scientific enquiry. The <b>FFP Triad</b> represents the
+            primary forms of research misconduct:</p>
+          <ul>
+            <li><b>Fabrication:</b> Making up synthetic data or experimental logs and reporting them as genuine
+              empirical results.</li>
+            <li><b>Falsification:</b> Manipulating equipment, execution parameters, or figures to distort actual
+              outcomes.</li>
+            <li><b>Plagiarism:</b> Stealing intellectual ideas, text, or code without proper attribution.</li>
+          </ul>
+
+          <p><b>Authorship Ethics (ICMJE Criteria):</b> Co-authorship requires satisfying all 4 criteria: substantial
+            research contribution, manuscript drafting/revision, final approval, and accountability. Unethical practices
+            include <i>Ghost</i>, <i>Gift/Honorary</i>, and <i>Guest</i> authorship.</p>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- UNIT III -->
+      <!-- =================================================================== -->
+      <section id="unit3" class="unit">
+        <span class="unit-tag">UNIT III</span>
+        <h2>Technical Writing, Research Proposals & Peer Review</h2>
+        <p class="unit-desc">Effective technical writing, how to write report, Paper Developing a Research Proposal,
+          Format of research proposal, a presentation and assessment by a review committee.</p>
+
+        <!-- 3.1 -->
+        <div class="topic" id="u3-1">
+          <h3><span class="num">3.1</span> Effective Technical Writing</h3>
+          <p>Technical writing demands precision, objectivity, clarity, conciseness, and logical flow. Scientific papers
+            follow the universal <b>IMRaD Structural Framework</b>:</p>
+
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 3.1: Standard IMRaD Manuscript Architecture</span>
+            <div class="mermaid">
+              graph TD
+              Title[Title, Abstract, Keywords] --> I[Introduction: Problem & Motivation]
+              I --> M[Methods: Proposed Architecture & Experiments]
+              M --> R[Results: Benchmark Tables & Charts]
+              R --> D[Discussion: Analysis & Limitations]
+              D --> C[Conclusion & Future Scope]
+            </div>
+          </div>
+
+          <p><b>Structured Abstract Components:</b> Context (1-2 sentences), Problem (1 sentence), Proposed Solution
+            (2-3 sentences), Key Quantitative Results (2 sentences), and Conclusion (1 sentence).</p>
+        </div>
+
+        <!-- 3.2 -->
+        <div class="topic" id="u3-2">
+          <h3><span class="num">3.2</span> How to Write Report</h3>
+          <p>Writing a formal research report or master's thesis requires structured chapter organization:</p>
+          <ol>
+            <li><b>Front Matter:</b> Title Page, Certificate, Abstract, Table of Contents, List of Figures/Tables.</li>
+            <li><b>Chapter 1: Introduction:</b> Context, Problem Statement, Objectives, Delimitations, Thesis Outline.
+            </li>
+            <li><b>Chapter 2: Literature Survey:</b> Critical appraisal of prior art and research gap identification.
+            </li>
+            <li><b>Chapter 3: Proposed Methodology:</b> Algorithmic formulation, architecture diagrams, mathematical
+              proofs.</li>
+            <li><b>Chapter 4: Implementation & Experimental Results:</b> Benchmark datasets, performance graphs,
+              baseline comparisons.</li>
+            <li><b>Chapter 5: Conclusion & Future Scope:</b> Primary contributions and open directions.</li>
+            <li><b>Back Matter:</b> References (IEEE/APA format), Appendices, Published Papers.</li>
+          </ol>
+        </div>
+
+        <!-- 3.3 -->
+        <div class="topic" id="u3-3">
+          <h3><span class="num">3.3</span> Paper Writing, Journal Metrics & Peer Review</h3>
+          <div class="eq-box">
+            <b>Journal Metrics KaTeX Formulas:</b>
+            <p><b>Impact Factor (Clarivate Web of Science):</b></p>
+            $$\text{IF}_{2024} = \frac{\text{Citations in 2024 to items published in 2022 + 2023}}{\text{Total
+            publishable items in 2022 + 2023}}$$
+            <p><b>CiteScore (Scopus / Elsevier):</b></p>
+            $$\text{CiteScore}_{2024} = \frac{\text{Citations in 2020--2023 to articles, reviews, papers published in
+            2020--2023}}{\text{Total documents published in 2020--2023}}$$
+          </div>
+
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 3.2: Complete Journal Peer Review & Decision Sequence</span>
+            <div class="mermaid">
+              sequenceDiagram
+              autonumber
+              Author->>Editor: Submits Manuscript
+              Editor->>Editor: Desk Check (Scope & Similarity)
+              alt Desk Reject
               Editor-->>Author: Reject (Out of Scope)
-            else Accepted for Review
+              else Accepted for Review
               Editor->>Reviewers: Assigns Subject Experts
               Reviewers->>Editor: Submits Technical Evaluation
               Editor-->>Author: Decision (Accept / Revision / Reject)
-            end
-          </div>
-        </div>
-      </div>
-
-      <!-- 3.4 -->
-      <div class="topic" id="u3-4">
-        <h3><span class="num">3.4</span> Developing a Research Proposal & Format of Research Proposal</h3>
-        <p>A <b>Research Proposal</b> is a formal document soliciting research grant funding from institutional or governmental bodies (DST-SERB, AICTE, CSIR, ISRO, DRDO, UGC). Standard 7-part format:</p>
-
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th>Proposal Head</th>
-              <th>Required Technical Contents</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>1. Executive Summary</b></td>
-              <td>High-level synthesis of project goals, total budget requirement, duration, and deliverables.</td>
-            </tr>
-            <tr>
-              <td><b>2. Statement of Problem</b></td>
-              <td>Technical breakdown of the gap, industrial significance, and motivation.</td>
-            </tr>
-            <tr>
-              <td><b>3. Literature Survey & Gap</b></td>
-              <td>Critical analysis proving no existing commercial product handles the problem.</td>
-            </tr>
-            <tr>
-              <td><b>4. Specific Objectives</b></td>
-              <td>Bullet-pointed, quantifiable technical targets at major milestones.</td>
-            </tr>
-            <tr>
-              <td><b>5. Work Plan & Methodology</b></td>
-              <td>Phase-wise tasks supported by a <b>Gantt Chart</b> and PERT network diagram.</td>
-            </tr>
-            <tr>
-              <td><b>6. Budget Breakdown</b></td>
-              <td>Equipment/Hardware, Manpower (JRF salaries), Travel, Contingency, Overheads.</td>
-            </tr>
-            <tr>
-              <td><b>7. Expected Deliverables</b></td>
-              <td>Patents, open-source software, journal papers, technology transfer prototypes.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 3.5 -->
-      <div class="topic" id="u3-5">
-        <h3><span class="num">3.5</span> Presentation and Assessment by a Review Committee</h3>
-        <p>Defending a proposal or thesis before a review committee (Doctoral Advisory Committee / Grant Evaluation Board) focuses on 5 core evaluation criteria: <b>Scientific Novelty</b>, <b>Methodological Rigor</b>, <b>Budget Justification</b>, <b>Risk Mitigation & Feasibility</b>, and <b>Investigator Track Record</b>.</p>
-      </div>
-    </section>
-
-    <!-- =================================================================== -->
-    <!-- UNIT IV -->
-    <!-- =================================================================== -->
-    <section id="unit4" class="unit">
-      <span class="unit-tag">UNIT IV</span>
-      <h2>Nature of Intellectual Property & Patenting Process</h2>
-      <p class="unit-desc">Nature of Intellectual Property: Patents, Designs, Trade and Copyright. Process of Patenting and Development: technological research, innovation, patenting, development. International Scenario: International cooperation on Intellectual Property. Procedure for grants of patents, Patenting under PCT.</p>
-
-      <!-- 4.1 -->
-      <div class="topic" id="u4-1">
-        <h3><span class="num">4.1</span> Nature of Intellectual Property: Patents, Designs, Trade Marks & Copyright</h3>
-        <p>Intellectual Property refers to legal monopoly rights granted by the state for human intellectual creations, balancing private commercial incentive with public domain disclosure.</p>
-
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th>IP Category</th>
-              <th>Protected Subject Matter</th>
-              <th>Term / Duration</th>
-              <th>Governing Legislation</th>
-              <th>Core Grant Criterion</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Patents</b></td>
-              <td>Functional inventions (Products, Processes).</td>
-              <td><b>20 Years</b> ($T_{\text{patent}} = t_{\text{filing}} + 20$)</td>
-              <td>The Patents Act, 1970</td>
-              <td>Novelty, Non-obviousness, Industrial Utility.</td>
-            </tr>
-            <tr>
-              <td><b>Industrial Designs</b></td>
-              <td>Aesthetic visual shape or pattern of an article.</td>
-              <td><b>10 + 5 Years</b></td>
-              <td>The Designs Act, 2000</td>
-              <td>Novel visual appearance, non-functional.</td>
-            </tr>
-            <tr>
-              <td><b>Trade Marks & Secrets</b></td>
-              <td>Brand names, logos, symbols, slogans / Confidential info.</td>
-              <td><b>10 Years</b> (Renewable) / Indefinite</td>
-              <td>The Trade Marks Act, 1999 / Contract Law</td>
-              <td>Distinctiveness; non-confusing / Secrecy.</td>
-            </tr>
-            <tr>
-              <td><b>Copyright</b></td>
-              <td>Literary, artistic works, software source code.</td>
-              <td><b>Life + 60 Years</b></td>
-              <td>The Copyright Act, 1957</td>
-              <td>Originality of expression.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 4.2 -->
-      <div class="topic" id="u4-2">
-        <h3><span class="num">4.2</span> Process of Patenting and Development: Technological Research, Innovation, Patenting, Development</h3>
-        <p>The innovation pipeline moves through 4 distinct stages:</p>
-        <ol>
-          <li><b>Technological Research:</b> Basic scientific enquiry and algorithm design.</li>
-          <li><b>Innovation:</b> Applying research to solve a specific practical problem with technical contribution.</li>
-          <li><b>Patenting:</b> Novelty searching, filing patent applications, claims drafting, and securing grant.</li>
-          <li><b>Development & Commercialization:</b> Technology transfer, licensing, scaling prototype to industrial production.</li>
-        </ol>
-
-        <h4 style="font-size:15px;color:var(--heading);margin:16px 0 8px 0;">Statutory Criteria for Patentability (Section 2(1)(j))</h4>
-        <ol>
-          <li><b>Novelty:</b> Absolute world novelty; no prior public disclosure anywhere in the world.</li>
-          <li><b>Inventive Step (Non-Obviousness):</b> Technical advance not obvious to a <b>PHOSITA</b> (Person Having Ordinary Skill In The Art).</li>
-          <li><b>Industrial Applicability:</b> Capable of industrial manufacture or application.</li>
-        </ol>
-
-        <div class="warn">
-          <b>Non-Patentable Subject Matter (Section 3 & 4):</b> Frivolous inventions (Sec 3a), scientific principles/abstract theories (Sec 3b), computer programs per se or algorithms (Sec 3k), aesthetic creations (Sec 3m), and atomic energy (Sec 4).
-        </div>
-      </div>
-
-      <!-- 4.3 -->
-      <div class="topic" id="u4-3">
-        <h3><span class="num">4.3</span> International Scenario: International Cooperation on Intellectual Property</h3>
-        <p>Patents are territorial rights. International cooperation harmonizes IP protection across borders:</p>
-        <ul>
-          <li><b>WIPO (World Intellectual Property Organization):</b> UN specialized agency administering global IP treaties.</li>
-          <li><b>Paris Convention (1883):</b> Establishes 12-month Priority Right across member states.</li>
-          <li><b>Berne Convention (1886):</b> International copyright protection without formal registration requirements.</li>
-          <li><b>TRIPS Agreement (1994):</b> Trade-Related Aspects of Intellectual Property Rights under WTO establishing 20-year minimum patent terms globally.</li>
-        </ul>
-      </div>
-
-      <!-- 4.4 -->
-      <div class="topic" id="u4-4">
-        <h3><span class="num">4.4</span> Procedure for Grants of Patents</h3>
-        
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 4.1: Indian Patent Office Examination & Grant Workflow</span>
-          <div class="mermaid">
-          graph TD
-            F1[Provisional Specification] -->|Within 12 Months| F2[Complete Specification]
-            F2 --> Pub[Publication at 18 Months]
-            Pub --> RFE[Request for Examination]
-            RFE --> FER[First Examination Report - FER]
-            FER --> Resp[Applicant Response & Amendments]
-            Resp --> Grant[Grant of Patent - 20 Years Protection]
+              end
+            </div>
           </div>
         </div>
 
-        <p><b>Anatomy of Patent Claims:</b> Claims define the legal enforceable boundary. <i>Independent Claims</i> define broad structural elements; <i>Dependent Claims</i> add narrower fallback limitations.</p>
-      </div>
+        <!-- 3.4 -->
+        <div class="topic" id="u3-4">
+          <h3><span class="num">3.4</span> Developing a Research Proposal & Format of Research Proposal</h3>
+          <p>A <b>Research Proposal</b> is a formal document soliciting research grant funding from institutional or
+            governmental bodies (DST-SERB, AICTE, CSIR, ISRO, DRDO, UGC). Standard 7-part format:</p>
 
-      <!-- 4.5 -->
-      <div class="topic" id="u4-5">
-        <h3><span class="num">4.5</span> Patenting under PCT (Patent Cooperation Treaty)</h3>
-        <p>The <b>Patent Cooperation Treaty (PCT)</b> provides a single international application delaying national filing fees until <b>Month 30/31</b> across 155+ member countries.</p>
-
-        <div class="eq-box">
-          <b>PCT Timeline Equation:</b>
-          $$t_{\text{national}} = t_{\text{priority}} + 30 \text{ months}$$
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Proposal Head</th>
+                <th>Required Technical Contents</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>1. Executive Summary</b></td>
+                <td>High-level synthesis of project goals, total budget requirement, duration, and deliverables.</td>
+              </tr>
+              <tr>
+                <td><b>2. Statement of Problem</b></td>
+                <td>Technical breakdown of the gap, industrial significance, and motivation.</td>
+              </tr>
+              <tr>
+                <td><b>3. Literature Survey & Gap</b></td>
+                <td>Critical analysis proving no existing commercial product handles the problem.</td>
+              </tr>
+              <tr>
+                <td><b>4. Specific Objectives</b></td>
+                <td>Bullet-pointed, quantifiable technical targets at major milestones.</td>
+              </tr>
+              <tr>
+                <td><b>5. Work Plan & Methodology</b></td>
+                <td>Phase-wise tasks supported by a <b>Gantt Chart</b> and PERT network diagram.</td>
+              </tr>
+              <tr>
+                <td><b>6. Budget Breakdown</b></td>
+                <td>Equipment/Hardware, Manpower (JRF salaries), Travel, Contingency, Overheads.</td>
+              </tr>
+              <tr>
+                <td><b>7. Expected Deliverables</b></td>
+                <td>Patents, open-source software, journal papers, technology transfer prototypes.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="diagram-wrap">
-          <span class="diagram-title">Figure 4.2: PCT International Patent Filing Phases (30-Month Gantt Chart)</span>
-          <div class="mermaid">
-          gantt
-            title PCT 30-Month Timeline Workflow
-            dateFormat YYYY-MM-DD
-            axisFormat %m Mon
-            
-            Priority Filing Date (Month 0) :milestone, m0, 2024-01-01, 0d
-            International PCT Application (Month 12) :active, m12, 2024-01-01, 365d
-            International Search Report ISR :m16, 2025-05-01, 30d
-            International Publication (Month 18) :milestone, m18, 2025-07-01, 0d
-            National Phase Entry (Month 30/31) :milestone, m30, 2026-07-01, 0d
+        <!-- 3.5 -->
+        <div class="topic" id="u3-5">
+          <h3><span class="num">3.5</span> Presentation and Assessment by a Review Committee</h3>
+          <p>Defending a proposal or thesis before a review committee (Doctoral Advisory Committee / Grant Evaluation
+            Board) focuses on 5 core evaluation criteria: <b>Scientific Novelty</b>, <b>Methodological Rigor</b>,
+            <b>Budget Justification</b>, <b>Risk Mitigation & Feasibility</b>, and <b>Investigator Track Record</b>.</p>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- UNIT IV -->
+      <!-- =================================================================== -->
+      <section id="unit4" class="unit">
+        <span class="unit-tag">UNIT IV</span>
+        <h2>Nature of Intellectual Property & Patenting Process</h2>
+        <p class="unit-desc">Nature of Intellectual Property: Patents, Designs, Trade and Copyright. Process of
+          Patenting and Development: technological research, innovation, patenting, development. International Scenario:
+          International cooperation on Intellectual Property. Procedure for grants of patents, Patenting under PCT.</p>
+
+        <!-- 4.1 -->
+        <div class="topic" id="u4-1">
+          <h3><span class="num">4.1</span> Nature of Intellectual Property: Patents, Designs, Trade Marks & Copyright
+          </h3>
+          <p>Intellectual Property refers to legal monopoly rights granted by the state for human intellectual
+            creations, balancing private commercial incentive with public domain disclosure.</p>
+
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>IP Category</th>
+                <th>Protected Subject Matter</th>
+                <th>Term / Duration</th>
+                <th>Governing Legislation</th>
+                <th>Core Grant Criterion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Patents</b></td>
+                <td>Functional inventions (Products, Processes).</td>
+                <td><b>20 Years</b> ($T_{\text{patent}} = t_{\text{filing}} + 20$)</td>
+                <td>The Patents Act, 1970</td>
+                <td>Novelty, Non-obviousness, Industrial Utility.</td>
+              </tr>
+              <tr>
+                <td><b>Industrial Designs</b></td>
+                <td>Aesthetic visual shape or pattern of an article.</td>
+                <td><b>10 + 5 Years</b></td>
+                <td>The Designs Act, 2000</td>
+                <td>Novel visual appearance, non-functional.</td>
+              </tr>
+              <tr>
+                <td><b>Trade Marks & Secrets</b></td>
+                <td>Brand names, logos, symbols, slogans / Confidential info.</td>
+                <td><b>10 Years</b> (Renewable) / Indefinite</td>
+                <td>The Trade Marks Act, 1999 / Contract Law</td>
+                <td>Distinctiveness; non-confusing / Secrecy.</td>
+              </tr>
+              <tr>
+                <td><b>Copyright</b></td>
+                <td>Literary, artistic works, software source code.</td>
+                <td><b>Life + 60 Years</b></td>
+                <td>The Copyright Act, 1957</td>
+                <td>Originality of expression.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 4.2 -->
+        <div class="topic" id="u4-2">
+          <h3><span class="num">4.2</span> Process of Patenting and Development: Technological Research, Innovation,
+            Patenting, Development</h3>
+          <p>The innovation pipeline moves through 4 distinct stages:</p>
+          <ol>
+            <li><b>Technological Research:</b> Basic scientific enquiry and algorithm design.</li>
+            <li><b>Innovation:</b> Applying research to solve a specific practical problem with technical contribution.
+            </li>
+            <li><b>Patenting:</b> Novelty searching, filing patent applications, claims drafting, and securing grant.
+            </li>
+            <li><b>Development & Commercialization:</b> Technology transfer, licensing, scaling prototype to industrial
+              production.</li>
+          </ol>
+
+          <h4 style="font-size:15px;color:var(--heading);margin:16px 0 8px 0;">Statutory Criteria for Patentability
+            (Section 2(1)(j))</h4>
+          <ol>
+            <li><b>Novelty:</b> Absolute world novelty; no prior public disclosure anywhere in the world.</li>
+            <li><b>Inventive Step (Non-Obviousness):</b> Technical advance not obvious to a <b>PHOSITA</b> (Person
+              Having Ordinary Skill In The Art).</li>
+            <li><b>Industrial Applicability:</b> Capable of industrial manufacture or application.</li>
+          </ol>
+
+          <div class="warn">
+            <b>Non-Patentable Subject Matter (Section 3 & 4):</b> Frivolous inventions (Sec 3a), scientific
+            principles/abstract theories (Sec 3b), computer programs per se or algorithms (Sec 3k), aesthetic creations
+            (Sec 3m), and atomic energy (Sec 4).
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- =================================================================== -->
-    <!-- UNIT V -->
-    <!-- =================================================================== -->
-    <section id="unit5" class="unit">
-      <span class="unit-tag">UNIT V</span>
-      <h2>Patent Rights, Technology Transfer & Emerging IPR</h2>
-      <p class="unit-desc">Patent Rights: Scope of Patent Rights. Licensing and transfer of technology. Patent information and databases. Geographical Indications. New Developments in IPR: Administration of Patent System. New developments in IPR; IPR of Biological Systems, Computer Software etc. Traditional knowledge Case Studies, IPR and IITs.</p>
-
-      <!-- 5.1 -->
-      <div class="topic" id="u5-1">
-        <h3><span class="num">5.1</span> Patent Rights: Scope of Patent Rights</h3>
-        <p>A patent grants exclusive negative rights to exclude third parties from making, using, selling, or importing the patented product or process. Statutory exceptions include <b>Research Exemption</b>, <b>Bolar Provisions</b> (regulatory data testing), and <b>Compulsory Licensing (Section 84)</b> granted after 3 years if public requirements are unmet or prices unaffordable.</p>
-      </div>
-
-      <!-- 5.2 -->
-      <div class="topic" id="u5-2">
-        <h3><span class="num">5.2</span> Licensing and Transfer of Technology</h3>
-        <p>Technology Transfer models enable commercial exploitation of IP:</p>
-        <ul>
-          <li><b>Assignment:</b> Outright permanent transfer/sale of IP title and ownership.</li>
-          <li><b>Exclusive License:</b> Single licensee gains commercial rights; licensor is excluded from commercial use.</li>
-          <li><b>Non-Exclusive License:</b> Rights granted to multiple competing entities simultaneously.</li>
-          <li><b>Cross-Licensing:</b> Mutual exchange of patent portfolio rights between technology firms.</li>
-        </ul>
-      </div>
-
-      <!-- 5.3 -->
-      <div class="topic" id="u5-3">
-        <h3><span class="num">5.3</span> Patent Information and Databases</h3>
-        <p>Patent landscape searches prevent reinventing the wheel. Major global search engines: <b>InPASS</b> (India), <b>Espacenet</b> (EPO - 140M+ docs), <b>PATENTSCOPE</b> (WIPO), <b>USPTO</b>, and <b>Google Patents</b>. Indexed via <b>IPC</b> (International Patent Classification) and <b>CPC</b> (Cooperative Patent Classification).</p>
-      </div>
-
-      <!-- 5.4 -->
-      <div class="topic" id="u5-4">
-        <h3><span class="num">5.4</span> Geographical Indications</h3>
-        <p>A <b>Geographical Indication (GI)</b> identifies goods originating from a specific geographic region with unique qualities or reputation (e.g. <i>Darjeeling Tea, Mysore Silk, Hyderabad Haleem, Pochampally Ikat</i>). GIs are collective property of regional artisans, unlike corporate Trademarks.</p>
-      </div>
-
-      <!-- 5.5 -->
-      <div class="topic" id="u5-5">
-        <h3><span class="num">5.5</span> New Developments in IPR: Administration of Patent System</h3>
-        <p>Modernization of patent offices: E-filing portals, digital patents, AI-assisted prior art screening, expedited examination for startups and female inventors.</p>
-      </div>
-
-      <!-- 5.6 -->
-      <div class="topic" id="u5-6">
-        <h3><span class="num">5.6</span> New Developments in IPR: IPR of Biological Systems, Computer Software etc.</h3>
-        <ul>
-          <li><b>IPR of Biological Systems:</b> Microorganisms are patentable following <i>Diamond v. Chakrabarty (1980)</i>. The <b>Budapest Treaty</b> mandates biological sample deposit at an International Depository Authority (MTCC in India).</li>
-          <li><b>IPR of Computer Software:</b> Software per se is excluded under Section 3(k), but software demonstrating a <b>Technical Effect</b> embedded in hardware is patentable.</li>
-          <li><b>AI & Inventorship:</b> In test cases involving <b>DABUS</b>, patent offices ruled that an inventor under law must be a <b>natural human person</b>.</li>
-        </ul>
-      </div>
-
-      <!-- 5.7 -->
-      <div class="topic" id="u5-7">
-        <h3><span class="num">5.7</span> Traditional Knowledge Case Studies</h3>
-        <p><b>Biopiracy</b> is the unauthorized commercial patenting of indigenous traditional knowledge. India created the <b>Traditional Knowledge Digital Library (TKDL)</b> containing 450,000+ formulations in 5 international languages to prevent bad patents globally.</p>
-
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th>Landmark Case</th>
-              <th>Contested Patent</th>
-              <th>Indian Defense Evidence</th>
-              <th>Outcome</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><b>Turmeric Case (1997)</b></td>
-              <td>US Patent on wound healing.</td>
-              <td>Ancient Sanskrit texts proving prior art in India.</td>
-              <td><b>Patent Revoked</b> by USPTO.</td>
-            </tr>
-            <tr>
-              <td><b>Neem Case (2000)</b></td>
-              <td>EPO Patent on anti-fungal extract.</td>
-              <td>Evidence of traditional agricultural usage.</td>
-              <td><b>Patent Revoked</b> by EPO.</td>
-            </tr>
-            <tr>
-              <td><b>Basmati Rice (2001)</b></td>
-              <td>US Patent on Basmati lines.</td>
-              <td>Genetic strain data & geographic origin evidence.</td>
-              <td>RiceTec forced to <b>withdraw major claims</b>.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 5.8 -->
-      <div class="topic" id="u5-8">
-        <h3><span class="num">5.8</span> IPR and IITs</h3>
-        <p>Top Indian universities (IITs, IISc) enforce IP policies: IP developed using institutional infrastructure is owned by the Institute; commercial royalties are split (typically <b>70% to Inventors / 30% to Institution</b>); faculty/student spin-offs are supported via incubation parks (FITT, SINE, IITM RP).</p>
-      </div>
-    </section>
-
-    <!-- =================================================================== -->
-    <!-- EXAM QUESTION BANK -->
-    <!-- =================================================================== -->
-    <section id="exam-qa" class="unit">
-      <span class="unit-tag">EXAM PREP</span>
-      <h2>High-Yield Exam Question Bank & Model Answers</h2>
-      <p class="unit-desc">Frequently asked descriptive semester exam questions with concise model responses.</p>
-
-      <div class="qa-block">
-        <div class="qa-q">Q1. Distinguish between Deductive and Inductive research approaches with Computer Science examples.</div>
-        <div class="qa-a">
-          <p><b>Deductive Research:</b> Moves from general theories to specific empirical observations ("Top-Down"). A hypothesis is formulated based on existing theory and tested empirically. <i>Example:</i> Formulating a hypothesis that a Transformer model will outperform an LSTM on long text sequences due to self-attention theory, then testing it on benchmark data.</p>
-          <p><b>Inductive Research:</b> Moves from specific empirical observations to general theories ("Bottom-Up"). Experimental data is gathered, patterns are discovered, and a novel model is built. <i>Example:</i> Analyzing execution log files across thousands of cloud servers, discovering unexpected memory bottleneck patterns, and proposing a new dynamic resource allocation algorithm.</p>
+        <!-- 4.3 -->
+        <div class="topic" id="u4-3">
+          <h3><span class="num">4.3</span> International Scenario: International Cooperation on Intellectual Property
+          </h3>
+          <p>Patents are territorial rights. International cooperation harmonizes IP protection across borders:</p>
+          <ul>
+            <li><b>WIPO (World Intellectual Property Organization):</b> UN specialized agency administering global IP
+              treaties.</li>
+            <li><b>Paris Convention (1883):</b> Establishes 12-month Priority Right across member states.</li>
+            <li><b>Berne Convention (1886):</b> International copyright protection without formal registration
+              requirements.</li>
+            <li><b>TRIPS Agreement (1994):</b> Trade-Related Aspects of Intellectual Property Rights under WTO
+              establishing 20-year minimum patent terms globally.</li>
+          </ul>
         </div>
-      </div>
 
-      <div class="qa-block">
-        <div class="qa-q">Q2. Explain the difference between Similarity Index and Plagiarism. State the UGC penalty levels.</div>
-        <div class="qa-a">
-          <p><b>Similarity Index</b> is an automated text-matching percentage produced by software (e.g. Turnitin), including properly cited quotes and standard formulas. <b>Plagiarism</b> is an ethical violation involving dishonest theft of ideas, text, or code without attribution.</p>
-          <p><b>UGC Penalties:</b> Level 0 (&le;10% - No penalty); Level 1 (10%-40% - Resubmit script in 6 months); Level 2 (40%-60% - Debarred for 1 year); Level 3 (&gt;60% - Registration cancelled).</p>
+        <!-- 4.4 -->
+        <div class="topic" id="u4-4">
+          <h3><span class="num">4.4</span> Procedure for Grants of Patents</h3>
+
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 4.1: Indian Patent Office Examination & Grant Workflow</span>
+            <div class="mermaid">
+              graph TD
+              F1[Provisional Specification] -->|Within 12 Months| F2[Complete Specification]
+              F2 --> Pub[Publication at 18 Months]
+              Pub --> RFE[Request for Examination]
+              RFE --> FER[First Examination Report - FER]
+              FER --> Resp[Applicant Response & Amendments]
+              Resp --> Grant[Grant of Patent - 20 Years Protection]
+            </div>
+          </div>
+
+          <p><b>Anatomy of Patent Claims:</b> Claims define the legal enforceable boundary. <i>Independent Claims</i>
+            define broad structural elements; <i>Dependent Claims</i> add narrower fallback limitations.</p>
         </div>
-      </div>
 
-      <div class="qa-block">
-        <div class="qa-q">Q3. What are the statutory criteria for patentability? List non-patentable subject matters under Section 3.</div>
-        <div class="qa-a">
-          <p><b>Criteria for Patentability:</b> 1. Absolute World Novelty; 2. Inventive Step (Non-obvious to a PHOSITA); 3. Industrial Applicability.</p>
-          <p><b>Section 3 Exclusions:</b> Frivolous inventions (3a), scientific principles/abstract theories (3b), mere discovery of new property (3d), software per se or algorithms (3k), aesthetic creations (3m), and atomic energy (Section 4).</p>
+        <!-- 4.5 -->
+        <div class="topic" id="u4-5">
+          <h3><span class="num">4.5</span> Patenting under PCT (Patent Cooperation Treaty)</h3>
+          <p>The <b>Patent Cooperation Treaty (PCT)</b> provides a single international application delaying national
+            filing fees until <b>Month 30/31</b> across 155+ member countries.</p>
+
+          <div class="eq-box">
+            <b>PCT Timeline Equation:</b>
+            $$t_{\text{national}} = t_{\text{priority}} + 30 \text{ months}$$
+          </div>
+
+          <div class="diagram-wrap">
+            <span class="diagram-title">Figure 4.2: PCT International Patent Filing Phases (30-Month Gantt Chart)</span>
+            <div class="mermaid">
+              gantt
+              title PCT 30-Month Timeline Workflow
+              dateFormat YYYY-MM-DD
+              axisFormat %m Mon
+
+              Priority Filing Date (Month 0) :milestone, m0, 2024-01-01, 0d
+              International PCT Application (Month 12) :active, m12, 2024-01-01, 365d
+              International Search Report ISR :m16, 2025-05-01, 30d
+              International Publication (Month 18) :milestone, m18, 2025-07-01, 0d
+              National Phase Entry (Month 30/31) :milestone, m30, 2026-07-01, 0d
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="qa-block">
-        <div class="qa-q">Q4. Explain the PCT workflow and its advantages over the Paris Convention.</div>
-        <div class="qa-a">
-          <p>The <b>PCT Workflow</b> allows filing a single international application within 12 months of priority date, receiving an International Search Report (ISR) at Month 16 and International Publication at Month 18. National phase entry into individual designated states is deferred to <b>Month 30/31</b>.</p>
-          <p><b>Advantages over Paris Convention:</b> Under Paris Convention, national filings in all target countries must occur at Month 12 (requiring heavy upfront translation and legal fees). PCT delays expenditure by 18 additional months while providing early evaluation of patentability via the ISR.</p>
+      <!-- =================================================================== -->
+      <!-- UNIT V -->
+      <!-- =================================================================== -->
+      <section id="unit5" class="unit">
+        <span class="unit-tag">UNIT V</span>
+        <h2>Patent Rights, Technology Transfer & Emerging IPR</h2>
+        <p class="unit-desc">Patent Rights: Scope of Patent Rights. Licensing and transfer of technology. Patent
+          information and databases. Geographical Indications. New Developments in IPR: Administration of Patent System.
+          New developments in IPR; IPR of Biological Systems, Computer Software etc. Traditional knowledge Case Studies,
+          IPR and IITs.</p>
+
+        <!-- 5.1 -->
+        <div class="topic" id="u5-1">
+          <h3><span class="num">5.1</span> Patent Rights: Scope of Patent Rights</h3>
+          <p>A patent grants exclusive negative rights to exclude third parties from making, using, selling, or
+            importing the patented product or process. Statutory exceptions include <b>Research Exemption</b>, <b>Bolar
+              Provisions</b> (regulatory data testing), and <b>Compulsory Licensing (Section 84)</b> granted after 3
+            years if public requirements are unmet or prices unaffordable.</p>
         </div>
-      </div>
 
-      <div class="qa-block">
-        <div class="qa-q">Q5. Explain how India protects Traditional Knowledge using TKDL, referencing the Turmeric case study.</div>
-        <div class="qa-a">
-          <p>India protects Traditional Knowledge via the <b>Traditional Knowledge Digital Library (TKDL)</b>, a defensive database transcribing traditional formulations into 5 international languages for global patent examiners.</p>
-          <p><b>Turmeric Case:</b> In 1995, a US patent was granted to the Univ of Mississippi for using turmeric to heal wounds. CSIR India produced ancient Sanskrit texts proving turmeric's medicinal use was documented prior art in India for centuries. The USPTO revoked all patent claims due to lack of novelty.</p>
+        <!-- 5.2 -->
+        <div class="topic" id="u5-2">
+          <h3><span class="num">5.2</span> Licensing and Transfer of Technology</h3>
+          <p>Technology Transfer models enable commercial exploitation of IP:</p>
+          <ul>
+            <li><b>Assignment:</b> Outright permanent transfer/sale of IP title and ownership.</li>
+            <li><b>Exclusive License:</b> Single licensee gains commercial rights; licensor is excluded from commercial
+              use.</li>
+            <li><b>Non-Exclusive License:</b> Rights granted to multiple competing entities simultaneously.</li>
+            <li><b>Cross-Licensing:</b> Mutual exchange of patent portfolio rights between technology firms.</li>
+          </ul>
         </div>
+
+        <!-- 5.3 -->
+        <div class="topic" id="u5-3">
+          <h3><span class="num">5.3</span> Patent Information and Databases</h3>
+          <p>Patent landscape searches prevent reinventing the wheel. Major global search engines: <b>InPASS</b>
+            (India), <b>Espacenet</b> (EPO - 140M+ docs), <b>PATENTSCOPE</b> (WIPO), <b>USPTO</b>, and <b>Google
+              Patents</b>. Indexed via <b>IPC</b> (International Patent Classification) and <b>CPC</b> (Cooperative
+            Patent Classification).</p>
+        </div>
+
+        <!-- 5.4 -->
+        <div class="topic" id="u5-4">
+          <h3><span class="num">5.4</span> Geographical Indications</h3>
+          <p>A <b>Geographical Indication (GI)</b> identifies goods originating from a specific geographic region with
+            unique qualities or reputation (e.g. <i>Darjeeling Tea, Mysore Silk, Hyderabad Haleem, Pochampally
+              Ikat</i>). GIs are collective property of regional artisans, unlike corporate Trademarks.</p>
+        </div>
+
+        <!-- 5.5 -->
+        <div class="topic" id="u5-5">
+          <h3><span class="num">5.5</span> New Developments in IPR: Administration of Patent System</h3>
+          <p>Modernization of patent offices: E-filing portals, digital patents, AI-assisted prior art screening,
+            expedited examination for startups and female inventors.</p>
+        </div>
+
+        <!-- 5.6 -->
+        <div class="topic" id="u5-6">
+          <h3><span class="num">5.6</span> New Developments in IPR: IPR of Biological Systems, Computer Software etc.
+          </h3>
+          <ul>
+            <li><b>IPR of Biological Systems:</b> Microorganisms are patentable following <i>Diamond v. Chakrabarty
+                (1980)</i>. The <b>Budapest Treaty</b> mandates biological sample deposit at an International Depository
+              Authority (MTCC in India).</li>
+            <li><b>IPR of Computer Software:</b> Software per se is excluded under Section 3(k), but software
+              demonstrating a <b>Technical Effect</b> embedded in hardware is patentable.</li>
+            <li><b>AI & Inventorship:</b> In test cases involving <b>DABUS</b>, patent offices ruled that an inventor
+              under law must be a <b>natural human person</b>.</li>
+          </ul>
+        </div>
+
+        <!-- 5.7 -->
+        <div class="topic" id="u5-7">
+          <h3><span class="num">5.7</span> Traditional Knowledge Case Studies</h3>
+          <p><b>Biopiracy</b> is the unauthorized commercial patenting of indigenous traditional knowledge. India
+            created the <b>Traditional Knowledge Digital Library (TKDL)</b> containing 450,000+ formulations in 5
+            international languages to prevent bad patents globally.</p>
+
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>Landmark Case</th>
+                <th>Contested Patent</th>
+                <th>Indian Defense Evidence</th>
+                <th>Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Turmeric Case (1997)</b></td>
+                <td>US Patent on wound healing.</td>
+                <td>Ancient Sanskrit texts proving prior art in India.</td>
+                <td><b>Patent Revoked</b> by USPTO.</td>
+              </tr>
+              <tr>
+                <td><b>Neem Case (2000)</b></td>
+                <td>EPO Patent on anti-fungal extract.</td>
+                <td>Evidence of traditional agricultural usage.</td>
+                <td><b>Patent Revoked</b> by EPO.</td>
+              </tr>
+              <tr>
+                <td><b>Basmati Rice (2001)</b></td>
+                <td>US Patent on Basmati lines.</td>
+                <td>Genetic strain data & geographic origin evidence.</td>
+                <td>RiceTec forced to <b>withdraw major claims</b>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 5.8 -->
+        <div class="topic" id="u5-8">
+          <h3><span class="num">5.8</span> IPR and IITs</h3>
+          <p>Top Indian universities (IITs, IISc) enforce IP policies: IP developed using institutional infrastructure
+            is owned by the Institute; commercial royalties are split (typically <b>70% to Inventors / 30% to
+              Institution</b>); faculty/student spin-offs are supported via incubation parks (FITT, SINE, IITM RP).</p>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- FEBRUARY 2026 PREVIOUS SEMESTER EXAM SOLVED PAPER -->
+      <!-- =================================================================== -->
+      <section id="exam-qa" class="unit" style="border-top: 3px solid var(--amber);">
+        <span class="unit-tag" style="color:var(--amber);">AUTHENTIC EXAM PAPER</span>
+        <h2>February 2026 Regular Semester Examination — Full Solved Answer Key</h2>
+        <p class="unit-desc">Course Code: 2511345 &bull; MLRS-MT25 &bull; Marri Laxman Reddy Institute of Technology &
+          Management &bull; Max Marks: 60 (Full 60/60 Model Solutions)</p>
+
+        <h3 style="color:var(--amber);margin:24px 0 12px 0;">PART - A (05 &times; 2 Marks = 10 Marks) — All Questions
+          Compulsory</h3>
+
+        <div class="qa-block">
+          <div class="qa-q">Q1. a) Define the research problem. [2M, CO1, BL1]</div>
+          <div class="qa-a">
+            <b>Model Answer:</b> A <b>Research Problem</b> is a clear, explicit, and precise statement regarding an
+            unresolved gap in existing knowledge, an operational difficulty in technology, or a theoretical
+            contradiction that requires systematic investigation, empirical data collection, and analytical reasoning to
+            solve.
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q1. b) Explain plagiarism in research. [2M, CO2, BL2]</div>
+          <div class="qa-a">
+            <b>Model Answer:</b> <b>Plagiarism</b> is an ethical violation involving the unacknowledged appropriation of
+            another person's intellectual work, ideas, text, figures, or source code without giving proper credit or
+            explicit citation. It ranges from verbatim copy-pasting to paraphrase and patchwriting plagiarism.
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q1. c) Illustrate the significance of presentation and assessment by a review committee.
+            [2M, CO3, BL2]</div>
+          <div class="qa-a">
+            <b>Model Answer:</b> Presentation and assessment by a review committee (Doctoral Advisory Committee / Grant
+            Evaluation Board) provides independent peer validation of scientific novelty, methodological rigor, budget
+            justification, and risk feasibility, ensuring high academic standards and preventing misallocation of
+            research funding.
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q1. d) What is meant by patent. [2M, CO4, BL2]</div>
+          <div class="qa-a">
+            <b>Model Answer:</b> A <b>Patent</b> is an exclusive statutory negative right granted by the government to
+            an inventor for a limited period of <b>20 years</b> from the filing date, excluding third parties from
+            making, using, offering for sale, selling, or importing the patented product or process without
+            authorization, in exchange for complete public disclosure of the invention.
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q1. e) Organize patent details using patent information databases. [2M, CO5, BL3]</div>
+          <div class="qa-a">
+            <b>Model Answer:</b> Patent details are systematically organized across global databases (InPASS, Espacenet,
+            PATENTSCOPE, USPTO) by indexing applications using standard International Patent Classification (IPC) or
+            Cooperative Patent Classification (CPC) codes, structured fields (Title, Abstract, Inventor Name, Applicant,
+            Priority Date), and Boolean keyword matrices.
+          </div>
+        </div>
+
+        <h3 style="color:var(--amber);margin:32px 0 12px 0;">PART - B (05 &times; 10 Marks = 50 Marks) — Answer One
+          Question From Each Unit</h3>
+
+        <!-- UNIT I EXAM SOLUTION -->
+        <h4
+          style="font-family:'Space Grotesk',sans-serif;color:var(--teal);margin:24px 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:4px;">
+          UNIT I (Q2 OR Q3)</h4>
+
+        <div class="qa-block">
+          <div class="qa-q">Q2. a) Explain the major sources from which research problems are identified. [5M, CO1, BL2]
+            &mdash; <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Introduction:</b> Identifying a viable research problem is the foundation of postgraduate
+              scientific inquiry. A research problem represents a clear gap in existing domain knowledge, a theoretical
+              contradiction, or an operational bottleneck requiring empirical investigation.</p>
+            <p><b>2. Primary Sources of Research Problems:</b></p>
+            <ul>
+              <li><b>Literature Review & Published Research Gaps:</b> The most prominent academic source. By conducting
+                a systematic literature review across top-tier peer-reviewed journals (IEEE Transactions, ACM Digital
+                Library, SpringerLink), researchers examine discussion and "Future Work" sections. Gaps emerge where
+                existing algorithms fail under non-ideal noise, lack scalability, or suffer high computational
+                complexity.</li>
+              <li><b>Technological Paradigm Shifts:</b> Shifts in computational paradigms open vast unexplored problem
+                spaces. Examples in Computer Science include the transition from classical machine learning to Quantum
+                Machine Learning, Edge AI, Zero-Trust Security architectures, and post-quantum cryptography.</li>
+              <li><b>Industrial & Practical Bottlenecks:</b> Practical challenges faced by engineering industries. For
+                example, high latency in autonomous vehicle perception pipelines, memory constraints in embedded
+                microcontrollers, or real-time fraud detection in high-throughput financial micro-transactions.</li>
+              <li><b>Interdisciplinary Domain Intersections:</b> Cross-pollinating computational algorithms into other
+                fields. For example, applying Transformer architectures to genomic sequencing (Bioinformatics),
+                financial risk assessment (FinTech), or medical imaging diagnostics.</li>
+              <li><b>Personal Experience & Expert Consultations:</b> Daily technical observations, interactions with
+                industry mentors, and discussions during academic conferences.</li>
+            </ul>
+            <p><b>3. Summary Schematic for Answer Booklet:</b></p>
+            <p>
+              <code>[Literature Gaps] + [Tech Shifts] + [Industrial Bottlenecks] + [Interdisciplinary Needs] &rarr; [Formulated Research Problem]</code>
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q2. b) Discuss the errors in selecting a research problem. [5M, CO1, BL3] &mdash; <i>Booklet
+              Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Introduction:</b> Improper selection of a research problem leads to wasted effort, resource
+              exhaustion, and potential project abandonment. Recognizing common errors ensures a feasible and impactful
+              research trajectory.</p>
+            <p><b>2. Major Errors in Problem Selection:</b></p>
+            <ul>
+              <li><b>Over-Broad & Unbounded Scope ("Solving World Hunger" Fallacy):</b> Formulating a topic so vast
+                (e.g. <i>"Improving Cybersecurity using Artificial Intelligence"</i>) that it cannot be investigated
+                within time and resource bounds. A good problem must be tightly delimited.</li>
+              <li><b>Trivial & Over-Researched Problems:</b> Selecting topics that have already been extensively solved
+                or re-implementing established baselines without adding novel architectural or algorithmic value.</li>
+              <li><b>Ignoring Compute, Hardware & Resource Constraints:</b> Formulating problems requiring unavailable
+                infrastructure (e.g. attempting to train a 70-billion parameter LLM from scratch without dedicated GPU
+                clusters like NVIDIA A100/H100) or proprietary datasets.</li>
+              <li><b>Unscientific / Subjective Personal Bias:</b> Designing a problem to confirm a pre-conceived
+                personal opinion rather than uncovering objective, empirical, and verifiable truth.</li>
+              <li><b>Ignoring Data Availability & Privacy Regulations:</b> Formulating problems reliant on sensitive
+                human data without verifying data privacy compliance (GDPR, IRB clearance).</li>
+            </ul>
+            <p><b>3. Remediation Strategy:</b> Apply the <b>S.M.A.R.T. Criteria</b> (Specific, Measurable, Achievable,
+              Relevant, Time-bound) before finalizing problem selection.</p>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">OR &mdash; Q3. Analyze the approaches of investigation of solutions for a research problem
+            with respect to data collection, analysis and interpretation. [10M, CO1, BL4] &mdash; <i>Booklet Target:
+              ~3-4 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Introduction:</b> Investigating solutions for a research problem requires a structured, empirical
+              framework spanning logical reasoning pathways, data collection, statistical analysis, and objective
+              interpretation.</p>
+
+            <p><b>2. Investigation Logic Pathways:</b></p>
+            <ul>
+              <li><b>Deductive Reasoning (Top-Down):</b> Moves from General Theory $\rightarrow$ Hypothesis Formulation
+                ($H_0: \mu_{\text{proposed}} = \mu_{\text{baseline}}$ vs $H_1: \mu_{\text{proposed}} >
+                \mu_{\text{baseline}}$) $\rightarrow$ Controlled Experimentation $\rightarrow$ Confirmation/Rejection.
+                Used to validate existing theories under new conditions.</li>
+              <li><b>Inductive Reasoning (Bottom-Up):</b> Moves from Specific Observations $\rightarrow$ Pattern
+                Recognition $\rightarrow$ Tentative Hypothesis $\rightarrow$ General Theory Building. Used when
+                exploring under-researched domains.</li>
+            </ul>
+
+            <p><b>3. Data Collection Framework:</b></p>
+            <ul>
+              <li><b>Primary Data Collection:</b> Gathered directly via controlled experiments, hardware sensor logs,
+                user telemetry, or network packet traces. Provides high authenticity.</li>
+              <li><b>Secondary Data Collection:</b> Extracted from standardized benchmark repositories (Kaggle, UCI ML
+                Repository, IEEE DataPort).</li>
+              <li><b>Sample Size Determination (Cochran's Formula):</b>
+                $$n_0 = \frac{Z^2 \cdot p \cdot (1 - p)}{e^2}$$
+                For finite populations, Yamane's correction is applied: $n = \frac{N}{1 + N(e)^2}$.
+              </li>
+            </ul>
+
+            <p><b>4. Statistical Data Analysis:</b></p>
+            <ul>
+              <li><b>Descriptive Statistics:</b> Mean, median, standard deviation, and variance summarizing benchmark
+                execution metrics.</li>
+              <li><b>Inferential Hypothesis Testing (Student's t-test):</b>
+                $$t = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$$
+              </li>
+              <li><b>Chi-Square ($\chi^2$) Test of Independence:</b>
+                $$\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}$$
+              </li>
+            </ul>
+
+            <p><b>5. Data Interpretation:</b> Evaluating $p$-value statistical significance ($p < 0.05$), isolating
+                confounding variables, avoiding correlation-causation fallacies, and stating research delimitations.</p>
+          </div>
+        </div>
+
+        <!-- UNIT II EXAM SOLUTION -->
+        <h4
+          style="font-family:'Space Grotesk',sans-serif;color:var(--teal);margin:24px 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:4px;">
+          UNIT II (Q4 OR Q5)</h4>
+
+        <div class="qa-block">
+          <div class="qa-q">Q4. a) Explain the key approaches used for conducting an effective literature study. [5M,
+            CO2, BL2] &mdash; <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Introduction:</b> A literature study provides the theoretical foundation for scientific research,
+              ensuring the researcher understands the state-of-the-art and avoids reinventing existing solutions.</p>
+            <p><b>2. Key Approaches for Effective Literature Study:</b></p>
+            <ol>
+              <li><b>Systematic Literature Review (SLR - PRISMA Framework):</b> Following a structured 4-stage pipeline:
+                <i>Identification</i> (database queries) $\rightarrow$ <i>Screening</i> (title/abstract filter)
+                $\rightarrow$ <i>Eligibility</i> (full-text appraisal) $\rightarrow$ <i>Inclusion</i> (final synthesis).
+              </li>
+              <li><b>Boolean Query Optimization:</b> Constructing search queries using Boolean operators
+                (<code>AND</code>, <code>OR</code>, <code>NOT</code>) and indexed keyword matrices across recognized
+                academic databases (IEEE Xplore, ACM Digital Library, Scopus, Web of Science).</li>
+              <li><b>Citation Snowballing:</b>
+                <ul>
+                  <li><i>Backward Chaining:</i> Reviewing reference lists of landmark papers to trace foundational
+                    origin.</li>
+                  <li><i>Forward Chaining:</i> Tracking recent papers citing landmark works via Google Scholar / Scopus.
+                  </li>
+                </ul>
+              </li>
+              <li><b>Synthesis Matrix Construction:</b> Organizing literature into a comparative table mapping
+                Author/Year, Proposed Method, Dataset, Key Strengths, and Identified Limitations (Gaps).</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q4. b) Assess the importance of research ethics in academic and scientific research. [5M,
+            CO2, BL5] &mdash; <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Rationale of Research Ethics:</b> Ethics safeguards scientific integrity, protects public safety,
+              ensures fair attribution, and maintains societal trust in academic publications.</p>
+            <p><b>2. Prevention of Misconduct (The FFP Triad):</b></p>
+            <ul>
+              <li><b>Fabrication:</b> Prevents making up fake empirical data or synthetic benchmark logs.</li>
+              <li><b>Falsification:</b> Prevents manipulating equipment parameters, logs, or figures to distort
+                outcomes.</li>
+              <li><b>Plagiarism:</b> Prevents stealing intellectual ideas, text, or code without credit.</li>
+            </ul>
+            <p><b>3. Authorship & Institutional Standards:</b> Enforces the <b>ICMJE 4-Criteria</b> for authorship,
+              eliminating unethical practices like <i>Ghost Authorship</i> (omitting contributors), <i>Gift/Honorary
+                Authorship</i> (adding administrators), and <i>Guest Authorship</i>. Ensures transparent
+              conflict-of-interest disclosure and data privacy protection (GDPR).</p>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">OR &mdash; Q5. Evaluate the issue of plagiarism in research and recommend suitable measures
+            to prevent it. [10M, CO2, BL5] &mdash; <i>Booklet Target: ~3-4 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Definition:</b> Plagiarism is the unacknowledged appropriation of another person's ideas, text,
+              empirical results, or code without proper attribution.</p>
+
+            <p><b>2. Comprehensive Plagiarism Taxonomy:</b></p>
+            <ul>
+              <li><b>Direct / Verbatim Plagiarism:</b> Word-for-word copy-pasting without quotation marks or
+                attribution.</li>
+              <li><b>Mosaic / Patchwriting Plagiarism:</b> Intertwining copied phrases with personal synonyms while
+                keeping original structure.</li>
+              <li><b>Paraphrase Plagiarism:</b> Rewording another author's core ideas without citing the source.</li>
+              <li><b>Self-Plagiarism (Text Recycling):</b> Re-publishing one's own previously published text/data
+                without disclosure.</li>
+              <li><b>Cyber-Plagiarism / Code Theft:</b> Copying open-source software scripts without license compliance.
+              </li>
+            </ul>
+
+            <p><b>3. Similarity Index vs. Plagiarism:</b> Similarity Index is an automated text-matching percentage
+              generated by software (Turnitin, iThenticate). It includes properly cited quotes and standard formulas.
+              Plagiarism is an ethical breach of intellectual theft.</p>
+
+            <p><b>4. UGC Academic Integrity Penalty Framework:</b></p>
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>Similarity Threshold</th>
+                  <th>UGC Prescribed Penalty</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Level 0</b></td>
+                  <td>Up to 10%</td>
+                  <td>Minor similarity — Acceptable threshold; no penalty.</td>
+                </tr>
+                <tr>
+                  <td><b>Level 1</b></td>
+                  <td>10% to 40%</td>
+                  <td>Student must submit a revised manuscript within 6 months.</td>
+                </tr>
+                <tr>
+                  <td><b>Level 2</b></td>
+                  <td>40% to 60%</td>
+                  <td>Student is debarred from submitting revised script for 1 year.</td>
+                </tr>
+                <tr>
+                  <td><b>Level 3</b></td>
+                  <td>Above 60%</td>
+                  <td>Student's registration for the academic program is cancelled.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p><b>5. Recommended Prevention & Remedial Measures:</b> Mandatory pre-submission software scans, proper
+              in-text citation (IEEE/APA format), quotation marks for direct excerpts, thorough synthesis rewording, and
+              institutional ethics committee oversight.</p>
+          </div>
+        </div>
+
+        <!-- UNIT III EXAM SOLUTION -->
+        <h4
+          style="font-family:'Space Grotesk',sans-serif;color:var(--teal);margin:24px 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:4px;">
+          UNIT III (Q6 OR Q7)</h4>
+
+        <div class="qa-block">
+          <div class="qa-q">Q6. a) Explain the process involved in developing a research proposal. [5M, CO3, BL2]
+            &mdash; <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Rationale:</b> Developing a research proposal is the systematic preparation of a technical document
+              soliciting funding from grant agencies (DST-SERB, AICTE, CSIR, ISRO, DRDO).</p>
+            <p><b>2. Sequential Phases in Proposal Development:</b></p>
+            <ol>
+              <li><b>Problem Identification & Industrial Need:</b> Formulating a concise technical problem statement and
+                demonstrating economic/scientific significance.</li>
+              <li><b>Prior Art Literature Appraisal:</b> Reviewing existing literature to prove no existing product or
+                open algorithm solves the challenge.</li>
+              <li><b>Formulating Specific Objectives:</b> Defining bullet-pointed, quantifiable technical targets at key
+                project milestones.</li>
+              <li><b>Designing Methodology & Work Plan:</b> Establishing a phase-wise execution strategy supported by a
+                <b>Gantt Chart</b> and PERT network diagram.</li>
+              <li><b>Itemized Budget Breakdown:</b> Computing financial requirements across heads (Equipment,
+                Manpower/JRF, Travel, Contingency, Institutional Overheads).</li>
+              <li><b>Institutional Endorsement & Submission:</b> Obtaining Principal Investigator (PI) clearance and
+                institutional approval.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q6. b) Describe the standard format of a research proposal. [5M, CO3, BL2] &mdash;
+            <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>Standard 7-Part Research Proposal Format:</b></p>
+            <ol>
+              <li><b>Executive Summary:</b> High-level synthesis of project goals, total budget requirement, duration,
+                and deliverables.</li>
+              <li><b>Statement of Problem:</b> Detailed technical breakdown of motivation, industrial challenges, and
+                research gap.</li>
+              <li><b>State of the Art & Literature Survey:</b> Exhaustive critical review of existing methods.</li>
+              <li><b>Specific Objectives:</b> Bullet-pointed, measurable targets expected at key milestones.</li>
+              <li><b>Work Plan & Methodology:</b> Detailed phase-wise tasks supported by a <b>Gantt Chart</b> timeline.
+              </li>
+              <li><b>Itemized Budget Breakdown:</b> Hardware/Equipment, JRF salaries, Travel, Contingency, Overheads.
+              </li>
+              <li><b>Expected Deliverables & Impact:</b> Patents, open-source software, high-impact journal papers,
+                technology transfer prototypes.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">OR &mdash; Q7. Justify the importance of effective technical writing in report writing and
+            research paper preparation. [10M, CO3, BL5] &mdash; <i>Booklet Target: ~3-4 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Rationale:</b> Technical writing bridges scientific discovery and peer comprehension through
+              clarity, precision, conciseness, and logical organization.</p>
+
+            <p><b>2. Principles of Technical Writing:</b> Objectivity, active vs passive voice control, elimination of
+              ambiguity, and standard mathematical notation.</p>
+
+            <p><b>3. The IMRaD Structural Framework:</b></p>
+            <ul>
+              <li><b>Introduction:</b> Background, problem statement, motivation, thesis contributions.</li>
+              <li><b>Methods:</b> Algorithmic formulation, architecture diagrams, control variable isolation.</li>
+              <li><b>Results:</b> Empirical benchmark tables, performance graphs, baseline comparisons.</li>
+              <li><b>Discussion:</b> Analytical interpretation, limitations, and future scope.</li>
+            </ul>
+
+            <p><b>4. Thesis & Report Chapter Structure:</b> Front matter $\rightarrow$ Chapters 1 to 5 (Intro, Survey,
+              Method, Results, Conclusion) $\rightarrow$ Back matter (References, Appendices).</p>
+
+            <p><b>5. Adherence to Journal Metrics:</b></p>
+            $$\text{Impact Factor}_{2024} = \frac{\text{Citations in 2024 to items published in 2022 +
+            2023}}{\text{Total publishable items in 2022 + 2023}}$$
+            $$\text{CiteScore}_{2024} = \frac{\text{Citations in 2020--2023 to articles, reviews published in
+            2020--2023}}{\text{Total documents published in 2020--2023}}$$
+
+            <p><b>6. Peer Review Success:</b> Enables peer reviewers during journal submission to validate empirical
+              claims and evaluate scientific novelty.</p>
+          </div>
+        </div>
+
+        <!-- UNIT IV EXAM SOLUTION -->
+        <h4
+          style="font-family:'Space Grotesk',sans-serif;color:var(--teal);margin:24px 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:4px;">
+          UNIT IV (Q8 OR Q9)</h4>
+
+        <div class="qa-block">
+          <div class="qa-q">Q8. a) Explain the nature of Intellectual Property with reference to patents and designs.
+            [5M, CO4, BL2] &mdash; <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Nature of Intellectual Property:</b> IP creates temporary statutory monopoly rights granted by the
+              state in exchange for complete public disclosure of the creation.</p>
+            <p><b>2. Patents:</b> Protect functional inventions (products, processes) for <b>20 years</b> under The
+              Patents Act 1970. Requires Novelty, Inventive Step (PHOSITA), and Industrial Applicability.</p>
+            <p><b>3. Industrial Designs:</b> Protect aesthetic visual shapes, patterns, configurations, or ornaments of
+              an industrial article for <b>10+5 years</b> under The Designs Act 2000, excluding purely functional
+              features.</p>
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Patents</th>
+                  <th>Industrial Designs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><b>Subject Matter</b></td>
+                  <td>Functional inventions (Product/Process).</td>
+                  <td>Aesthetic visual shape/pattern.</td>
+                </tr>
+                <tr>
+                  <td><b>Term</b></td>
+                  <td>20 Years</td>
+                  <td>10 + 5 Years (Max 15)</td>
+                </tr>
+                <tr>
+                  <td><b>Act</b></td>
+                  <td>The Patents Act, 1970</td>
+                  <td>The Designs Act, 2000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q8. b) Identify the steps involved in the process of patenting and development. [5M, CO4,
+            BL3] &mdash; <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <ol>
+              <li><b>Technological Research:</b> Basic scientific enquiry, algorithm design, and prototype testing.</li>
+              <li><b>Prior Art Novelty Search:</b> Checking global patent databases (InPASS, Espacenet, PATENTSCOPE) to
+                confirm absolute novelty.</li>
+              <li><b>Patent Specification Drafting:</b> Formulating Title, Abstract, Detailed Enablement Description,
+                and Independent/Dependent Claims.</li>
+              <li><b>Filing & Patent Office Examination:</b> Filing Provisional/Complete Specification $\rightarrow$
+                Publication at 18 months $\rightarrow$ Request for Examination (RFE) $\rightarrow$ FER Response
+                $\rightarrow$ Pre-grant Opposition $\rightarrow$ Grant.</li>
+              <li><b>Commercial Development:</b> Technology transfer, licensing, scaling prototype to industrial
+                production.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">OR &mdash; Q9. Analyze the procedure for the grant of patents and the process of patenting
+            under the PCT system. [10M, CO4, BL4] &mdash; <i>Booklet Target: ~3-4 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Indian Patent Office Examination Workflow:</b></p>
+            <ul>
+              <li><b>Filing:</b> Provisional Specification (securing priority) $\rightarrow$ Complete Specification
+                (within 12 months).</li>
+              <li><b>Publication:</b> Published in Official Patent Journal at <b>18 months</b>.</li>
+              <li><b>Examination:</b> Request for Examination (RFE) filed within 48 months $\rightarrow$ First
+                Examination Report (FER) issued.</li>
+              <li><b>Grant:</b> Applicant submits amendments $\rightarrow$ Pre-grant opposition window $\rightarrow$
+                <b>Grant of Patent (20 Years)</b>.</li>
+            </ul>
+
+            <p><b>2. Legal Importance of Patent Claims:</b> Independent Claims (broadest legal boundary) vs Dependent
+              Claims (narrower protection fallbacks).</p>
+
+            <p><b>3. PCT International Patent System:</b></p>
+            <ul>
+              <li>Administered by WIPO under $t_{\text{national}} = t_{\text{priority}} + 30 \text{ months}$.</li>
+              <li>Single international filing at Month 12 covering 155+ countries.</li>
+              <li>International Search Report (ISR by ISA) at Month 16.</li>
+              <li>International Publication at Month 18.</li>
+              <li>National Phase Entry at Month 30/31, delaying heavy upfront translation and legal fees by 18
+                additional months compared to Paris Convention.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- UNIT V EXAM SOLUTION -->
+        <h4
+          style="font-family:'Space Grotesk',sans-serif;color:var(--teal);margin:24px 0 8px 0;border-bottom:1px solid var(--border);padding-bottom:4px;">
+          UNIT V (Q10 OR Q11)</h4>
+
+        <div class="qa-block">
+          <div class="qa-q">Q10. a) Explain the scope of patent rights. [5M, CO5, BL2] &mdash; <i>Booklet Target: ~2
+              Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Scope of Patent Rights:</b> Patents grant exclusive negative rights to exclude third parties from
+              making, using, offering for sale, selling, or importing the patented product or process for 20 years.</p>
+            <p><b>2. Statutory Exceptions:</b></p>
+            <ul>
+              <li><b>Research Exemption:</b> Using patented tech purely for academic/experimental research.</li>
+              <li><b>Bolar Regulatory Provision:</b> Developing clinical or technical data required for regulatory
+                submission before patent expiry.</li>
+              <li><b>Compulsory Licensing (Section 84):</b> Granted by Controller after 3 years if public requirements
+                are unmet, prices unaffordable, or invention not worked in India.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">Q10. b) Describe the process of licensing and transfer of technology. [5M, CO5, BL2] &mdash;
+            <i>Booklet Target: ~2 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. Concept of Technology Transfer:</b> Mechanism of transferring commercial exploitation rights of IP
+              from licensor to licensee.</p>
+            <p><b>2. Licensing Models:</b></p>
+            <ul>
+              <li><b>Assignment:</b> Outright permanent transfer/sale of IP title and ownership.</li>
+              <li><b>Exclusive License:</b> Single licensee gains commercial rights; licensor excluded.</li>
+              <li><b>Non-Exclusive License:</b> Rights granted to multiple competing entities.</li>
+              <li><b>Cross-Licensing:</b> Mutual exchange of patent portfolios between firms.</li>
+            </ul>
+            <p>Managed via Technology Transfer Offices (TTOs) with clauses covering Upfront Fees, Running Royalties,
+              Territory, Field of Use, and Indemnification.</p>
+          </div>
+        </div>
+
+        <div class="qa-block">
+          <div class="qa-q">OR &mdash; Q11. Evaluate the new developments in IPR with reference to biological systems,
+            computer software and traditional knowledge. [10M, CO5, BL5] &mdash; <i>Booklet Target: ~3-4 Pages</i></div>
+          <div class="qa-a">
+            <b>Detailed Model Answer for Booklet:</b>
+            <p><b>1. IPR of Biological Systems:</b> Microorganisms are patentable following <i>Diamond v. Chakrabarty (1980)</i>. The Budapest Treaty (1977) mandates biological sample deposit at an International Depository Authority (MTCC in India).</p>
+            <p><b>2. Computer Software & AI IPR:</b> Software per se is excluded under Section 3(k), but software demonstrating a <b>Technical Effect</b> embedded in hardware is patentable. In <i>DABUS</i> test cases, patent offices ruled inventors must be natural human persons.</p>
+            <p><b>3. Traditional Knowledge (TK) & Biopiracy:</b> Defensive protection via the <b>Traditional Knowledge Digital Library (TKDL)</b> (450,000+ formulations in 5 languages). Proven by landmark case revocations: <b>Turmeric Case (1997)</b>, <b>Neem Case (2000)</b>, and <b>Basmati Rice Case (2001)</b> claims restriction.</p>
+            <p><b>4. University IP Policies & IITs:</b> Institutional IP ownership, 70:30 inventor/institution royalty split, and startup incubation parks (FITT, SINE, IITM RP).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <div class="footer">
+        M.Tech CSE Exam Preparation Hub &bull; Research Methodology &amp; IPR &bull; 100% Verbatim Syllabus Coverage
       </div>
-    </section>
 
-    <!-- Footer -->
-    <div class="footer">
-      M.Tech CSE Exam Preparation Hub &bull; Research Methodology &amp; IPR &bull; 100% Verbatim Syllabus Coverage
-    </div>
+    </main>
+  </div>
 
-  </main>
-</div>
+  <!-- Theme Toggle JavaScript -->
+  <script>
+    (function () {
+      const toggleBtn = document.getElementById('themeToggle');
+      const htmlEl = document.documentElement;
 
-<!-- Theme Toggle JavaScript -->
-<script>
-  (function(){
-    const toggleBtn = document.getElementById('themeToggle');
-    const htmlEl = document.documentElement;
-    
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    htmlEl.setAttribute('data-theme', savedTheme);
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      htmlEl.setAttribute('data-theme', savedTheme);
 
-    toggleBtn.addEventListener('click', () => {
-      const currentTheme = htmlEl.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      htmlEl.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      if (typeof renderMermaidTheme === 'function') {
-        renderMermaidTheme(newTheme);
-      }
-    });
-  })();
-</script>
+      toggleBtn.addEventListener('click', () => {
+        const currentTheme = htmlEl.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        if (typeof renderMermaidTheme === 'function') {
+          renderMermaidTheme(newTheme);
+        }
+      });
+    })();
+  </script>
 
 </body>
+
 </html>
